@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using System.Globalization
 
 @page "/sign-up";
 
@@ -52,6 +53,7 @@
         public string phoneNumber { get; set; }
 
         [Required]
+        [IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
         public string birthDate { get; set; }
 
         [Required]
@@ -75,10 +77,9 @@
     // Inherits from the ValidationAttribute class
     public class ContainsNumberAttribute : ValidationAttribute
     {
-        // Overrides the existing method IsValid in the ValidationAttribute
+        // Overrides the existing method IsValid in the ValidationAttribute class
         protected override ValidationResult IsValid(object value, ValidationContext validationContext) 
         {
-            // get the current password form element value as a string
             string password = value as string;
             // Checks if the password contains a number
             if (password.Any(char.IsDigit))
@@ -88,6 +89,32 @@
             {
                 return new ValidationResult("Passordet ditt må ha minst ett tall");
             }
+        }
+    }
+
+    // Inherits from the ValidationAttribute class
+    public class IsOverLegalAgeAttribute : ValidationAttribute
+    {
+        // Overrides the existing method IsValid in the ValidationAttribute class
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            string birthDateStr = value as string;
+            // format is with hyphens
+            DateTime birthDate = DateTime.ParseExact(birthDateStr, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            int age = DateTime.Now.Year - birthDate.Year;
+            // Checks exactly if the person is over 18
+            if (DateTime.Now.Month < birthDate.Month || (DateTime.Now.Month == birthDate.Month && DateTime.Now.Day < birthDate.Day))
+                age--;
+
+            if (age >= 18)
+            {
+                return ValidationResult.Success;
+            }
+    else
+            {
+                return new ValidationResult("Du må være over 18 år");
+            }
+
         }
     }
 
