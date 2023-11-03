@@ -2,30 +2,30 @@
 
 @page "/sign-up";
 
-<h2>Sign up</h2>
+<h2>Registrer deg her:</h2>
     <EditForm Model="@model" OnValidSubmit="DisplayResult">
     <DataAnnotationsValidator />
         <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Minimum 2 characters" Required="true" RequiredError="A Name is required" Label="First Name" InputType="@InputType.Text" @bind-Value="model.firstName" For="@(() => model.firstName)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Minimum to bokstaver" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="model.firstName" For="@(() => model.firstName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum 2 characters" RequiredError="A last name is required" Label="Last name('s)" InputType="@InputType.Text" @bind-Value="model.lastName" For="@(() => model.lastName)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum to bokstaver" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="model.lastName" For="@(() => model.lastName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Your norwegian phone number, +4788888888" RequiredError="A phone number is required" Label="Phone Number" InputType="@InputType.Telephone" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Ditt norske mobilnummer" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="The date you were born, you have to be over 18 years old of age" RequiredError="A birth date is required" Label="Birth date" InputType="@InputType.Date" @bind-Value="model.birthDate" For="@(() => model.birthDate)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Datoen du ble født" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="model.birthDate" For="@(() => model.birthDate)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="A minimum of 6 characters, combined with more than one number" RequiredError="A password is required" Label="Password" InputType="@InputType.Password" @bind-Value="model.password" For="@(() => model.password)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum seks bokstaver, og minst ett tall" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@InputType.Password" @bind-Value="model.password" For="@(() => model.password)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Repeat the password that you just typed" RequiredError="You have to repeat your password" Label="Repeat password" InputType="@InputType.Password" @bind-Value="model.passwordRepeat" For="@(() => model.passwordRepeat)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Skriv inn passordet på nytt" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="model.passwordRepeat" For="@(() => model.passwordRepeat)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Register</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Registrer deg</MudButton>
         </MudItem>
         <MudItem xs="8">@model.successMessage</MudItem>
     </MudGrid>
@@ -40,22 +40,22 @@
         public string successMessage = "";
 
         [Required]
-        [StringLength(36, ErrorMessage = "Maximum 36, minimum 2", MinimumLength = 2)]
+        [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
         public string firstName { get; set; }
 
         [Required]
-        [StringLength(112, ErrorMessage = "Maximum 112, minimum 2", MinimumLength = 2)]
+        [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
         public string lastName { get; set; }
 
         [Required]
-        [StringLength(8, ErrorMessage = "Has to be a norwegian phone number, in the format 888 88 888", MinimumLength = 8)]
+        [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
         public string phoneNumber { get; set; }
 
         [Required]
         public string birthDate { get; set; }
 
         [Required]
-        [StringLength(48, ErrorMessage = "Maximum 48 characters, minimum 6", MinimumLength = 8)]
+        [StringLength(48, ErrorMessage = "Maks 48 characters, minimum 6", MinimumLength = 8)]
         public string password { get; set; }
 
         [Required]
@@ -66,8 +66,9 @@
 
     public void DisplayResult()
     {
-        Console.WriteLine("sucess");
-        model.successMessage = "You are registered!";
+        Console.WriteLine(model.birthDate);
+        Console.WriteLine("success");
+        model.successMessage = "Du er registrert!";
     }
 
 }
