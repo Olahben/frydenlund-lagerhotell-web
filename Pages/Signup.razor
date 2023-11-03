@@ -2,3 +2,45 @@
 
 @page "/sign-up";
 
+<h2>Sign up</h2>
+    <MudForm @ref="form">
+        <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A Name is required" Label="First Name" InputType="@InputType.Text" @bind-Value="firstName" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A last name is required" Label="Last name('s)" InputType="@InputType.Text" @bind-Value="lastName" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A phone number is required" Label="Phone Number" InputType="@InputType.Telephone" @bind-Value="phoneNumber" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A birth date is required" Label="Birth date" InputType="@InputType.Date" @bind-Value="birthDate" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A password is required" Label="Password" InputType="@InputType.Password" @bind-Value="password" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="You have to repeat your password" Label="Repeat password" InputType="@InputType.Password" @bind-Value="password" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" >Submit</MudButton>
+        </MudItem>
+    </MudGrid>
+    </MudForm>
+
+
+@code {
+    private MudForm? form;
+    public string? firstName;
+    public string? lastName;
+    public string? phoneNumber;
+    public string? birthDate;
+    private string? password;
+    private string? repeatPassword;
+
+    public static void Submit()
+    {
+        Console.WriteLine("Submitted");
+    }
+}
