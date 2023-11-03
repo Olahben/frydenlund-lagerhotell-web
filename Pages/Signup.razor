@@ -27,6 +27,7 @@
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Register</MudButton>
         </MudItem>
+        <MudItem xs="8">@model.successMessage</MudItem>
     </MudGrid>
     </EditForm>
 
@@ -36,6 +37,7 @@
 
     public class RegisterAccountFormValues
     {
+        public string successMessage = "";
 
         [Required]
         [StringLength(36, ErrorMessage = "Maximum 36, minimum 2", MinimumLength = 2)]
@@ -65,6 +67,7 @@
     public void DisplayResult()
     {
         Console.WriteLine("sucess");
+        model.successMessage = "You are registered!";
     }
 
 }
