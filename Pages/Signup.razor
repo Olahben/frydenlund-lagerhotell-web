@@ -55,7 +55,8 @@
         public string birthDate { get; set; }
 
         [Required]
-        [StringLength(48, ErrorMessage = "Maks 48 characters, minimum 6", MinimumLength = 8)]
+        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
+        [ContainsNumber(ErrorMessage="Passordet ditt må ha minst ett tall")]
         public string password { get; set; }
 
         [Required]
@@ -69,6 +70,25 @@
         Console.WriteLine(model.birthDate);
         Console.WriteLine("success");
         model.successMessage = "Du er registrert!";
+    }
+
+    // Inherits from the ValidationAttribute class
+    public class ContainsNumberAttribute : ValidationAttribute
+    {
+        // Overrides the existing method IsValid in the ValidationAttribute
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) 
+        {
+            // get the current password form element value as a string
+            string password = value as string;
+            // Checks if the password contains a number
+            if (password.Any(char.IsDigit))
+            {
+                return ValidationResult.Success;
+            } else
+            {
+                return new ValidationResult("Passordet ditt må ha minst ett tall");
+            }
+        }
     }
 
 }
