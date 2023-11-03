@@ -3,36 +3,36 @@
 @page "/sign-up";
 
 <h2>Sign up</h2>
-    <MudForm @ref="form">
+    <EditForm Model="@model" OnValidSubmit="DisplayResult">
+    <DataAnnotationsValidator />
         <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A Name is required" Label="First Name" InputType="@InputType.Text" @bind-Value="formValues.firstName" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Minimum 2 characters" Required="true" RequiredError="A Name is required" Label="First Name" InputType="@InputType.Text" @bind-Value="model.firstName" For="@(() => model.firstName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A last name is required" Label="Last name('s)" InputType="@InputType.Text" @bind-Value="formValues.lastName" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum 2 characters" RequiredError="A last name is required" Label="Last name('s)" InputType="@InputType.Text" @bind-Value="model.lastName" For="@(() => model.lastName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A phone number is required" Label="Phone Number" InputType="@InputType.Telephone" @bind-Value="formValues.phoneNumber" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Your norwegian phone number, +4788888888" RequiredError="A phone number is required" Label="Phone Number" InputType="@InputType.Telephone" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A birth date is required" Label="Birth date" InputType="@InputType.Date" @bind-Value="formValues.birthDate" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="The date you were born, you have to be over 18 years old of age" RequiredError="A birth date is required" Label="Birth date" InputType="@InputType.Date" @bind-Value="model.birthDate" For="@(() => model.birthDate)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="A password is required" Label="Password" InputType="@InputType.Password" @bind-Value="formValues.password" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="A minimum of 6 characters, combined with more than one number" RequiredError="A password is required" Label="Password" InputType="@InputType.Password" @bind-Value="model.password" For="@(() => model.password)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="You have to repeat your password" Label="Repeat password" InputType="@InputType.Password" @bind-Value="formValues.passwordRepeat" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Repeat the password that you just typed" RequiredError="You have to repeat your password" Label="Repeat password" InputType="@InputType.Password" @bind-Value="model.passwordRepeat" For="@(() => model.passwordRepeat)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ValidateForm" >Submit</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Register</MudButton>
         </MudItem>
     </MudGrid>
-    </MudForm>
+    </EditForm>
 
 
 @code {
-    private MudForm form;
-    private RegisterAccountFormValues formValues = new RegisterAccountFormValues();
+    private RegisterAccountFormValues model = new RegisterAccountFormValues();
 
     public class RegisterAccountFormValues
     {
@@ -46,14 +46,14 @@
         public string lastName { get; set; }
 
         [Required]
-        [StringLength(24, ErrorMessage = "Maximum 24 characters, minimum 4", MinimumLength = 4)]
+        [StringLength(8, ErrorMessage = "Has to be a norwegian phone number, in the format 888 88 888", MinimumLength = 8)]
         public string phoneNumber { get; set; }
 
         [Required]
         public string birthDate { get; set; }
 
         [Required]
-        [StringLength(48, ErrorMessage = "Maximum 48 characters, minimum 8", MinimumLength = 8)]
+        [StringLength(48, ErrorMessage = "Maximum 48 characters, minimum 6", MinimumLength = 8)]
         public string password { get; set; }
 
         [Required]
@@ -62,9 +62,9 @@
 
     }
 
-    public void ValidateForm()
+    public void DisplayResult()
     {
-        Console.WriteLine("Finished");
+        Console.WriteLine("sucess");
     }
 
 }
