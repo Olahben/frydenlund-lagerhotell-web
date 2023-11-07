@@ -1,10 +1,12 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Globalization
+@using System.Text.Json
+@using System.IO
 
 @page "/sign-up";
 
 <h2>Registrer deg her:</h2>
-    <EditForm Model="@model" OnValidSubmit="DisplayResult">
+    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
         <MudGrid>
         <MudItem xs="12" sm="6">
@@ -40,38 +42,47 @@
     {
         public string successMessage = "";
 
-        [Required]
+        [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
         [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
         public string firstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ett etternavn er obligatorisk")]
         [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
         public string lastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
         public string phoneNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
         [IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
         public string birthDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ett passord er obligatorisk")]
         [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
         [ContainsNumber(ErrorMessage="Passordet ditt må ha minst ett tall")]
         public string password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Du må repetere passordet ditt")]
         [Compare(nameof(password))]
         public string passwordRepeat { get; set; }
 
     }
 
+    public void AddUser()
+    {
+        // Writes the data of the user to the JSON file
+    }
+
     public void DisplayResult()
     {
-        Console.WriteLine(model.birthDate);
-        Console.WriteLine("success");
         model.successMessage = "Du er registrert!";
+    }
+
+    public void OnValidSubmit()
+    {
+        DisplayResult();
+        AddUser();
     }
 
     // Inherits from the ValidationAttribute class
@@ -110,7 +121,7 @@
             {
                 return ValidationResult.Success;
             }
-    else
+            else
             {
                 return new ValidationResult("Du må være over 18 år");
             }
