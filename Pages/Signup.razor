@@ -1,7 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Globalization
-@using System.Text.Json
 @using System.IO
+@using Newtonsoft.Json
 
 @page "/sign-up";
 
@@ -64,14 +64,14 @@
         public string password { get; set; }
 
         [Required(ErrorMessage = "Du må repetere passordet ditt")]
-        [Compare(nameof(password))]
+        [Compare(nameof(password), ErrorMessage = "Passordene samstemmer ikke")]
         public string passwordRepeat { get; set; }
 
     }
 
     public void AddUser()
     {
-        // Writes the data of the user to the JSON file
+        // Calls API to add user in JSON file
     }
 
     public void DisplayResult()
@@ -85,7 +85,8 @@
         AddUser();
     }
 
-    // Inherits from the ValidationAttribute class
+  
+    // Inherits from ValidationAttribute class
     public class ContainsNumberAttribute : ValidationAttribute
     {
         // Overrides the existing method IsValid in the ValidationAttribute class
