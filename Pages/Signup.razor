@@ -76,8 +76,8 @@
 
     public async void AddUser()
     {
-        // Makes a dictionary of the current model values
-        Dictionary<string, object> userInfo = new Dictionary<string, object>() { { "firstName", model.firstName }, { "lastName", model.lastName }, { "phoneNumber", model.phoneNumber }, { "birthDate", model.birthDate }, { "password", model.password }, };
+        // Notice: By default all values are strings
+        Dictionary<string, string> userInfo = new Dictionary<string, string>() { { "firstName", model.firstName }, { "lastName", model.lastName }, { "phoneNumber", model.phoneNumber }, { "birthDate", model.birthDate }, { "password", model.password }, };
 
         // Calls API to add user in JSON file
         string url = "https://localhost:7272/user/adduser";
