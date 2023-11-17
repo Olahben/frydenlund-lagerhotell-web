@@ -8,6 +8,8 @@
 
 @page "/sign-up";
 
+@inject NavigationManager NavigationManager
+
 <h2>Registrer deg her:</h2>
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -33,7 +35,6 @@
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Registrer deg</MudButton>
         </MudItem>
-        <MudItem xs="8">@model.successMessage</MudItem>
     </MudGrid>
     </EditForm>
 
@@ -91,14 +92,15 @@
         HttpResponseMessage response = await client.PostAsync(url, content);
     }
 
-    public void DisplayResult()
+    public void RedirectToLogin()
     {
-        model.successMessage = "Du er registrert!";
+        // Redirects to login
+        NavigationManager.NavigateTo("/log-in");
     }
 
     public void OnValidSubmit()
     {
-        DisplayResult();
+        RedirectToLogin();
         AddUser();
     }
 
