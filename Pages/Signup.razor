@@ -55,6 +55,7 @@
         [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
         public string lastName { get; set; }
 
+        [ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
         public string phoneNumber { get; set; }
@@ -101,7 +102,7 @@
         AddUser();
     }
 
-  
+
     // Inherits from ValidationAttribute class
     public class ContainsNumberAttribute : ValidationAttribute
     {
@@ -116,6 +117,22 @@
             } else
             {
                 return new ValidationResult("Passordet ditt må ha minst ett tall");
+            }
+        }
+    }
+
+    public class ContainsOnlyNumbersAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            string phoneNumber = value as string;
+            int result;
+            if (int.TryParse(phoneNumber, out result))
+            {
+                return ValidationResult.Success;
+            } else
+            {
+                return new ValidationResult("Telefonnummeret ditt kan bare inneholde tall");
             }
         }
     }
