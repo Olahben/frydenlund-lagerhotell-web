@@ -44,7 +44,7 @@
 @code {
     private RegisterAccountFormValues model = new RegisterAccountFormValues();
     private static readonly HttpClient client = new HttpClient();
-    bool doesPhoneNumberExist;
+    public bool phoneNumberRegistered;
 
     public class RegisterAccountFormValues
     {
@@ -102,7 +102,7 @@
 
     public async void PhoneNumberExistence()
     {
-        // Calls API and gets true or false
+        // API method returns either a empty string, or "false"
         string url = "https://localhost:7272/user/is-phone-number-registered-registration";
         string jsonData = JsonSerializer.Serialize(model.phoneNumber);
         StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -110,14 +110,30 @@
         Console.WriteLine(content.ReadAsStringAsync().Result);
 
         HttpResponseMessage response = await client.PostAsync(url, content);
+        string responseStringContent = await response.Content.ReadAsStringAsync();
+        // if phone number is already registered
+        if (responseStringContent.Length > 2)
+        {
+            model.customError = "This phone number has already been registered";
+            phoneNumberRegistered = true;
+            Console.WriteLine("String is less than 2 in length");
+        } else
+        {
+            phoneNumberRegistered = false;
+            model.customError = "";
+        }
 
     }
 
     public void OnValidSubmit()
     {
         PhoneNumberExistence();
-        RedirectToLogin();
-        AddUser();
+        if (phoneNumberRegistered == true)
+        {
+            RedirectToLogin();
+            AddUser();
+        }
+            
     }
 
 
