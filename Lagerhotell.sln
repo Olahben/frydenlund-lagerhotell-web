@@ -4,6 +4,8 @@ VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lagerhotell", "Lagerhotell.csproj", "{B93E8971-9E54-4A44-B9F1-FE86BC7AEA86}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lagerhotell.Shared", "..\LagerhotellAPI\Lagerhotell.Shared\Lagerhotell.Shared.csproj", "{BFB6D3E5-E69B-4D19-9A24-B801389D0D69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,10 @@ Global
 		{B93E8971-9E54-4A44-B9F1-FE86BC7AEA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B93E8971-9E54-4A44-B9F1-FE86BC7AEA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B93E8971-9E54-4A44-B9F1-FE86BC7AEA86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFB6D3E5-E69B-4D19-9A24-B801389D0D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFB6D3E5-E69B-4D19-9A24-B801389D0D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFB6D3E5-E69B-4D19-9A24-B801389D0D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFB6D3E5-E69B-4D19-9A24-B801389D0D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
