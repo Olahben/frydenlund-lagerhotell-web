@@ -35,7 +35,9 @@
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Registrer deg</MudButton>
         </MudItem>
-        <MudItem xs="12" sm="4">@model.customError</MudItem>
+        <MudItem xs="12" sm="4" >
+            <p>@customError</p>
+        </MudItem>
     </MudGrid>
     </EditForm>
 
@@ -44,11 +46,11 @@
 @code {
     private RegisterAccountFormValues model = new RegisterAccountFormValues();
     private static readonly HttpClient client = new HttpClient();
-    public bool phoneNumberRegistered;
+    public string phoneNumberRegistered;
+    public string customError = "";
 
     public class RegisterAccountFormValues
     {
-        public string customError;
 
         [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
         [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
@@ -107,20 +109,18 @@
         string jsonData = JsonSerializer.Serialize(model.phoneNumber);
         StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-        Console.WriteLine(content.ReadAsStringAsync().Result);
 
         HttpResponseMessage response = await client.PostAsync(url, content);
         string responseStringContent = await response.Content.ReadAsStringAsync();
         // if phone number is already registered
         if (responseStringContent.Length > 2)
         {
-            model.customError = "This phone number has already been registered";
-            phoneNumberRegistered = true;
-            Console.WriteLine("String is less than 2 in length");
+            customError = "Dette telefonnummeret har allerede blitt registrert";
+            phoneNumberRegistered = "Registered";
         } else
         {
-            phoneNumberRegistered = false;
-            model.customError = "";
+            phoneNumberRegistered = "";
+            customError = "";
         }
 
     }
@@ -128,7 +128,8 @@
     public void OnValidSubmit()
     {
         PhoneNumberExistence();
-        if (phoneNumberRegistered == true)
+        StateHasChanged();
+        if (phoneNumberRegistered == "")
         {
             RedirectToLogin();
             AddUser();
