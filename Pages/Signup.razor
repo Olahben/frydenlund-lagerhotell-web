@@ -44,12 +44,12 @@
 @inject HttpClient Http
 
 @code {
-    private RegisterAccountFormValues model = new RegisterAccountFormValues();
+    private AccountFormValues model = new AccountFormValues();
     private static readonly HttpClient client = new HttpClient();
     public string phoneNumberRegistered;
     public string customError = "";
 
-    public class RegisterAccountFormValues
+    public class AccountFormValues
     {
 
         [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
