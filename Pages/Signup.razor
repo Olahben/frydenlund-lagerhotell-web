@@ -15,22 +15,22 @@
     <DataAnnotationsValidator />
         <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Minimum to bokstaver" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="model.firstName" For="@(() => model.firstName)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Minimum to bokstaver" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum to bokstaver" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="model.lastName" For="@(() => model.lastName)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum to bokstaver" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="model.LastName" For="@(() => model.LastName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Ditt norske mobilnummer" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Ditt norske mobilnummer" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Datoen du ble født" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="model.birthDate" For="@(() => model.birthDate)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Datoen du ble født" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="model.BirthDate" For="@(() => model.BirthDate)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum seks bokstaver, og minst ett tall" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@InputType.Password" @bind-Value="model.password" For="@(() => model.password)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum seks bokstaver, og minst ett tall" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@InputType.Password" @bind-Value="model.Password" For="@(() => model.Password)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Skriv inn passordet på nytt" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="model.passwordRepeat" For="@(() => model.passwordRepeat)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Skriv inn passordet på nytt" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="model.PasswordRepeat" For="@(() => model.PasswordRepeat)" />
         </MudItem>
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Registrer deg</MudButton>
@@ -46,7 +46,7 @@
 @code {
     private AccountFormValues model = new AccountFormValues();
     private static readonly HttpClient client = new HttpClient();
-    public string phoneNumberRegistered;
+    public string phoneNumberRegistered = "";
     public string customError = "";
 
     public class AccountFormValues
@@ -54,44 +54,40 @@
 
         [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
         [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Ett etternavn er obligatorisk")]
         [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
         [ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
-        public string phoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
         [IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
-        public string birthDate { get; set; }
+        public string BirthDate { get; set; }
 
         [Required(ErrorMessage = "Ett passord er obligatorisk")]
         [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
         [ContainsNumber(ErrorMessage="Passordet ditt må ha minst ett tall")]
-        public string password { get; set; }
+        public string Password { get; set; }
 
         [Required(ErrorMessage = "Du må repetere passordet ditt")]
-        [Compare(nameof(password), ErrorMessage = "Passordene samstemmer ikke")]
-        public string passwordRepeat { get; set; }
+        [Compare(nameof(Password), ErrorMessage = "Passordene samstemmer ikke")]
+        public string PasswordRepeat { get; set; }
 
     }
 
-    public async void AddUser()
+    public async Task AddUser()
     {
-        // Notice: By default all values are strings
-        Dictionary<string, string> userInfo = new Dictionary<string, string>() { { "firstName", model.firstName }, { "lastName", model.lastName }, { "phoneNumber", model.phoneNumber }, { "birthDate", model.birthDate }, { "password", model.password }, };
+        var request = LagerhotellAPI.Models.AddUserRequest.AddUserRequestFunc(model.FirstName, model.LastName, model.PhoneNumber, model.BirthDate, model.Password);
+        Console.WriteLine("request in Signup firstName" + request.FirstName);
 
-        // Calls API to add user in JSON file
-        string url = "https://localhost:7272/user/adduser";
-        string jsonData = JsonSerializer.Serialize(userInfo);
-
+        string url = "https://localhost:7272/users/adduser";
+        string jsonData = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-        Console.WriteLine(content.ReadAsStringAsync().Result);
 
         HttpResponseMessage response = await client.PostAsync(url, content);
     }
@@ -104,25 +100,12 @@
 
     public async void PhoneNumberExistence()
     {
-        // API method returns either a empty string, or "false"
-        string url = "https://localhost:7272/user/is-phone-number-registered-registration";
-        string jsonData = JsonSerializer.Serialize(model.phoneNumber);
+        string url = "https://localhost:7272/users/is-phone-number-registered-registration";
+        var request = new LagerhotellAPI.Models.CheckPhoneNumberRequest{PhoneNumber = model.PhoneNumber};
+        string jsonData = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-
         HttpResponseMessage response = await client.PostAsync(url, content);
-        string responseStringContent = await response.Content.ReadAsStringAsync();
-        // if phone number is already registered
-        if (responseStringContent.Length > 2)
-        {
-            customError = "Dette telefonnummeret har allerede blitt registrert";
-            phoneNumberRegistered = "Registered";
-        } else
-        {
-            phoneNumberRegistered = "";
-            customError = "";
-        }
-
     }
 
     public void OnValidSubmit()
