@@ -99,7 +99,7 @@
         NavigationManager.NavigateTo("/log-in");
     }
 
-    public async void PhoneNumberExistence()
+    public async Task PhoneNumberExistence()
     {
         string url = "https://localhost:7272/users/is-phone-number-registered-registration";
         var request = new LagerhotellAPI.Models.CheckPhoneNumberRequest{PhoneNumber = model.PhoneNumber};
@@ -108,21 +108,24 @@
 
         HttpResponseMessage response = await client.PostAsync(url, content);
         Console.WriteLine("response" + response.ReasonPhrase);
+        // Not found as in found
         if (response.ReasonPhrase == "Not Found")
         // Logic to handle if phone number exists or not
         {
+            Console.WriteLine("Phone number registered");
             customError = "Mobilnummeret har allerede blitt registrert";
             StateHasChanged();
             phoneNumberRegistered = "Registered";
         }
     }
 
-    public void OnValidSubmit()
+    public async void OnValidSubmit()
     {
-        PhoneNumberExistence();
+        await PhoneNumberExistence();
         StateHasChanged();
         if (phoneNumberRegistered == "")
         {
+            Console.WriteLine("this should not happen");
             RedirectToLogin();
             AddUser();
         }
