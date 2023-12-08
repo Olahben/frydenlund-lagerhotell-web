@@ -109,7 +109,7 @@
         HttpResponseMessage response = await client.PostAsync(url, content);
         Console.WriteLine("response" + response.ReasonPhrase);
         // Not found as in found
-        if (response.ReasonPhrase == "Not Found")
+        if (response.ReasonPhrase == "Conflict")
         // Logic to handle if phone number exists or not
         {
             Console.WriteLine("Phone number registered");
