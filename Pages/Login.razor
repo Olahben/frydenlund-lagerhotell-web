@@ -4,14 +4,14 @@
 @page "/log-in";
 
 <h2>Logg deg inn her:</h2>
-<EditForm Model="@model">
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="model.password" For="@(() => model.password)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="model.Password" For="@(() => model.Password)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
@@ -28,11 +28,16 @@
         [Signup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
         [Required(ErrorMessage = "Ett passord er obligatorisk")]
         [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
-        public string password { get; set; }
+        public string Password { get; set; }
 
         [Signup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
-        public string phoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+
+    public void OnValidSubmit()
+    {
+        // Calls check PhoneNumber
     }
 }
