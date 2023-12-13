@@ -1,27 +1,37 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Globalization
+@using System.Text
+@using System.Text.Json
 
 @page "/log-in";
 
 <h2>Logg deg inn her:</h2>
-<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+<EditForm Model="@logInValues" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="model.Password" For="@(() => model.Password)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="logInValues.PhoneNumber" For="@(() => logInValues.PhoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
         </MudItem>
+        <MudItem>
+            <p>@CustomError</p>
+        </MudItem>
     </MudGrid>
 </EditForm>
 
-
+@inject HttpClient Http
 @code {
-    private LogInValues model = new LogInValues();
+    private static readonly HttpClient client = new HttpClient();
+    private LogInValues logInValues = new LogInValues();
+    private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
+    public string PhoneNumberRegistered = "";
+    public string CustomError = "";
+
 
     public class LogInValues
     {
@@ -36,8 +46,22 @@
         public string PhoneNumber { get; set; }
     }
 
-    public void OnValidSubmit()
+    public async Task? CheckPhoneNumber(string phoneNumber)
     {
-        // Calls check PhoneNumber
+        // Check if phone number exists
+        // handle, some logic
+        string url = "https://localhost:7272/users/is-phone-number-registered-registration";
+        var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
+        string jsonData = JsonSerializer.Serialize(request);
+        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PostAsync(url, stringContent);
+        // Handle if phone number is not registered
+    }
+
+    public async void OnValidSubmit()
+    {
+        Console.WriteLine("Does this happen");
+        await CheckPhoneNumber(logInValues.PhoneNumber);
     }
 }
