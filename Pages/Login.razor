@@ -59,6 +59,9 @@
         if (response.ReasonPhrase == "OK")
         {
             CustomError = "Dette mobilnummeret er ikke registrert i våre systemer";
+        } else
+        {
+            CustomError = "";
         }
     }
 
@@ -71,7 +74,15 @@
 
         HttpResponseMessage response = await client.PostAsync(url, stringContent);
         // Should handle the response, compare the passwords and return an error if the passwords do not match
-        Console.WriteLine("Response:" + response);
+        Console.WriteLine("Response:" + response.Content.ReadAsStringAsync().Result.ToString());
+        if (response.Content.ReadAsStringAsync().Result.ToString().Contains(password))
+        {
+            // Sucessfull login
+            CustomError = "";
+        } else
+        {
+            CustomError = "Wrong password";
+        }
     }
 
     public async void OnValidSubmit()
@@ -79,5 +90,6 @@
         await CheckPhoneNumber(logInValues.PhoneNumber);
         StateHasChanged();
         CheckPassword(logInValues.Password, logInValues.PhoneNumber);
+        StateHasChanged();
     }
 }
