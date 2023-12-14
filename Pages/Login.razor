@@ -21,6 +21,9 @@
         <MudItem>
             <p>@CustomError</p>
         </MudItem>
+        <MudItem xs="6" sm="6">
+            <p>@PasswordError</p>
+        </MudItem>
     </MudGrid>
 </EditForm>
 
@@ -31,6 +34,7 @@
     private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
     public string PhoneNumberRegistered = "";
     public string CustomError = "";
+    public string PasswordError = "";
 
 
     public class LogInValues
@@ -78,10 +82,10 @@
         if (response.Content.ReadAsStringAsync().Result.ToString().Contains(password))
         {
             // Sucessfull login
-            CustomError = "";
+            PasswordError = "";
         } else
         {
-            CustomError = "Wrong password";
+            PasswordError = "Feil Passord";
         }
     }
 
@@ -89,7 +93,7 @@
     {
         await CheckPhoneNumber(logInValues.PhoneNumber);
         StateHasChanged();
-        CheckPassword(logInValues.Password, logInValues.PhoneNumber);
+        await CheckPassword(logInValues.Password, logInValues.PhoneNumber);
         StateHasChanged();
     }
 }
