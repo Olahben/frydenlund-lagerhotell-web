@@ -94,7 +94,14 @@
     {
         await CheckPhoneNumber(logInValues.PhoneNumber);
         StateHasChanged();
-        await CheckPassword(logInValues.Password, logInValues.PhoneNumber);
-        StateHasChanged();
+        if (CustomError == "")
+        {
+            await CheckPassword(logInValues.Password, logInValues.PhoneNumber);
+            StateHasChanged();
+        }
+        if (PasswordError == "" && CustomError == "")
+        {
+            // Redirect to user/UserId
+        }
     }
 }
