@@ -2,6 +2,7 @@
 @using System.Globalization
 @using System.Text
 @using System.Text.Json
+@using System.Collections.Generic
 
 @page "/log-in";
 
@@ -19,10 +20,10 @@
             <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
         </MudItem>
         <MudItem>
-            <p>@CustomError</p>
+            <MudText Color="Color.Error" Style="font-size: 16px">@CustomError</MudText>
         </MudItem>
         <MudItem xs="6" sm="6">
-            <p>@PasswordError</p>
+            <MudText Color="Color.Error" Style="font-size: 16px">@PasswordError</MudText>
         </MudItem>
     </MudGrid>
 </EditForm>
