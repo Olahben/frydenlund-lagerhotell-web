@@ -29,6 +29,7 @@
 </EditForm>
 
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 @code {
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
@@ -90,6 +91,21 @@
         }
     }
 
+    public async Task? GetUserByPhoneNumber(string phoneNumber)
+    {
+        string url = "https://localhost:7272/users/get-user-by-phone-number";
+        var request = new LagerhotellAPI.Models.GetUserByPhoneNumberRequest { PhoneNumber = phoneNumber };
+        string jsonData = JsonSerializer.Serialize(request);
+        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PostAsync(url, stringContent);
+    }
+
+    public async Task RedirectToUserSettings(string id)
+    {
+        NavigationManager.NavigateTo($"/user/{id}");
+    }
+
     public async void OnValidSubmit()
     {
         await CheckPhoneNumber(logInValues.PhoneNumber);
@@ -101,7 +117,11 @@
         }
         if (PasswordError == "" && CustomError == "")
         {
-            // Redirect to user/UserId
+            // Redirect to user/UserId, call API controller
+            GetUserByPhoneNumber(logInValues.PhoneNumber);
+            // Use what returned by GetUserByPhoneNumber, the id To Call RedirectToUserSettings
+            RedirectToUserSettings()
+            // Generate Session
         }
     }
 }
