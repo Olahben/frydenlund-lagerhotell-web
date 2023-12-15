@@ -83,7 +83,6 @@
     public async Task AddUser()
     {
         var request = LagerhotellAPI.Models.AddUserRequest.AddUserRequestFunc(model.FirstName, model.LastName, model.PhoneNumber, model.BirthDate, model.Password);
-        Console.WriteLine("request in Signup firstName" + request.FirstName);
 
         string url = "https://localhost:7272/users/adduser";
         string jsonData = JsonSerializer.Serialize(request);
@@ -96,19 +95,18 @@
     public void RedirectToLogin()
     {
         // Redirects to login
-        NavigationManager.NavigateTo("/log-in");
+        NavigationManager.NavigateTo("/success-login");
     }
 
-    public async Task PhoneNumberExistence()
+    public async Task? PhoneNumberExistence(string phoneNumber)
     {
         string url = "https://localhost:7272/users/is-phone-number-registered-registration";
-        var request = new LagerhotellAPI.Models.CheckPhoneNumberRequest{PhoneNumber = model.PhoneNumber};
+        var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest{PhoneNumber = phoneNumber};
         string jsonData = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
         HttpResponseMessage response = await client.PostAsync(url, content);
         Console.WriteLine("response" + response.ReasonPhrase);
-        // Not found as in found
         if (response.ReasonPhrase == "Conflict")
         // Logic to handle if phone number exists or not
         {
@@ -124,11 +122,10 @@
 
     public async void OnValidSubmit()
     {
-        await PhoneNumberExistence();
+        await PhoneNumberExistence(model.PhoneNumber);
         StateHasChanged();
         if (phoneNumberRegistered == "")
         {
-            Console.WriteLine("this should not happen");
             RedirectToLogin();
             AddUser();
         }
@@ -136,7 +133,6 @@
     }
 
 
-    // Inherits from ValidationAttribute class
     public class ContainsNumberAttribute : ValidationAttribute
     {
         // Overrides the existing method IsValid in the ValidationAttribute class
