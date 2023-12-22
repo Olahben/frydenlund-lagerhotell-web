@@ -19,11 +19,8 @@
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
         </MudItem>
-        <MudItem>
-            <MudText Color="Color.Error" Style="font-size: 16px">@CustomError</MudText>
-        </MudItem>
         <MudItem xs="6" sm="6">
-            <MudText Color="Color.Error" Style="font-size: 16px">@PasswordError</MudText>
+            <MudText Color="Color.Error" Style="font-size: 16px">@CustomError</MudText>
         </MudItem>
     </MudGrid>
 </EditForm>
@@ -34,11 +31,9 @@
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
     private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
-    private readonly Lagerhotell.Services.UserService userService = new Services.UserService();
-    private readonly Lagerhotell.Services.UserService.UserServiceLogin userServiceLogin = new Lagerhotell.Services.UserService.UserServiceLogin();
+    private readonly Lagerhotell.Services.UserService.UserServiceLogin userServiceLogin = new Services.UserService.UserServiceLogin();
     public string PhoneNumberRegistered = "";
     public string CustomError = "";
-    public string PasswordError = "";
 
 
     public class LogInValues
@@ -54,34 +49,10 @@
         public string PhoneNumber { get; set; }
     }
 
-    public async Task? CheckPhoneNumberCall(string phoneNumber)
-    {
-        // Error
-        var result = await userServiceLogin.CheckPhoneNumber(phoneNumber);
-        // Use message returned from function call
-        Console.WriteLine(result);
-    }
-
-    public async Task? CheckPassword(string password, string phoneNumber)
-    {
-        await userServiceLogin.CheckPassword(password, phoneNumber);
-        // Display message returned from function call
-    }
-
-    public async Task? GetUserByPhoneNumber(string phoneNumber)
-    {
-        await userServiceLogin.GetUserByPhoneNumber(phoneNumber);
-        // handle returned message if any
-    }
-
-    public async Task RedirectToUserSettings(string id)
-    {
-        await userServiceLogin.RedirectToUserSettings(id, NavigationManager);
-        // Handle returned message if any
-    }
-
     public async void LoginUser()
     {
-        await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
+        string result = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
+        CustomError = result;
+        // Handle returned value
     }
 }
