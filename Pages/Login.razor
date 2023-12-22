@@ -26,7 +26,7 @@
 </EditForm>
 
 @inject HttpClient Http
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigationManager
 @code {
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
@@ -51,7 +51,7 @@
 
     public async void LoginUser()
     {
-        string result = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
+        string result = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password, navigationManager);
         Console.WriteLine(result);
         CustomError = result;
         StateHasChanged();
