@@ -32,12 +32,10 @@ namespace Lagerhotell.Services.UserService
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
-            // Should handle the response, compare the passwords and return an error if the passwords do not match
-            Console.WriteLine("Response:" + response.Content.ReadAsStringAsync().Result.ToString());
             return response.Content.ReadAsStringAsync().Result.ToString().Contains(password);
         }
 
-        public async Task<LagerhotellAPI.Models.User> GetUserByPhoneNumber(string phoneNumber)
+        public async Task<string> GetUserByPhoneNumber(string phoneNumber)
         {
             string url = "https://localhost:7272/users/get-user-by-phone-number";
             var request = new LagerhotellAPI.Models.GetUserByPhoneNumberRequest { PhoneNumber = phoneNumber };
@@ -46,7 +44,14 @@ namespace Lagerhotell.Services.UserService
 
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
             // return User
-            return new LagerhotellAPI.Models.User();
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            LagerhotellAPI.Models.User userDeserialized = JsonSerializer.Deserialize<LagerhotellAPI.Models.User>(responseContent, options);
+            string userId = userDeserialized.Id;
+            return userId;
         }
         public async Task? RedirectToUserSettings(string id, NavigationManager navigationManager)
         {
@@ -70,9 +75,10 @@ namespace Lagerhotell.Services.UserService
                 throw new Exception("Feil passord");
             }
             // Redirect to user/UserId, call API controller
-            LagerhotellAPI.Models.User user = await GetUserByPhoneNumber(phoneNumber);
             // Use what returned by GetUserByPhoneNumber, the id To Call RedirectToUserSettings
-            await RedirectToUserSettings(user.Id, navigationManager);
+            Console.WriteLine("phoneNumber" + phoneNumber);
+            string userId = await GetUserByPhoneNumber(phoneNumber);
+            await RedirectToUserSettings(userId, navigationManager);
             // Generate Session
             return "";
 
