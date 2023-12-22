@@ -8,7 +8,6 @@ namespace Lagerhotell.Services.UserService
     public class UserServiceLogin
     {
         private readonly HttpClient client = new HttpClient();
-        private readonly NavigationManager navigationManager;
         private readonly string BaseUrlAPI = "https://localhost:7272/users";
         // Remove
         public string PhoneNumberRegistered = "";
@@ -38,7 +37,7 @@ namespace Lagerhotell.Services.UserService
             return response.Content.ReadAsStringAsync().Result.ToString().Contains(password);
         }
 
-        public async Task? GetUserByPhoneNumber(string phoneNumber)
+        public async Task<LagerhotellAPI.Models.User> GetUserByPhoneNumber(string phoneNumber)
         {
             string url = "https://localhost:7272/users/get-user-by-phone-number";
             var request = new LagerhotellAPI.Models.GetUserByPhoneNumberRequest { PhoneNumber = phoneNumber };
@@ -46,13 +45,15 @@ namespace Lagerhotell.Services.UserService
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
+            // return User
+            return new LagerhotellAPI.Models.User();
         }
-        public async Task RedirectToUserSettings(string id, NavigationManager navigationManager)
+        public async Task? RedirectToUserSettings(string id, NavigationManager navigationManager)
         {
             navigationManager.NavigateTo($"/user/{id}");
         }
 
-        public async Task<string> LoginUser(string phoneNumber, string password)
+        public async Task<string> LoginUser(string phoneNumber, string password, NavigationManager navigationManager)
         {
             // await CheckPhoneNumber(phoneNumber);
             bool userExistence = await CheckPhoneNumber(phoneNumber);
@@ -69,9 +70,9 @@ namespace Lagerhotell.Services.UserService
                 throw new Exception("Feil passord");
             }
             // Redirect to user/UserId, call API controller
-            await GetUserByPhoneNumber(phoneNumber);
+            LagerhotellAPI.Models.User user = await GetUserByPhoneNumber(phoneNumber);
             // Use what returned by GetUserByPhoneNumber, the id To Call RedirectToUserSettings
-            // RedirectToUserSettings()
+            await RedirectToUserSettings(user.Id, navigationManager);
             // Generate Session
             return "";
 
