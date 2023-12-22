@@ -52,7 +52,9 @@
     public async void LoginUser()
     {
         string result = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
+        Console.WriteLine(result);
         CustomError = result;
+        StateHasChanged();
         // Handle returned value
     }
 }

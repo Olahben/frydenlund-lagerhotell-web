@@ -52,18 +52,20 @@ namespace Lagerhotell.Services.UserService
             navigationManager.NavigateTo($"/user/{id}");
         }
 
-        public async Task<string>? LoginUser(string phoneNumber, string password)
+        public async Task<string> LoginUser(string phoneNumber, string password)
         {
             // await CheckPhoneNumber(phoneNumber);
             bool userExistence = await CheckPhoneNumber(phoneNumber);
             if (!userExistence)
             {
+                return "Brukeren eksisterer ikke";
                 throw new Exception("Brukeren eksisterer ikke");
             }
 
             bool passwordCorrectness = await CheckPassword(password, phoneNumber);
             if (!passwordCorrectness)
             {
+                return "Feil passord";
                 throw new Exception("Feil passord");
             }
             // Redirect to user/UserId, call API controller
