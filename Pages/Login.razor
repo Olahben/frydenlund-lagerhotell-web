@@ -7,7 +7,7 @@
 @page "/log-in";
 
 <h2>Logg deg inn her:</h2>
-<EditForm Model="@logInValues" OnValidSubmit="OnValidSubmit">
+<EditForm Model="@logInValues" OnValidSubmit="LoginUser">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="6">
@@ -34,6 +34,8 @@
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
     private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
+    private readonly Lagerhotell.Services.UserService userService = new Services.UserService();
+    private readonly Lagerhotell.Services.UserService.UserServiceLogin userServiceLogin = new Lagerhotell.Services.UserService.UserServiceLogin();
     public string PhoneNumberRegistered = "";
     public string CustomError = "";
     public string PasswordError = "";
@@ -52,76 +54,34 @@
         public string PhoneNumber { get; set; }
     }
 
-    public async Task? CheckPhoneNumber(string phoneNumber)
+    public async Task? CheckPhoneNumberCall(string phoneNumber)
     {
-        // Check if phone number exists
-        // handle, some logic
-        string url = "https://localhost:7272/users/is-phone-number-registered-registration";
-        var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
-        string jsonData = JsonSerializer.Serialize(request);
-        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await client.PostAsync(url, stringContent);
-        if (response.ReasonPhrase == "OK")
-        {
-            CustomError = "Dette mobilnummeret er ikke registrert i våre systemer";
-        } else
-        {
-            CustomError = "";
-        }
+        // Error
+        var result = await userServiceLogin.CheckPhoneNumber(phoneNumber);
+        // Use message returned from function call
+        Console.WriteLine(result);
     }
 
     public async Task? CheckPassword(string password, string phoneNumber)
     {
-        string url = "https://localhost:7272/users/check-password";
-        var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
-        string jsonData = JsonSerializer.Serialize(request);
-        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await client.PostAsync(url, stringContent);
-        // Should handle the response, compare the passwords and return an error if the passwords do not match
-        Console.WriteLine("Response:" + response.Content.ReadAsStringAsync().Result.ToString());
-        if (response.Content.ReadAsStringAsync().Result.ToString().Contains(password))
-        {
-            // Sucessfull login
-            PasswordError = "";
-        } else
-        {
-            PasswordError = "Feil Passord";
-        }
+        await userServiceLogin.CheckPassword(password, phoneNumber);
+        // Display message returned from function call
     }
 
     public async Task? GetUserByPhoneNumber(string phoneNumber)
     {
-        string url = "https://localhost:7272/users/get-user-by-phone-number";
-        var request = new LagerhotellAPI.Models.GetUserByPhoneNumberRequest { PhoneNumber = phoneNumber };
-        string jsonData = JsonSerializer.Serialize(request);
-        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await client.PostAsync(url, stringContent);
+        await userServiceLogin.GetUserByPhoneNumber(phoneNumber);
+        // handle returned message if any
     }
 
     public async Task RedirectToUserSettings(string id)
     {
-        NavigationManager.NavigateTo($"/user/{id}");
+        await userServiceLogin.RedirectToUserSettings(id, NavigationManager);
+        // Handle returned message if any
     }
 
-    public async void OnValidSubmit()
+    public async void LoginUser()
     {
-        await CheckPhoneNumber(logInValues.PhoneNumber);
-        StateHasChanged();
-        if (CustomError == "")
-        {
-            await CheckPassword(logInValues.Password, logInValues.PhoneNumber);
-            StateHasChanged();
-        }
-        if (PasswordError == "" && CustomError == "")
-        {
-            // Redirect to user/UserId, call API controller
-            GetUserByPhoneNumber(logInValues.PhoneNumber);
-            // Use what returned by GetUserByPhoneNumber, the id To Call RedirectToUserSettings
-            RedirectToUserSettings()
-            // Generate Session
-        }
+        await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
     }
 }
