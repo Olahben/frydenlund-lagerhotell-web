@@ -5,49 +5,50 @@
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @using System.Collections.Generic
+@using Lagerhotell.Services.UserService
 
 @page "/sign-up";
 
-@inject NavigationManager NavigationManager
-
 <h2>Registrer deg her:</h2>
-    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <EditForm Model="@accountFormValues" OnValidSubmit="SignupUser">
     <DataAnnotationsValidator />
         <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Minimum to bokstaver" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Minimum to bokstaver" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="accountFormValues.FirstName" For="@(() => accountFormValues.FirstName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum to bokstaver" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="model.LastName" For="@(() => model.LastName)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum to bokstaver" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="accountFormValues.LastName" For="@(() => accountFormValues.LastName)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Ditt norske mobilnummer" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Ditt norske mobilnummer" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="accountFormValues.PhoneNumber" For="@(() => accountFormValues.PhoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Datoen du ble født" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="model.BirthDate" For="@(() => model.BirthDate)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Datoen du ble født" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="accountFormValues.BirthDate" For="@(() => accountFormValues.BirthDate)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum seks bokstaver, og minst ett tall" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@InputType.Password" @bind-Value="model.Password" For="@(() => model.Password)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum seks bokstaver, og minst ett tall" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@InputType.Password" @bind-Value="accountFormValues.Password" For="@(() => accountFormValues.Password)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Skriv inn passordet på nytt" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="model.PasswordRepeat" For="@(() => model.PasswordRepeat)" />
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Skriv inn passordet på nytt" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="accountFormValues.PasswordRepeat" For="@(() => accountFormValues.PasswordRepeat)" />
         </MudItem>
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Registrer deg</MudButton>
         </MudItem>
         <MudItem xs="12" sm="4" >
-            <p>@customError</p>
+            <p>@CustomError</p>
         </MudItem>
     </MudGrid>
     </EditForm>
 
 @inject HttpClient Http
+@inject NavigationManager navigationManager
 
 @code {
-    private AccountFormValues model = new AccountFormValues();
+    private AccountFormValues accountFormValues = new AccountFormValues();
     private static readonly HttpClient client = new HttpClient();
-    public string phoneNumberRegistered = "";
-    public string customError = "";
+    private UserServiceSignup userServiceSignup = new UserServiceSignup();
+    public string PhoneNumberRegistered = "";
+    public string CustomError = "";
 
     public class AccountFormValues
     {
@@ -60,18 +61,18 @@
         [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
         public string LastName { get; set; }
 
-        [ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
+        [UserServiceSignup.ContainsNumberAttribute(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
-        [IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
+        [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
         public string BirthDate { get; set; }
 
         [Required(ErrorMessage = "Ett passord er obligatorisk")]
         [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
-        [ContainsNumber(ErrorMessage="Passordet ditt må ha minst ett tall")]
+        [UserServiceSignup.ContainsNumber(ErrorMessage="Passordet ditt må ha minst ett tall")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Du må repetere passordet ditt")]
@@ -80,116 +81,18 @@
 
     }
 
-    public async Task AddUser()
+    public async Task? SignupUser()
     {
-        var request = LagerhotellAPI.Models.AddUserRequest.AddUserRequestFunc(model.FirstName, model.LastName, model.PhoneNumber, model.BirthDate, model.Password);
-
-        string url = "https://localhost:7272/users/adduser";
-        string jsonData = JsonSerializer.Serialize(request);
-        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await client.PostAsync(url, content);
-        // Handle the ID that is returned
-    }
-
-    public void RedirectToLogin()
-    {
-        // Redirects to login
-        NavigationManager.NavigateTo("/success-login");
-    }
-
-    public async Task? PhoneNumberExistence(string phoneNumber)
-    {
-        string url = "https://localhost:7272/users/is-phone-number-registered-registration";
-        var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest{PhoneNumber = phoneNumber};
-        string jsonData = JsonSerializer.Serialize(request);
-        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await client.PostAsync(url, content);
-        Console.WriteLine("response" + response.ReasonPhrase);
-        if (response.ReasonPhrase == "Conflict")
-        // Logic to handle if phone number exists or not
-        {
-            Console.WriteLine("Phone number registered");
-            customError = "Mobilnummeret har allerede blitt registrert";
-            phoneNumberRegistered = "Registered";
-        } else
-        {
-            customError = "";
-            phoneNumberRegistered = "";
-        }
-    }
-
-    public async void OnValidSubmit()
-    {
-        await PhoneNumberExistence(model.PhoneNumber);
+        /* await PhoneNumberExistence(accountFormValues.PhoneNumber);
         StateHasChanged();
         if (phoneNumberRegistered == "")
-        {
+            {
             RedirectToLogin();
             AddUser();
-        }
-            
-    }
-
-
-    public class ContainsNumberAttribute : ValidationAttribute
-    {
-        // Overrides the existing method IsValid in the ValidationAttribute class
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext) 
-        {
-            string password = value as string;
-            // Checks if the password contains a number
-            if (password.Any(char.IsDigit))
-            {
-                return ValidationResult.Success;
-            } else
-            {
-                return new ValidationResult("Passordet ditt må ha minst ett tall");
-            }
-        }
-    }
-
-    public class ContainsOnlyNumbersAttribute : ValidationAttribute
-    {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            string phoneNumber = value as string;
-            int result;
-            if (int.TryParse(phoneNumber, out result))
-            {
-                return ValidationResult.Success;
-            } else
-            {
-                return new ValidationResult("Telefonnummeret ditt kan bare inneholde tall");
-            }
-        }
-    }
-
-    // Inherits from the ValidationAttribute class
-    public class IsOverLegalAgeAttribute : ValidationAttribute
-    {
-        // Overrides the existing method IsValid in the ValidationAttribute class
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            string birthDateStr = value as string;
-            // format is with hyphens
-            DateTime birthDate = DateTime.ParseExact(birthDateStr, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            int age = DateTime.Now.Year - birthDate.Year;
-            // Checks exactly if the person is over 18
-            if (DateTime.Now.Month < birthDate.Month || (DateTime.Now.Month == birthDate.Month && DateTime.Now.Day < birthDate.Day))
-                age--;
-
-            if (age >= 18)
-            {
-                return ValidationResult.Success;
-            }
-            else
-            {
-                return new ValidationResult("Du må være over 18 år");
-            }
-
-        }
+        } */
+        string result = await userServiceSignup.SignupUser(navigationManager, accountFormValues, client);
+        CustomError = result;
+        StateHasChanged();
     }
 
 }
