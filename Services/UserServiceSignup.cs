@@ -11,8 +11,8 @@ namespace Lagerhotell.Services.UserService
     {
         // private static readonly HttpClient client = new();
         // public Signup signup = new();
-        public string CustomError = "";
-        public string PhoneNumberRegistered = "";
+        public string CustomError;
+        public bool UserRegistered;
         public async Task AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string password, HttpClient client)
         {
             var request = LagerhotellAPI.Models.AddUserRequest.AddUserRequestFunc(firstName, lastName, phoneNumber, birthDate, password);
@@ -42,18 +42,18 @@ namespace Lagerhotell.Services.UserService
             {
                 Console.WriteLine("Phone number registered");
                 CustomError = "Mobilnummeret har allerede blitt registrert";
-                PhoneNumberRegistered = "Registered";
+                UserRegistered = true;
             }
             else
             {
                 CustomError = "";
-                PhoneNumberRegistered = "";
+                UserRegistered = false;
             }
         }
         public async Task<string> SignupUser(NavigationManager navigationManager, Signup.AccountFormValues accountFormValues, HttpClient client)
         {
             await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
-            if (PhoneNumberRegistered == "")
+            if (!UserRegistered)
             {
                 await RedirectToLogin(navigationManager);
                 await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client);
