@@ -3,6 +3,7 @@
 @using System.Text
 @using System.Text.Json
 @using System.Collections.Generic
+@using Lagerhotell.Services.UserService
 
 @page "/log-in";
 
@@ -31,19 +32,19 @@
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
     private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
-    private readonly Lagerhotell.Services.UserService.UserServiceLogin userServiceLogin = new Services.UserService.UserServiceLogin();
+    private readonly UserServiceLogin userServiceLogin = new();
     public string PhoneNumberRegistered = "";
     public string CustomError = "";
 
 
     public class LogInValues
     {
-        [Signup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
+        [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
         [Required(ErrorMessage = "Ett passord er obligatorisk")]
         [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
         public string Password { get; set; }
 
-        [Signup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
+        [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
         public string PhoneNumber { get; set; }
