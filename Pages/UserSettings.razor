@@ -1,6 +1,7 @@
 ﻿@using System.Text
 @using System.Text.Json
 @using LagerhotellAPI.Models
+@using Lagerhotell.Services.UserService
 
 @page "/user/{userId}"
 
@@ -25,33 +26,25 @@
 @inject HttpClient Http
 @code {
     private static readonly HttpClient client = new HttpClient();
-    [Parameter] public string userId { get; set; }
+    [Parameter] public string UserId { get; set; }
     private User _userValues = new User();
+    private UserServiceUserSettings _userServiceUserSettings = new();
 
     protected override async Task OnInitializedAsync()
     {
-        string url = "https://localhost:7272/users/get-user";
-        var request = new LagerhotellAPI.Models.GetUserRequest { UserId = userId };
-        string jsonData = JsonSerializer.Serialize(request);
-        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        var User = await _userServiceUserSettings.LoadUser(client, _userValues, UserId);
+        Console.WriteLine(User.LastName);
+        if (User != null)
+         {
+            _userValues.FirstName = User.FirstName;
+            _userValues.LastName = User.LastName;
+            _userValues.PhoneNumber = User.PhoneNumber;
+            _userValues.BirthDate = User.BirthDate;
+            _userValues.Password = User.Password;
+         } else
+         {
+            Console.WriteLine("Error in loading user");
+        }
 
-        HttpResponseMessage response = await client.PostAsync(url, stringContent);
-        if (response.IsSuccessStatusCode)
-        {
-            string result = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
-            LagerhotellAPI.Models.User deserializedUser = JsonSerializer.Deserialize<LagerhotellAPI.Models.User>(result, options);
-            _userValues.FirstName = deserializedUser.FirstName;
-            _userValues.LastName = deserializedUser.LastName;
-            _userValues.PhoneNumber = deserializedUser.PhoneNumber;
-            _userValues.BirthDate = deserializedUser.BirthDate;
-        }
-        else
-        {
-            Console.WriteLine($"Error: {response.StatusCode}");
-        }
     }
 }
