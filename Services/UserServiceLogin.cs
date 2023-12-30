@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using LagerhotellAPI.Models;
+using Microsoft.AspNetCore.Components;
 using System.Text;
 using System.Text.Json;
 
@@ -9,10 +10,6 @@ namespace Lagerhotell.Services.UserService
     {
         private readonly HttpClient client = new HttpClient();
         private readonly string BaseUrlAPI = "https://localhost:7272/users";
-        // Remove
-        public string PhoneNumberRegistered = "";
-        public string CustomError = "";
-        public string PasswordError = "";
 
         public async Task<bool> CheckPhoneNumber(string phoneNumber)
         {
@@ -74,14 +71,29 @@ namespace Lagerhotell.Services.UserService
                 return "Feil passord";
                 throw new Exception("Feil passord");
             }
-            // Redirect to user/UserId, call API controller
-            // Use what returned by GetUserByPhoneNumber, the id To Call RedirectToUserSettings
             Console.WriteLine("phoneNumber" + phoneNumber);
             string userId = await GetUserByPhoneNumber(phoneNumber);
             await RedirectToUserSettings(userId, navigationManager);
             // Generate Session
             return "";
 
+        }
+
+        public async Task<CreateJwt.CreateJwtResponse> CreateJWT(CreateJwt.CreateJwtRequest request)
+        {
+            string url = BaseUrlAPI + "/create-jwt";
+            string jsonData = JsonSerializer.Serialize(request);
+            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync(url, stringContent);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            CreateJwt.CreateJwtResponse deserializedResponse = JsonSerializer.Deserialize<CreateJwt.CreateJwtResponse>(responseContent, options);
+            Console.WriteLine(deserializedResponse.JWT);
+            return deserializedResponse;
         }
     }
 }
