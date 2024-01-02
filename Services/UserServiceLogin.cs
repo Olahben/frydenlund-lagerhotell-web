@@ -79,11 +79,12 @@ namespace Lagerhotell.Services.UserService
 
         }
 
-        public async Task<CreateJwt.CreateJwtResponse> CreateJWT(CreateJwt.CreateJwtRequestService request)
+        public async Task<CreateJwt.CreateJwtResponse> CreateJWT(CreateJwt.CreateJwtRequestService serviceRequest)
         {
             string url = BaseUrlAPI + "/create-jwt";
+            string userId = await GetUserByPhoneNumber(serviceRequest.PhoneNumber);
+            CreateJwt.CreateJwtRequest request = new CreateJwt.CreateJwtRequest { Id = userId };
             string jsonData = JsonSerializer.Serialize(request);
-            Console.WriteLine("Json data" + jsonData);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
             string responseContent = await response.Content.ReadAsStringAsync();
