@@ -29,6 +29,7 @@
 
 @inject HttpClient Http
 @inject NavigationManager navigationManager
+@inject SessionService sessionService
 @code {
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
@@ -55,6 +56,8 @@
     {
         Console.WriteLine(logInValues.PhoneNumber);
         CreateJwt.CreateJwtResponse jwt = await userServiceLogin.CreateJWT(new CreateJwt.CreateJwtRequestService { PhoneNumber = logInValues.PhoneNumber });
+        string jwtString = jwt.ToString();
+        await sessionService.AddJwtToLocalStorage(jwtString);
         Console.WriteLine(jwt);
         string result = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password, navigationManager);
         CustomError = result;
