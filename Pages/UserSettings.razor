@@ -32,15 +32,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var User = await _userServiceUserSettings.LoadUser(client, _userValues, UserId);
-        Console.WriteLine(User.LastName);
-        if (User != null)
+        var user = await _userServiceUserSettings.LoadUser(client, _userValues, UserId);
+        // Console.WriteLine(user.LastName);
+        if (user != null)
          {
-            _userValues.FirstName = User.FirstName;
-            _userValues.LastName = User.LastName;
-            _userValues.PhoneNumber = User.PhoneNumber;
-            _userValues.BirthDate = User.BirthDate;
-            _userValues.Password = User.Password;
+            _userValues.FirstName = user.FirstName;
+            _userValues.LastName = user.LastName;
+            _userValues.PhoneNumber = user.PhoneNumber;
+            _userValues.BirthDate = user.BirthDate;
+            _userValues.Password = user.Password;
          } else
          {
             Console.WriteLine("Error in loading user");
