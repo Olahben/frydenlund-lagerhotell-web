@@ -11,12 +11,13 @@ namespace Lagerhotell.Services.UserService
     {
         // private static readonly HttpClient client = new();
         // public Signup signup = new();
-        public string CustomError;
-        public bool UserRegistered;
+        private readonly string _baseUrl = "https://localhost:7272/users/";
+        protected string? CustomError;
+        protected bool UserRegistered;
         public async Task AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string password, HttpClient client)
         {
             var request = LagerhotellAPI.Models.AddUserRequest.AddUserRequestFunc(firstName, lastName, phoneNumber, birthDate, password);
-            string url = "https://localhost:7272/users/adduser";
+            string url = _baseUrl + "add-user";
             string jsonData = JsonSerializer.Serialize(request);
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
@@ -31,7 +32,7 @@ namespace Lagerhotell.Services.UserService
         }
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
         {
-            string url = "https://localhost:7272/users/is-phone-number-registered-registration";
+            string url = _baseUrl + "is-phone-number-registered-registration";
             var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
