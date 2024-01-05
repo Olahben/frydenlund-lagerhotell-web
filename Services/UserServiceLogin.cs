@@ -1,8 +1,6 @@
 ﻿using LagerhotellAPI.Models;
-using Microsoft.AspNetCore.Components;
 using System.Text;
 using System.Text.Json;
-
 
 namespace Lagerhotell.Services.UserService
 {
@@ -21,15 +19,30 @@ namespace Lagerhotell.Services.UserService
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
             return response.IsSuccessStatusCode;
         }
-        public async Task<bool> CheckPassword(string password, string phoneNumber)
+        public async Task<(string, bool)> CheckPassword(string password, string phoneNumber)
         {
             string url = _baseUrl + "check-password";
-            var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
+            var request = new CheckPassword.CheckPasswordRequest { PhoneNumber = phoneNumber, Password = password };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
-            return response.Content.ReadAsStringAsync().Result.ToString().Contains(password);
+            if (response.IsSuccessStatusCode)
+            {
+                // Read the string content of the response
+                var responseString = await response.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                Jwt jwt = JsonSerializer.Deserialize<Jwt>(responseString, options);
+                return (jwt.Token, true);
+            }
+            else
+            {
+                // Handle the error or throw an exception as appropriate
+                throw new HttpRequestException($"Invalid response: {response.StatusCode}");
+            }
         }
 
         public async Task<string> GetUserByPhoneNumber(string phoneNumber)
@@ -50,50 +63,23 @@ namespace Lagerhotell.Services.UserService
             string userId = userDeserialized.Id;
             return userId;
         }
-        public async Task? RedirectToUserSettings(string id, NavigationManager navigationManager)
-        {
-            navigationManager.NavigateTo($"/user/{id}");
-        }
 
-        public async Task<string> LoginUser(string phoneNumber, string password, NavigationManager navigationManager)
+        public async Task<(string, string)> LoginUser(string phoneNumber, string password)
         {
-            // await CheckPhoneNumber(phoneNumber);
+            object returnedObject = new();
+
             bool userExistence = await CheckPhoneNumber(phoneNumber);
             if (!userExistence)
             {
-                return "Brukeren eksisterer ikke";
                 throw new Exception("Brukeren eksisterer ikke");
             }
-
-            bool passwordCorrectness = await CheckPassword(password, phoneNumber);
-            if (!passwordCorrectness)
+            (string token, bool passwordMatch) = await CheckPassword(password, phoneNumber);
+            if (!passwordMatch)
             {
-                return "Feil passord";
                 throw new Exception("Feil passord");
             }
-            Console.WriteLine("phoneNumber" + phoneNumber);
             string userId = await GetUserByPhoneNumber(phoneNumber);
-            await RedirectToUserSettings(userId, navigationManager);
-            // Generate Session
-            return "";
-
-        }
-
-        public async Task<CreateJwt.CreateJwtResponse> CreateJWT(CreateJwt.CreateJwtRequestService serviceRequest)
-        {
-            string url = _baseUrl + "create-jwt";
-            string userId = await GetUserByPhoneNumber(serviceRequest.PhoneNumber);
-            CreateJwt.CreateJwtRequest request = new CreateJwt.CreateJwtRequest { Id = userId };
-            string jsonData = JsonSerializer.Serialize(request);
-            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync(url, stringContent);
-            string responseContent = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            CreateJwt.CreateJwtResponse deserializedResponse = JsonSerializer.Deserialize<CreateJwt.CreateJwtResponse>(responseContent, options);
-            return deserializedResponse;
+            return (token, userId);
         }
     }
 }
