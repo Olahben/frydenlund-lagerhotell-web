@@ -22,7 +22,7 @@
             <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
         </MudItem>
         <MudItem xs="6" sm="6">
-            <MudText Color="Color.Error" Style="font-size: 16px">@CustomError</MudText>
+            <MudText Color="Color.Error" Style="font-size: 16px">@ErrorMessage</MudText>
         </MudItem>
     </MudGrid>
 </EditForm>
@@ -36,7 +36,7 @@
     private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
     private readonly UserServiceLogin userServiceLogin = new();
     public string PhoneNumberRegistered = "";
-    public string CustomError = "";
+    public string ErrorMessage = "";
 
 
     public class LogInValues
@@ -54,13 +54,17 @@
 
     public async void LoginUser()
     {
-        Console.WriteLine(logInValues.PhoneNumber);
-        CreateJwt.CreateJwtResponse jwt = await userServiceLogin.CreateJWT(new CreateJwt.CreateJwtRequestService { PhoneNumber = logInValues.PhoneNumber });
-        string jwtString = jwt.ToString();
-        await sessionService.AddJwtToLocalStorage(jwtString);
-        Console.WriteLine(jwt);
-        string result = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password, navigationManager);
-        CustomError = result;
+        string userJwt;
+        string userId;
+        try
+        {
+            (userJwt, userId) = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
+            await sessionService.AddJwtToLocalStorage(userJwt);
+            navigationManager.NavigateTo($"/user/{userId}");
+        } catch (Exception ex)
+        {
+            ErrorMessage = "Mobilnummer eller passord er feil";
+        }
         StateHasChanged();
     }
 }
