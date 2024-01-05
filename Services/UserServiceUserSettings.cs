@@ -6,10 +6,10 @@ namespace Lagerhotell.Services.UserService
 {
     public class UserServiceUserSettings
     {
-        private readonly string baseUrl = "https://localhost:7272/users";
+        private readonly string _baseUrl = "https://localhost:7272/users/";
         public async Task<User> LoadUser(HttpClient client, User user, string userId)
         {
-            string url = baseUrl + "/get-user";
+            string url = _baseUrl + "get-user";
             var request = new LagerhotellAPI.Models.GetUserRequest { UserId = userId };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
