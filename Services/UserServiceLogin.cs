@@ -9,11 +9,11 @@ namespace Lagerhotell.Services.UserService
     public class UserServiceLogin
     {
         private readonly HttpClient client = new HttpClient();
-        private readonly string BaseUrl = "https://localhost:7272/users/";
+        private readonly string _baseUrl = "https://localhost:7272/users/";
 
         public async Task<bool> CheckPhoneNumber(string phoneNumber)
         {
-            string url = BaseUrl + "is-phone-number-registered-registration";
+            string url = _baseUrl + "is-phone-number-registered-registration";
             var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -23,7 +23,7 @@ namespace Lagerhotell.Services.UserService
         }
         public async Task<bool> CheckPassword(string password, string phoneNumber)
         {
-            string url = BaseUrl + "check-password";
+            string url = _baseUrl + "check-password";
             var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -34,7 +34,7 @@ namespace Lagerhotell.Services.UserService
 
         public async Task<string> GetUserByPhoneNumber(string phoneNumber)
         {
-            string url = BaseUrl + "get-user-by-phone-number";
+            string url = _baseUrl + "get-user-by-phone-number";
             var request = new LagerhotellAPI.Models.GetUserByPhoneNumberRequest { PhoneNumber = phoneNumber };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -81,7 +81,7 @@ namespace Lagerhotell.Services.UserService
 
         public async Task<CreateJwt.CreateJwtResponse> CreateJWT(CreateJwt.CreateJwtRequestService serviceRequest)
         {
-            string url = BaseUrl + "create-jwt";
+            string url = _baseUrl + "create-jwt";
             string userId = await GetUserByPhoneNumber(serviceRequest.PhoneNumber);
             CreateJwt.CreateJwtRequest request = new CreateJwt.CreateJwtRequest { Id = userId };
             string jsonData = JsonSerializer.Serialize(request);
