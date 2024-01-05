@@ -22,7 +22,6 @@
             <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
         </MudItem>
         <MudItem xs="6" sm="6">
-            <MudText Color="Color.Error" Style="font-size: 16px">@ErrorMessage</MudText>
         </MudItem>
     </MudGrid>
 </EditForm>
@@ -30,6 +29,7 @@
 @inject HttpClient Http
 @inject NavigationManager navigationManager
 @inject SessionService sessionService
+@inject ISnackbar snackbar
 @code {
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
@@ -64,6 +64,7 @@
         } catch (Exception ex)
         {
             ErrorMessage = "Mobilnummer eller passord er feil";
+            snackbar.Add(ErrorMessage, Severity.Error);
         }
         StateHasChanged();
     }
