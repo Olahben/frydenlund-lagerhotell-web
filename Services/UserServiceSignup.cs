@@ -58,8 +58,9 @@ namespace Lagerhotell.Services.UserService
             {
                 await RedirectToLogin(navigationManager);
                 await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client);
+                return "";
             }
-            return CustomError;
+            throw new Exception("Brukeren er allerede registrert");
 
         }
         public class ContainsNumberAttribute : ValidationAttribute
