@@ -51,14 +51,14 @@ namespace Lagerhotell.Services.UserService
                 UserRegistered = false;
             }
         }
-        public async Task<string> SignupUser(NavigationManager navigationManager, Signup.AccountFormValues accountFormValues, HttpClient client)
+        public async Task? SignupUser(NavigationManager navigationManager, Signup.AccountFormValues accountFormValues, HttpClient client)
         {
             await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
             if (!UserRegistered)
             {
                 await RedirectToLogin(navigationManager);
                 await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client);
-                return "";
+                return;
             }
             throw new Exception("Brukeren er allerede registrert");
 
