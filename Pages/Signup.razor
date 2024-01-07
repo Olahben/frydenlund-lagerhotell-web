@@ -34,21 +34,18 @@
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Registrer deg</MudButton>
         </MudItem>
-        <MudItem xs="12" sm="4" >
-            <p>@CustomError</p>
-        </MudItem>
     </MudGrid>
     </EditForm>
 
 @inject HttpClient Http
-@inject NavigationManager navigationManager
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
 @code {
     private AccountFormValues accountFormValues = new AccountFormValues();
     private static readonly HttpClient client = new HttpClient();
     private UserServiceSignup userServiceSignup = new UserServiceSignup();
-    public string PhoneNumberRegistered = "";
-    public string CustomError = "";
+    public string ErrorMessage = "";
 
     public class AccountFormValues
     {
@@ -90,9 +87,15 @@
             RedirectToLogin();
             AddUser();
         } */
-        string result = await userServiceSignup.SignupUser(navigationManager, accountFormValues, client);
-        CustomError = result;
-        StateHasChanged();
+        try
+        {
+            await userServiceSignup.SignupUser(NavigationManager, accountFormValues, client);
+            StateHasChanged();
+        } catch (Exception ex)
+        {
+            ErrorMessage = "En bruker med dette telefonnummeret er allerede registrert";
+            Snackbar.Add(ErrorMessage, Severity.Error);
+        }
     }
 
 }
