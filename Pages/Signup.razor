@@ -89,12 +89,15 @@
         } */
         try
         {
-            await userServiceSignup.SignupUser(NavigationManager, accountFormValues, client);
+            // Should be returned the user and call navigate with user id
+            string userId = await userServiceSignup.SignupUser(accountFormValues, client);
+            NavigationManager.NavigateTo($"/user/{userId}");
             StateHasChanged();
         } catch (Exception ex)
         {
             ErrorMessage = "En bruker med dette telefonnummeret er allerede registrert";
             Snackbar.Add(ErrorMessage, Severity.Error);
+            StateHasChanged();
         }
     }
 
