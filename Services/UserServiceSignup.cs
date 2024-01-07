@@ -1,4 +1,5 @@
 ﻿using Lagerhotell.Pages;
+using LagerhotellAPI.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Lagerhotell.Services.UserService
         private readonly string _baseUrl = "https://localhost:7272/users/";
         protected string? CustomError;
         protected bool UserRegistered;
-        public async Task AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string password, HttpClient client)
+        public async Task<string> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string password, HttpClient client)
         {
             var request = LagerhotellAPI.Models.AddUserRequest.AddUserRequestFunc(firstName, lastName, phoneNumber, birthDate, password);
             string url = _baseUrl + "add-user";
@@ -21,7 +22,14 @@ namespace Lagerhotell.Services.UserService
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync(url, content);
-            // Handle the ID that is returned
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            string responseContent = await response.Content.ReadAsStringAsync();
+            AddUserResponse userIdResponse = JsonSerializer.Deserialize<AddUserResponse>(responseContent, options);
+            Console.WriteLine(userIdResponse.UserId);
+            return userIdResponse.UserId;
         }
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
         {
@@ -44,13 +52,12 @@ namespace Lagerhotell.Services.UserService
                 UserRegistered = false;
             }
         }
-        public async Task? SignupUser(Signup.AccountFormValues accountFormValues, HttpClient client)
+        public async Task<string> SignupUser(Signup.AccountFormValues accountFormValues, HttpClient client)
         {
             await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
             if (!UserRegistered)
             {
-                await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client);
-                return;
+                return await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client); ;
             }
             throw new Exception("Brukeren er allerede registrert");
 
