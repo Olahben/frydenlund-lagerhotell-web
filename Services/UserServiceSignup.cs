@@ -1,5 +1,4 @@
 ﻿using Lagerhotell.Pages;
-using Microsoft.AspNetCore.Components;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text;
@@ -24,12 +23,6 @@ namespace Lagerhotell.Services.UserService
             HttpResponseMessage response = await client.PostAsync(url, content);
             // Handle the ID that is returned
         }
-
-        public async Task? RedirectToLogin(NavigationManager navigationManager)
-        {
-            // Redirects to login
-            navigationManager.NavigateTo("/success-login");
-        }
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
         {
             string url = _baseUrl + "is-phone-number-registered-registration";
@@ -51,12 +44,11 @@ namespace Lagerhotell.Services.UserService
                 UserRegistered = false;
             }
         }
-        public async Task? SignupUser(NavigationManager navigationManager, Signup.AccountFormValues accountFormValues, HttpClient client)
+        public async Task? SignupUser(Signup.AccountFormValues accountFormValues, HttpClient client)
         {
             await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
             if (!UserRegistered)
             {
-                await RedirectToLogin(navigationManager);
                 await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client);
                 return;
             }
