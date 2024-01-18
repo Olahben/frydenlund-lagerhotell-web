@@ -13,5 +13,11 @@ namespace Lagerhotell.Services.UserService
         {
             await jsRuntime.InvokeVoidAsync("localStorage.setItem", "jwtToken", jwt);
         }
+
+        public async Task<string> GetJwtFromLocalStorage()
+        {
+            var token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "jwtToken");
+            return token ?? throw new Exception("Brukeren har ingen JWT");
+        }
     }
 }
