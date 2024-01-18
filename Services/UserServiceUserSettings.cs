@@ -6,15 +6,15 @@ namespace Lagerhotell.Services.UserService
 {
     public class UserServiceUserSettings
     {
-        private readonly string _baseUrl = "https://localhost:7272/users/";
-        public async Task<User> LoadUser(HttpClient client, User user, string userId)
+        private readonly string _baseUrl = "https://localhost:7272/users";
+        public async Task<User> LoadUser(HttpClient client, User user, string userId, string jwtToken)
         {
-            string url = _baseUrl + "get-user";
+            string url = _baseUrl + "/get-user";
             var request = new LagerhotellAPI.Models.GetUserRequest { UserId = userId };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);
 
-            Console.WriteLine("Does this happen");
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
             if (response.IsSuccessStatusCode)
             {
