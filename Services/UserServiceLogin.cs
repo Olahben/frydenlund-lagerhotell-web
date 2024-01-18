@@ -45,12 +45,13 @@ namespace Lagerhotell.Services.UserService
             }
         }
 
-        public async Task<string> GetUserByPhoneNumber(string phoneNumber)
+        public async Task<string> GetUserByPhoneNumber(string phoneNumber, string jwtToken)
         {
             string url = _baseUrl + "get-user-by-phone-number";
             var request = new LagerhotellAPI.Models.GetUserByPhoneNumberRequest { PhoneNumber = phoneNumber };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);
 
             HttpResponseMessage response = await client.PostAsync(url, stringContent);
             // return User
@@ -64,10 +65,8 @@ namespace Lagerhotell.Services.UserService
             return userId;
         }
 
-        public async Task<(string, string)> LoginUser(string phoneNumber, string password)
+        public async Task<(string Token, string UserId)> LoginUser(string phoneNumber, string password)
         {
-            object returnedObject = new();
-
             bool userExistence = await CheckPhoneNumber(phoneNumber);
             if (!userExistence)
             {
@@ -78,7 +77,7 @@ namespace Lagerhotell.Services.UserService
             {
                 throw new Exception("Feil passord");
             }
-            string userId = await GetUserByPhoneNumber(phoneNumber);
+            string userId = await GetUserByPhoneNumber(phoneNumber, token);
             return (token, userId);
         }
     }
