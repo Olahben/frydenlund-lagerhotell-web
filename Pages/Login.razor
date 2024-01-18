@@ -13,10 +13,10 @@
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="logInValues.PhoneNumber" For="@(() => logInValues.PhoneNumber)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="logInValues.PhoneNumber" For="@(() => logInValues.PhoneNumber)" />
+            <MudTextField T="string" Class="form-text-field" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" />
         </MudItem>
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
@@ -27,9 +27,9 @@
 </EditForm>
 
 @inject HttpClient Http
-@inject NavigationManager navigationManager
-@inject SessionService sessionService
-@inject ISnackbar snackbar
+@inject NavigationManager NavigationManager
+@inject SessionService SessionService
+@inject ISnackbar Snackbar
 @code {
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
@@ -59,12 +59,12 @@
         try
         {
             (userJwt, userId) = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
-            await sessionService.AddJwtToLocalStorage(userJwt);
-            navigationManager.NavigateTo($"/user/{userId}");
+            await SessionService.AddJwtToLocalStorage(userJwt);
+            NavigationManager.NavigateTo($"/user/{userId}");
         } catch (Exception ex)
         {
             ErrorMessage = "Mobilnummer eller passord er feil";
-            snackbar.Add(ErrorMessage, Severity.Error);
+            Snackbar.Add(ErrorMessage, Severity.Error);
         }
         StateHasChanged();
     }
