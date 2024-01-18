@@ -1,0 +1,33 @@
+@phoneNumber = 12345678
+@password = karakter1
+@api = https://localhost:7272
+
+### Get token
+# @name login
+POST {{api}}/users/check-password
+Content-Type: application/json
+
+{
+    "phoneNumber": "{{phoneNumber}}",
+  "password": "{{password}}"
+}
+
+### Get user by phone number
+# @name getUserByPhoneNumber
+POST {{api}}/users/get-user-by-phone-number
+Content-Type: application/json
+
+{
+    "phoneNumber": "{{phoneNumber}}"
+}
+
+
+### Get user
+# @name getUser
+POST {{api}}/users/get-user
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "userId": "{{getUserByPhoneNumber.response.body.id}}"
+}
