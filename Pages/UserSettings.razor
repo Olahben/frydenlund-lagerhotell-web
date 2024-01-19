@@ -72,15 +72,15 @@
                 _userValues.PhoneNumber = user.PhoneNumber;
                 _userValues.BirthDate = user.BirthDate;
                 _userValues.Password = user.Password;
-                snackBar.Add("Sucess!", Severity.Success);
+                snackBar.Add("Vellykket innlogging!", Severity.Success);
             }
             else
             {
-                snackBar.Add("Failed loading user", Severity.Error);
+                snackBar.Add("Kunne ikke laste inn brukeren", Severity.Error);
             }
         } catch (Exception ex)
         {
-            snackBar.Add("Failed loading user", Severity.Error);
+            snackBar.Add("Kunne ikke laste inn brukeren", Severity.Error);
         }
 
     }
