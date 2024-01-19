@@ -68,7 +68,7 @@ namespace Lagerhotell
                 }
                 catch
                 {
-                    await _sessionService.RemoveItemAsync("accessToken");
+                    await _sessionService.RemoveItemAsync("jwtToken");
                     identity = new ClaimsIdentity();
                 }
             }
