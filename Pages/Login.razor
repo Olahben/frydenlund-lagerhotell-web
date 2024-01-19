@@ -10,80 +10,38 @@
 
 <AuthorizeView>
     <NotAuthorized>
-        1111
+    <LoginForm />
     </NotAuthorized>
-    <Authorized>          
-        2222
+    <Authorized>
+        <MudPaper Elevation="3" Class="p-4">
+            <MudText Typo="Typo.h5" GutterBottom>Du er allerede logget inn</MudText>
+            <MudText>Velkommen tilbake! Du kan fortsette å bruke appen, eller logge ut om du ønsker det.</MudText>
+            <MudButton Color="Color.Error" Variant="Variant.Filled" @onclick="LogOutUser" Class="mt-3">Logg ut</MudButton>
+        </MudPaper>
     </Authorized>          
 </AuthorizeView>
-
-<h2>Logg deg inn her:</h2>
-<EditForm Model="@logInValues" OnValidSubmit="LoginUser">
-    <DataAnnotationsValidator />
-    <MudGrid>
-        <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="logInValues.PhoneNumber" For="@(() => logInValues.PhoneNumber)" />
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudTextField T="string" Class="form-text-field" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" />
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary">Logg inn</MudButton>
-        </MudItem>
-        <MudItem xs="6" sm="6">
-        </MudItem>
-    </MudGrid>
-</EditForm>
 
 @inject HttpClient http
 @inject NavigationManager navigationManager
 @inject SessionService sessionService
 @inject ISnackbar snackbar
 @code {
-    private static readonly HttpClient client = new HttpClient();
-    private LogInValues logInValues = new LogInValues();
     private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
     private readonly UserServiceLogin userServiceLogin = new();
     public string PhoneNumberRegistered = "";
     public string ErrorMessage = "";
 
-
-    public class LogInValues
-    {
-        [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
-        [Required(ErrorMessage = "Ett passord er obligatorisk")]
-        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
-        public string Password { get; set; }
-
-        [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
-        [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
-        [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
-        public string PhoneNumber { get; set; }
-    }
-
-    public async void LoginUser()
-    {
-        string userJwt;
-        string userId;
-        try
-        {
-            (userJwt, userId) = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
-            await sessionService.AddJwtToLocalStorage(userJwt);
-            navigationManager.NavigateTo($"/user/{userId}");
-        } catch (Exception ex)
-        {
-            ErrorMessage = "Mobilnummer eller passord er feil";
-            snackbar.Add(ErrorMessage, Severity.Error);
-        }
-        StateHasChanged();
-    }
-
     protected override async Task OnInitializedAsync()
     {
         /* string jwtToken = await sessionService.GetJwtFromLocalStorage();
         if (jwtToken != null)
-        {
+            {
             // decode token
         } */
+    }
+
+    public async void LogOutUser()
+    {
+        // Log out
     }
 }
