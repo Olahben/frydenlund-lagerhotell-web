@@ -8,6 +8,15 @@
 
 @page "/log-in";
 
+<AuthorizeView>
+    <NotAuthorized>
+        1111
+    </NotAuthorized>
+    <Authorized>          
+        2222
+    </Authorized>          
+</AuthorizeView>
+
 <h2>Logg deg inn her:</h2>
 <EditForm Model="@logInValues" OnValidSubmit="LoginUser">
     <DataAnnotationsValidator />
@@ -26,10 +35,10 @@
     </MudGrid>
 </EditForm>
 
-@inject HttpClient Http
-@inject NavigationManager NavigationManager
-@inject SessionService SessionService
-@inject ISnackbar Snackbar
+@inject HttpClient http
+@inject NavigationManager navigationManager
+@inject SessionService sessionService
+@inject ISnackbar snackbar
 @code {
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
@@ -59,13 +68,22 @@
         try
         {
             (userJwt, userId) = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
-            await SessionService.AddJwtToLocalStorage(userJwt);
-            NavigationManager.NavigateTo($"/user/{userId}");
+            await sessionService.AddJwtToLocalStorage(userJwt);
+            navigationManager.NavigateTo($"/user/{userId}");
         } catch (Exception ex)
         {
             ErrorMessage = "Mobilnummer eller passord er feil";
-            Snackbar.Add(ErrorMessage, Severity.Error);
+            snackbar.Add(ErrorMessage, Severity.Error);
         }
         StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        /* string jwtToken = await sessionService.GetJwtFromLocalStorage();
+        if (jwtToken != null)
+        {
+            // decode token
+        } */
     }
 }
