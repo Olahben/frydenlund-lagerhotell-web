@@ -68,7 +68,7 @@ namespace Lagerhotell.Services.UserService
         public async Task<(string Token, string UserId)> LoginUser(string phoneNumber, string password)
         {
             bool userExistence = await CheckPhoneNumber(phoneNumber);
-            if (!userExistence)
+            if (userExistence)
             {
                 throw new Exception("Brukeren eksisterer ikke");
             }

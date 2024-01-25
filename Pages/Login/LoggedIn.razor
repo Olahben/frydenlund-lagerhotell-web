@@ -11,7 +11,7 @@
     public async Task? LogOutUser()
     {
         sessionService.RemoveItemAsync("jwtToken");
-        navigationManager.NavigateTo("/home");
+        navigationManager.NavigateTo(navigationManager.Uri, true);
 
     }
 }
