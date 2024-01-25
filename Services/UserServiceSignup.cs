@@ -28,7 +28,6 @@ namespace Lagerhotell.Services.UserService
             };
             string responseContent = await response.Content.ReadAsStringAsync();
             AddUserResponse userIdResponse = JsonSerializer.Deserialize<AddUserResponse>(responseContent, options);
-            Console.WriteLine(userIdResponse.UserId);
             return userIdResponse.UserId;
         }
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
@@ -38,28 +37,28 @@ namespace Lagerhotell.Services.UserService
             string jsonData = JsonSerializer.Serialize(request);
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.PostAsync(url, content);
-            Console.WriteLine("response" + response.ReasonPhrase);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Console.WriteLine("Phone number registered");
-                CustomError = "Mobilnummeret har allerede blitt registrert";
-                UserRegistered = true;
-            }
-            else
-            {
+                HttpResponseMessage response = await client.PostAsync(url, content);
                 CustomError = "";
                 UserRegistered = false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         public async Task<string> SignupUser(Signup.AccountFormValues accountFormValues, HttpClient client)
         {
-            await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
-            if (!UserRegistered)
+            try
             {
-                return await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client); ;
+                await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
+                return await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client);
             }
-            throw new Exception("Brukeren er allerede registrert");
+            catch (Exception ex)
+            {
+                throw new Exception("Brukeren er allerede registrert");
+            }
 
         }
         public class ContainsNumberAttribute : ValidationAttribute
