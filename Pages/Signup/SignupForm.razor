@@ -1,0 +1,101 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Globalization
+@using System.IO
+@using System.Text
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using System.Collections.Generic
+@using Lagerhotell.Services.UserService
+
+<h2>Registrer deg her:</h2>
+<EditForm Model="@accountFormValues" OnValidSubmit="SignupUser">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" HelperText="Minimum to bokstaver" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="accountFormValues.FirstName" For="@(() => accountFormValues.FirstName)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum to bokstaver" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="accountFormValues.LastName" For="@(() => accountFormValues.LastName)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Ditt norske mobilnummer" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="accountFormValues.PhoneNumber" For="@(() => accountFormValues.PhoneNumber)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Datoen du ble født" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="accountFormValues.BirthDate" For="@(() => accountFormValues.BirthDate)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Minimum seks bokstaver, og minst ett tall" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@InputType.Password" @bind-Value="accountFormValues.Password" For="@(() => accountFormValues.Password)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Class="form-text-field" Required="true" HelperText="Skriv inn passordet på nytt" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="accountFormValues.PasswordRepeat" For="@(() => accountFormValues.PasswordRepeat)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Registrer deg</MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+@code {
+    private AccountFormValues accountFormValues = new AccountFormValues();
+    private static readonly HttpClient client = new HttpClient();
+    private UserServiceSignup userServiceSignup = new UserServiceSignup();
+    public string ErrorMessage = "";
+
+    public class AccountFormValues
+    {
+        [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
+        [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Ett etternavn er obligatorisk")]
+        [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
+        public string LastName { get; set; }
+
+        [UserServiceSignup.ContainsNumberAttribute(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
+        [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
+        [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
+        [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
+        public string BirthDate { get; set; }
+
+        [Required(ErrorMessage = "Ett passord er obligatorisk")]
+        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
+        [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Du må repetere passordet ditt")]
+        [Compare(nameof(Password), ErrorMessage = "Passordene samstemmer ikke")]
+        public string PasswordRepeat { get; set; }
+
+    }
+
+    public async Task? SignupUser()
+    {
+        /* await PhoneNumberExistence(accountFormValues.PhoneNumber);
+        StateHasChanged();
+        if (phoneNumberRegistered == "")
+            {
+            RedirectToLogin();
+            AddUser();
+        } */
+        try
+        {
+            // Should be returned the user and call navigate with user id
+            string userId = await userServiceSignup.SignupUser(accountFormValues, client);
+            NavigationManager.NavigateTo($"/user/{userId}");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "En bruker med dette telefonnummeret er allerede registrert";
+            Snackbar.Add(ErrorMessage, Severity.Error);
+            StateHasChanged();
+        }
+    }
+}
