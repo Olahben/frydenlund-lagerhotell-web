@@ -53,12 +53,15 @@ namespace Lagerhotell.Services.UserService
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<string> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
+        public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
         {
+            string userId;
+            string token;
             try
             {
                 await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
-                return await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, client);
+                (userId, token) = await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, client);
+                return (userId, token);
             }
             catch (Exception ex)
             {
