@@ -47,12 +47,15 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
+@inject SessionService sessionService
 
 @code {
     private AccountFormValues accountFormValues = new AccountFormValues();
     private static readonly HttpClient client = new HttpClient();
     private UserServiceSignup userServiceSignup = new UserServiceSignup();
     public string ErrorMessage = "";
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
     public class AccountFormValues
     {
@@ -110,7 +113,11 @@
         try
         {
             // Should be returned the user and call navigate with user id
-            string userId = await userServiceSignup.SignupUser(accountFormValues, client);
+            string userId;
+            string token;
+            (userId, token) = await userServiceSignup.SignupUser(accountFormValues, client);
+            await sessionService.AddJwtToLocalStorage(token);
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
             NavigationManager.NavigateTo($"/user/{userId}");
             StateHasChanged();
         }
