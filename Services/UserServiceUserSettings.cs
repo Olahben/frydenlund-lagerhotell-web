@@ -29,6 +29,9 @@ namespace Lagerhotell.Services.UserService
                 user.LastName = deserializedUser.LastName;
                 user.PhoneNumber = deserializedUser.PhoneNumber;
                 user.BirthDate = deserializedUser.BirthDate;
+                user.Address = deserializedUser.Address;
+                user.PostalCode = deserializedUser.PostalCode;
+                user.City = deserializedUser.City;
                 user.Password = deserializedUser.Password;
                 return user;
             }
