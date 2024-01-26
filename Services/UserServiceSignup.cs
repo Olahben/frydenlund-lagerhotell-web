@@ -1,4 +1,4 @@
-﻿using Lagerhotell.Pages;
+﻿using Lagerhotell.Pages.Signup;
 using LagerhotellAPI.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -22,13 +22,17 @@ namespace Lagerhotell.Services.UserService
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync(url, content);
-            JsonSerializerOptions options = new JsonSerializerOptions
+            if (response.IsSuccessStatusCode)
             {
-                PropertyNameCaseInsensitive = true
-            };
-            string responseContent = await response.Content.ReadAsStringAsync();
-            AddUserResponse userIdResponse = JsonSerializer.Deserialize<AddUserResponse>(responseContent, options);
-            return userIdResponse.UserId;
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                string responseContent = await response.Content.ReadAsStringAsync();
+                AddUserResponse userIdResponse = JsonSerializer.Deserialize<AddUserResponse>(responseContent, options);
+                return userIdResponse.UserId;
+            }
+            throw new Exception("Brukeren er allerede registrert");
         }
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
         {
@@ -48,7 +52,7 @@ namespace Lagerhotell.Services.UserService
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<string> SignupUser(Signup.AccountFormValues accountFormValues, HttpClient client)
+        public async Task<string> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
         {
             try
             {
