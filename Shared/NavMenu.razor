@@ -1,5 +1,11 @@
 ﻿<MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink Href="/sign-up" Icon="@Icons.Material.Filled.PersonAdd">Registrer deg</MudNavLink>
-    <MudNavLink Href="/log-in" Icon="@Icons.Material.Filled.Login">Logg inn</MudNavLink>
+    <AuthorizeView>
+    <NotAuthorized>
+            <MudNavLink Href="/sign-up" Icon="@Icons.Material.Filled.PersonAdd">Registrer deg</MudNavLink>
+            <MudNavLink Href="/log-in" Icon="@Icons.Material.Filled.Login">Logg inn</MudNavLink>
+    </NotAuthorized>
+    <Authorized>
+    </Authorized>          
+</AuthorizeView>
 </MudNavMenu>
