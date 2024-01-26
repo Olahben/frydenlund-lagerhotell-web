@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Lagerhotell.Services.UserService
 {
@@ -121,6 +122,40 @@ namespace Lagerhotell.Services.UserService
                     return new ValidationResult("Du må være over 18 år");
                 }
 
+            }
+        }
+
+        public class ContainsNumbersAndLetters : ValidationAttribute
+        {
+            protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+            {
+                string addressStr = value as string;
+                bool containsInt = addressStr.Any(char.IsDigit);
+                bool containsLetter = addressStr.Any(char.IsLetter);
+                if (containsInt && containsLetter)
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("Dette feltet må inneholde både bokstaver og tall");
+                }
+
+            }
+        }
+        public class ContainsOnlyLetters : ValidationAttribute
+        {
+            protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+            {
+                string valueStr = value as string;
+                if (Regex.IsMatch(valueStr, @"^[a-zA-Z]+$"))
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("Dette feltet kan bare inneholde bokstaver");
+                }
             }
         }
     }
