@@ -64,7 +64,7 @@
         [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
         public string LastName { get; set; }
 
-        [UserServiceSignup.ContainsNumberAttribute(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
+        [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
         public string PhoneNumber { get; set; }
@@ -73,8 +73,18 @@
         [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
         public string BirthDate { get; set; }
 
+        [StringLength(112, ErrorMessage = "Addressen din kan være 2-112 bokstaver/tall lang")]
+        [Required(ErrorMessage = "En addresse er obligatorisk")]
+        [UserServiceSignup.ContainsNumbersAndLetters(ErrorMessage = "Dette feltet må inneholde bokstaver og tall")]
         public string Address { get; set; }
+
+        [Required(ErrorMessage = "Dette feltet er obligatorisk")]
+        [StringLength(4, ErrorMessage = "Dette må inneholde fire siffer", MinimumLength = 4)]
         public string PostalCode { get; set; }
+
+        [Required(ErrorMessage = "Dette feltet er obligatorisk")]
+        [StringLength(140, ErrorMessage = "Dette feltet må være 2-140 bokstaver langt")]
+        [UserServiceSignup.ContainsOnlyLetters(ErrorMessage = "Dette feltet kan bare inneholde bokstaver")]
         public string City { get; set; }
 
         [Required(ErrorMessage = "Ett passord er obligatorisk")]
