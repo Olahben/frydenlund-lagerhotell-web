@@ -15,9 +15,9 @@ namespace Lagerhotell.Services.UserService
         private readonly string _baseUrl = "https://localhost:7272/users/";
         protected string? CustomError;
         protected bool UserRegistered;
-        public async Task<string> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string password, HttpClient client)
+        public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, HttpClient client)
         {
-            var request = LagerhotellAPI.Models.AddUserRequest.AddUserRequestFunc(firstName, lastName, phoneNumber, birthDate, password);
+            var request = new LagerhotellAPI.Models.AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password };
             string url = _baseUrl + "add-user";
             string jsonData = JsonSerializer.Serialize(request);
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -31,7 +31,7 @@ namespace Lagerhotell.Services.UserService
                 };
                 string responseContent = await response.Content.ReadAsStringAsync();
                 AddUserResponse userIdResponse = JsonSerializer.Deserialize<AddUserResponse>(responseContent, options);
-                return userIdResponse.UserId;
+                return (userIdResponse.UserId, userIdResponse.Token);
             }
             throw new Exception("Brukeren er allerede registrert");
         }
@@ -58,7 +58,7 @@ namespace Lagerhotell.Services.UserService
             try
             {
                 await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
-                return await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Password, client);
+                return await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, client);
             }
             catch (Exception ex)
             {
