@@ -56,7 +56,7 @@
                              <MudTextField Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Variant="Variant.Outlined"
                                             FullWidth />
                              <MudDivider Class="my-4" />
-                             <MudTextField @bind-Value="_userValues.Password" For="@(() => _userValues.Password)" Label="Passord" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+                             <MudTextField @bind-Value="_userValues.Password" For="@(() => _userValues.Password)" Label="Passord" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
                              <MudTextField @bind-Value="_userValues.PasswordRepeat" For="@(() => _userValues.PasswordRepeat)" Label="Repeter passordet ditt" Variant="Variant.Text" InputType="InputType.Password" />
                          </MudExpansionPanel>
 
@@ -87,7 +87,7 @@
                                 <MudText>@_userValues.BirthDate</MudText>
                                 <MudDivider Class="my-4" />
                                 <MudText Typo="Typo.subtitle2">Passord</MudText>
-                                <MudTextField @bind-Value="_userValues.Password" ReadOnly="true" Label="Password" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+                                <MudTextField @bind-Value="_userValues.Password" ReadOnly="true" Label="Password" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
                             </MudExpansionPanel>
                             <MudExpansionPanel Text="Bosted, Addresser">
                                 <MudText Typo="Typo.subtitle2">Addresse</MudText>
@@ -107,13 +107,11 @@
 
 
 
-
 @inject HttpClient Http
+@inject SessionService sessionService
+@inject ISnackbar snackBar
 
-            @inject SessionService sessionService
-
-            @inject ISnackbar snackBar
-                @code {
+@code {
         private static readonly HttpClient client = new HttpClient();
         [Parameter] public string UserId { get; set; }
         private UserServiceUserSettings _userServiceUserSettings = new();
@@ -205,7 +203,7 @@
             StateHasChanged();
         }
 
-        void ButtonTestclick()
+        void TogglePasswordVisibility()
         {
                 @if (isShow)
             {
