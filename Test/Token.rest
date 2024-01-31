@@ -4,7 +4,7 @@
 
 ### Get token
 # @name login
-POST {{api}}/users/check-password
+POST {{api}}/users/log-in
 Content-Type: application/json
 
 {
@@ -14,20 +14,39 @@ Content-Type: application/json
 
 ### Get user by phone number
 # @name getUserByPhoneNumber
-POST {{api}}/users/get-user-by-phone-number
-Content-Type: application/json
-
-{
-    "phoneNumber": "{{phoneNumber}}"
-}
+GET {{api}}/users/get-user-by-phone-number/{{phoneNumber}}
+Authorization: Bearer {{login.response.body.token}}
 
 
 ### Get user
 # @name getUser
-POST {{api}}/users/get-user
+GET {{api}}/users/get-user/{{getUserByPhoneNumber.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+### decode token
+# @name decodeToken
+POST {{api}}/users/decode-token
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "userId": "{{getUserByPhoneNumber.response.body.id}}"
+  "Token": "{{login.response.body.token}}"
+}
+
+### update user values
+# @name updateUserValues
+PUT {{api}}/users/update-user-values
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "FirstName": "Ba",
+  "LastName": "Etternavn",
+  "PhoneNumber": "{{phoneNumber}}",
+  "BirthDate": "1111-11-11",
+  "Address": "gg 1",
+  "PostalCode": "0999",
+  "City": "Oslo",
+  "Password": "passord123"
 }
