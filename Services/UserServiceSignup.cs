@@ -12,13 +12,13 @@ namespace Lagerhotell.Services.UserService
     {
         // private static readonly HttpClient client = new();
         // public Signup signup = new();
-        private readonly string _baseUrl = "https://localhost:7272/users/";
+        private readonly string _baseUrl = "https://localhost:7272/users";
         protected string? CustomError;
         protected bool UserRegistered;
         public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, HttpClient client)
         {
             var request = new LagerhotellAPI.Models.AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password };
-            string url = _baseUrl + "add-user";
+            string url = _baseUrl + "/add-user";
             string jsonData = JsonSerializer.Serialize(request);
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
@@ -37,14 +37,11 @@ namespace Lagerhotell.Services.UserService
         }
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
         {
-            string url = _baseUrl + "is-phone-number-registered-registration";
-            var request = new LagerhotellAPI.Models.CheckPhoneNumber.CheckPhoneNumberRequest { PhoneNumber = phoneNumber };
-            string jsonData = JsonSerializer.Serialize(request);
-            StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            string url = _baseUrl + "/is-phone-number-registered-registration/" + phoneNumber;
 
             try
             {
-                HttpResponseMessage response = await client.PostAsync(url, content);
+                HttpResponseMessage response = await client.GetAsync(url);
                 CustomError = "";
                 UserRegistered = false;
             }

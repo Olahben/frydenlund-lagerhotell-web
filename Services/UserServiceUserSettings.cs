@@ -10,13 +10,10 @@ namespace Lagerhotell.Services.UserService
         private readonly string _baseUrl = "https://localhost:7272/users";
         public async Task<UserValues> LoadUser(HttpClient client, UserValues user, string userId, string jwtToken)
         {
-            string url = _baseUrl + "/get-user";
-            var request = new LagerhotellAPI.Models.GetUserRequest { UserId = userId };
-            string jsonData = JsonSerializer.Serialize(request);
-            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            string url = _baseUrl + "/get-user/" + userId;
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);
 
-            HttpResponseMessage response = await client.PostAsync(url, stringContent);
+            HttpResponseMessage response = await client.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 string result = await response.Content.ReadAsStringAsync();
@@ -51,7 +48,7 @@ namespace Lagerhotell.Services.UserService
             StringContent stringContentRequest = new StringContent(jsonData, Encoding.UTF8, "application/json");
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);
 
-            HttpResponseMessage response = await httpClient.PostAsync(url, stringContentRequest);
+            HttpResponseMessage response = await httpClient.PutAsync(url, stringContentRequest);
             if (response.IsSuccessStatusCode)
             {
                 return true;
