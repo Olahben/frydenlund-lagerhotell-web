@@ -21,7 +21,7 @@ namespace Lagerhotell.Services.UserService
                 {
                     PropertyNameCaseInsensitive = true
                 };
-                UserValues deserializedUser = JsonSerializer.Deserialize<UserValues>(result, options);
+                UserValues? deserializedUser = JsonSerializer.Deserialize<UserValues>(result, options);
                 Console.WriteLine(deserializedUser);
                 user.FirstName = deserializedUser.FirstName;
                 user.LastName = deserializedUser.LastName;

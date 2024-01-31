@@ -5,105 +5,113 @@
 
 @page "/user/{userId}"
 
-<MudGrid>
-    <MudItem xs="12" md="3">
-        <MudPaper Elevation="1">
-            <MudList>
-                <MudListItem>
-                    <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
-                    <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
-                </MudListItem>
-                <MudListItem>
-                    <MudIcon Icon="@Icons.Material.Filled.Security" style="vertical-align: middle;" />
-                    <span style="vertical-align: middle; margin-left: 8px;">Sikkerhet</span>
-                </MudListItem>
-            </MudList>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" md="9">
-        <MudPaper Elevation="1" Class="pa-4">
-            <MudText Typo="Typo.h6">Profil</MudText>
-            <MudText Typo="Typo.subtitle1">Velkommen, @_userValues.FirstName!</MudText>
-            <MudDivider Class="my-4" />
-            <div class="d-flex align-items-center">
-                <MudAvatar Src="path_to_image.jpg" />
-                <div class="ml-2">
-                    <MudText Typo="Typo.subtitle1"><MudText Style=" font-weight:780; display:inline">@_userValues.FirstName</MudText> @_userValues.LastName</MudText>
-                </div>
-            </div>
-            <div Style="height: 8px"></div>
-            @if (_editMode)
-                        {
-                            <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
-                        }
-                        else
-                        {
-                            <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
-                        }
-            <div style="height:10px"></div>
-            @if (_editMode)
-            {
-                <MudForm Model="@_userValues" @ref="_form">
-                    <MudExpansionPanels MultiExpansion="true">
-                        <MudExpansionPanel Text="Generelt">
-                            <MudTextField Label="Fornavn" @bind-Value="_userValues.FirstName" For="@(() => _userValues.FirstName)" Variant="Variant.Outlined" FullWidth />
-                             <MudDivider Class="my-4" />
-                             <MudTextField Label="Etternavn" @bind-Value="_userValues.LastName" For="@(() => _userValues.LastName)" Variant="Variant.Outlined" FullWidth />
-                             <MudDivider Class="my-4" />
-                             <MudTextField Label="Mobilnummer" ReadOnly="true" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Variant="Variant.Outlined"
-                                            FullWidth />
-                             <MudDivider Class="my-4" />
-                             <MudTextField Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Variant="Variant.Outlined"
-                                            FullWidth />
-                             <MudDivider Class="my-4" />
-                             <MudTextField @bind-Value="_userValues.Password" For="@(() => _userValues.Password)" Label="Passord" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
-                             <MudTextField @bind-Value="_userValues.PasswordRepeat" For="@(() => _userValues.PasswordRepeat)" Label="Repeter passordet ditt" Variant="Variant.Text" InputType="InputType.Password" />
-                         </MudExpansionPanel>
+    <AuthorizeView>
+    <NotAuthorized>
+    Unauthorized
+    </NotAuthorized>
+    <Authorized>
+        <MudGrid>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="1">
+                    <MudList>
+                        <MudListItem>
+                            <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
+                            <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
+                        </MudListItem>
+                        <MudListItem>
+                            <MudIcon Icon="@Icons.Material.Filled.Security" style="vertical-align: middle;" />
+                            <span style="vertical-align: middle; margin-left: 8px;">Sikkerhet</span>
+                        </MudListItem>
+                    </MudList>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="9">
+                <MudPaper Elevation="1" Class="pa-4">
+                    <MudText Typo="Typo.h6">Profil</MudText>
+                    <MudText Typo="Typo.subtitle1">Velkommen, @_userValues.FirstName!</MudText>
+                        <MudDivider Class="my-4" />
+                        <div class="d-flex align-items-center">
+                            <MudAvatar Src="path_to_image.jpg" />
+                            <div class="ml-2">
+                                <MudText Typo="Typo.subtitle1"><MudText Style=" font-weight:780; display:inline">@_userValues.FirstName</MudText> @_userValues.LastName</MudText>
+                            </div>
+                        </div>
+                        <div Style="height: 8px"></div>
+                        @if (_editMode)
+                    {
+                        <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
+                    }
+                    <div style="height:10px"></div>
+                    @if (_editMode)
+                    {
+                        <MudForm Model="@_userValues" @ref="_form">
+                            <MudExpansionPanels MultiExpansion="true">
+                                <MudExpansionPanel Text="Generelt">
+                                    <MudTextField Label="Fornavn" @bind-Value="_userValues.FirstName" For="@(() => _userValues.FirstName)" Variant="Variant.Outlined" FullWidth />
+                                     <MudDivider Class="my-4" />
+                                     <MudTextField Label="Etternavn" @bind-Value="_userValues.LastName" For="@(() => _userValues.LastName)" Variant="Variant.Outlined" FullWidth />
+                                     <MudDivider Class="my-4" />
+                                     <MudTextField Label="Mobilnummer" ReadOnly="true" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Variant="Variant.Outlined"
+                                                        FullWidth />
+                                     <MudDivider Class="my-4" />
+                                     <MudTextField Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Variant="Variant.Outlined"
+                                                        FullWidth />
+                                     <MudDivider Class="my-4" />
+                                     <MudTextField @bind-Value="_userValues.Password" For="@(() => _userValues.Password)" Label="Passord" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
+                                     <MudTextField @bind-Value="_userValues.PasswordRepeat" For="@(() => _userValues.PasswordRepeat)" Label="Repeter passordet ditt" Variant="Variant.Text" InputType="InputType.Password" />
+                                 </MudExpansionPanel>
 
 
-                         <MudExpansionPanel Text="Bosted, Addresser">
-                             <MudTextField Label="Adresse" @bind-Value="@_userValues.Address" For="@(() => _userValues.Address)" Variant="Variant.Outlined"
-                                            FullWidth />
-                             <MudDivider Class="my-4" />
-                             <MudTextField Label="Postnummer" @bind-Value="@_userValues.PostalCode" For="@(() => _userValues.PostalCode)" Variant="Variant.Outlined"
-                                            FullWidth />
-                             <MudDivider Class="my-4" />
-                             <MudTextField Label="By, Poststed" @bind-Value="@_userValues.City" For="@(() => _userValues.City)" Variant="Variant.Outlined"
-                                            FullWidth />
-                         </MudExpansionPanel>
-                     </MudExpansionPanels>
-                     <div style="height: 8px"></div>
-                     <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SaveUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
-                 </MudForm>
-            }
-            else
-                {
-                    <MudExpansionPanels MultiExpansion="true">
-                        <MudExpansionPanel Text="Generelt">
-                            <MudText Typo="Typo.subtitle2">Mobilnummer</MudText>
-                            <MudText>@_userValues.PhoneNumber</MudText>
-                                <MudDivider Class="my-4" />
-                                <MudText Typo="Typo.subtitle2">Fødselsdato</MudText>
-                                <MudText>@_userValues.BirthDate</MudText>
-                                <MudDivider Class="my-4" />
-                                <MudText Typo="Typo.subtitle2">Passord</MudText>
-                                <MudTextField @bind-Value="_userValues.Password" ReadOnly="true" Label="Password" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
-                            </MudExpansionPanel>
-                            <MudExpansionPanel Text="Bosted, Addresser">
-                                <MudText Typo="Typo.subtitle2">Addresse</MudText>
-                                <MudText>@_userValues.Address</MudText>
-                                <MudDivider Class="my-4" />
-                                <MudText Typo="Typo.subtitle2">Postnummer</MudText>
-                                <MudText>@_userValues.PostalCode</MudText>
-                                <MudDivider Class="my-4" />
-                                <MudText Typo="Typo.subtitle2">By, Poststed</MudText>
-                                <MudText>@_userValues.City</MudText>
-                            </MudExpansionPanel>
-                    </MudExpansionPanels>
-                }
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
+                                 <MudExpansionPanel Text="Bosted, Addresser">
+                                     <MudTextField Label="Adresse" @bind-Value="@_userValues.Address" For="@(() => _userValues.Address)" Variant="Variant.Outlined"
+                                                        FullWidth />
+                                     <MudDivider Class="my-4" />
+                                     <MudTextField Label="Postnummer" @bind-Value="@_userValues.PostalCode" For="@(() => _userValues.PostalCode)" Variant="Variant.Outlined"
+                                                        FullWidth />
+                                     <MudDivider Class="my-4" />
+                                     <MudTextField Label="By, Poststed" @bind-Value="@_userValues.City" For="@(() => _userValues.City)" Variant="Variant.Outlined"
+                                                        FullWidth />
+                                 </MudExpansionPanel>
+                             </MudExpansionPanels>
+                             <div style="height: 8px"></div>
+                             <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SaveUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+                         </MudForm>
+                    }
+                    else
+                    {
+                        <MudExpansionPanels MultiExpansion="true">
+                            <MudExpansionPanel Text="Generelt">
+                                <MudText Typo="Typo.subtitle2">Mobilnummer</MudText>
+                                <MudText>@_userValues.PhoneNumber</MudText>
+                                    <MudDivider Class="my-4" />
+                                    <MudText Typo="Typo.subtitle2">Fødselsdato</MudText>
+                                    <MudText>@_userValues.BirthDate</MudText>
+                                    <MudDivider Class="my-4" />
+                                    <MudText Typo="Typo.subtitle2">Passord</MudText>
+                                    <MudTextField @bind-Value="_userValues.Password" ReadOnly="true" Label="Password" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" />
+                                </MudExpansionPanel>
+                                <MudExpansionPanel Text="Bosted, Addresser">
+                                    <MudText Typo="Typo.subtitle2">Addresse</MudText>
+                                    <MudText>@_userValues.Address</MudText>
+                                    <MudDivider Class="my-4" />
+                                    <MudText Typo="Typo.subtitle2">Postnummer</MudText>
+                                    <MudText>@_userValues.PostalCode</MudText>
+                                    <MudDivider Class="my-4" />
+                                    <MudText Typo="Typo.subtitle2">By, Poststed</MudText>
+                                    <MudText>@_userValues.City</MudText>
+                                </MudExpansionPanel>
+                            </MudExpansionPanels>
+                    }
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </Authorized>          
+</AuthorizeView>
+
 
 
 
@@ -122,48 +130,50 @@
         string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
         bool isShow;
         private MudForm _form;
+        [Inject]
+        protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         public class UserValues
         {
             [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
             [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
-            public string FirstName { get; set; }
+            public string FirstName { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Ett etternavn er obligatorisk")]
             [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
-            public string LastName { get; set; }
+            public string LastName { get; set; }  = string.Empty;
 
             [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
             [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
             [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
-            public string PhoneNumber { get; set; }
+            public string PhoneNumber { get; set; }  = string.Empty;
 
             [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
             [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
-            public string BirthDate { get; set; }
+        public string BirthDate { get; set; } = string.Empty;
 
             [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
             [Required(ErrorMessage = "Ett passord er obligatorisk")]
             [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
-            public string Password { get; set; }
+            public string Password { get; set; }  = string.Empty;
 
             [Required(ErrorMessage = "Du må repetere passordet ditt")]
             [Compare(nameof(Password), ErrorMessage = "Passordene samstemmer ikke")]
-            public string PasswordRepeat { get; set; }
+        public string PasswordRepeat { get; set; } = string.Empty;
 
             [StringLength(112, ErrorMessage = "Addressen din kan være 2-112 bokstaver/tall lang")]
             [Required(ErrorMessage = "En addresse er obligatorisk")]
             [UserServiceSignup.ContainsNumbersAndLetters(ErrorMessage = "Dette feltet må inneholde bokstaver og tall")]
-            public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Dette feltet er obligatorisk")]
             [StringLength(4, ErrorMessage = "Dette må inneholde fire siffer", MinimumLength = 4)]
-            public string PostalCode { get; set; }
+        public string PostalCode { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Dette feltet er obligatorisk")]
             [StringLength(140, ErrorMessage = "Dette feltet må være 2-140 bokstaver langt")]
             [UserServiceSignup.ContainsOnlyLetters(ErrorMessage = "Dette feltet kan bare inneholde bokstaver")]
-            public string City { get; set; }
+        public string City { get; set; } = string.Empty;
         }
 
         protected override async Task OnInitializedAsync()
@@ -190,7 +200,7 @@
                 snackBar.Add("Kunne ikke laste inn brukeren", Severity.Error);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 snackBar.Add("Kunne ikke laste inn brukeren", Severity.Error);
             }
@@ -205,7 +215,7 @@
 
         void TogglePasswordVisibility()
         {
-                @if (isShow)
+                if (isShow)
             {
                 isShow = false;
                 PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -229,8 +239,6 @@
                 return false;
             }
 
-            // Additional validation logic here
-
             return true;
         }
 
@@ -242,7 +250,7 @@
                 // The form is valid, proceed with the save operation
                 await _userServiceUserSettings.UpdateUserValues(client, _userValues, token);
                 // Show a success message
-                snackBar.Add("User details saved successfully", Severity.Success);
+                snackBar.Add("Dine data ble oppdatert", Severity.Success);
                 ToggleEditMode();
                 StateHasChanged();
             }

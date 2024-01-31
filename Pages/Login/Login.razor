@@ -16,28 +16,3 @@
         <LoggedIn />
     </Authorized>          
 </AuthorizeView>
-
-@inject HttpClient http
-@inject NavigationManager navigationManager
-@inject SessionService sessionService
-@inject ISnackbar snackbar
-@code {
-    private LagerhotellAPI.Models.CheckPhoneNumber checkPhoneNumber = new LagerhotellAPI.Models.CheckPhoneNumber();
-    private readonly UserServiceLogin userServiceLogin = new();
-    public string PhoneNumberRegistered = "";
-    public string ErrorMessage = "";
-
-    protected override async Task OnInitializedAsync()
-    {
-        /* string jwtToken = await sessionService.GetJwtFromLocalStorage();
-        if (jwtToken != null)
-            {
-            // decode token
-        } */
-    }
-
-    public async void LogOutUser()
-    {
-        // Log out
-    }
-}
