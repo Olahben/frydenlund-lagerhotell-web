@@ -1,0 +1,251 @@
+﻿@page "/bestilling"
+
+
+@*
+    <MudGrid Justify="Justify.Center">
+    <MudText Class="my-4" Typo="Typo.h2">Din bestilling</MudText>
+    <MudForm Model="_userOrder">
+        <MudItem xs="12" sm="8" Class="mb-2">
+            <MudPaper Elevation="0">
+                <MudText Align="Align.Left" Typo="Typo.subtitle1">Innflyttningsdato</MudText>
+                <MudDatePicker Label="Startdato for innflyttning" Editable="true" TitleDateFormat="dddd, dd MMMM" @bind-Value="_userOrder.StartDate"></MudDatePicker>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="8" Class="mb-2">
+            <MudPaper Elevation="2">
+                <AuthorizeView>
+                    <Authorized>
+                        <MudText Typo="Typo.subtitle1">Hei, bruker</MudText>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudText Typo="Typo.subtitle1">
+                            Hei, det ser ikke ut som du er logget inn, logg inn her eller registrer deg her
+                        </MudText>
+                    </NotAuthorized>
+                </AuthorizeView>
+                <MudText Typo="Typo.subtitle1">Har du noen spesielle instruksjoner ved din bestilling</MudText>
+                <MudCheckBox @bind-Value="_userOrder.Comment" Color="Color.Primary"></MudCheckBox>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="8" Class="mb-2">
+            <MudPaper Elevation="0">
+                <MudText Color="Color.Primary" Align="Align.Left" Typo="Typo.subtitle1">Rabattkode</MudText>
+                <MudText Color="Color.Dark">Har du en rabattkode?</MudText>
+                <MudCheckBox @bind-Value="_userOrder.CouponCode" Color="Color.Primary">Legg til en rabattkode</MudCheckBox>
+                <!--Show coupon code text field on click-->
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="8" Class="mb-2">
+            <MudPaper Elevation="0">
+                <MudText Align="Align.Left" Typo="Typo.h5">Oppsumering av din bestilling</MudText>
+                <table class="summary-table">
+                    <tbody>
+                        <tr>
+                            <td class="font-weight-bold">Avdeling</td>
+                            <td>Skien</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Lagerstørrelse</td>
+                            <td>12 m²</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Innflyttningsdato</td>
+                            <td>2024-02-01</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Avtaletype</td>
+                            <td>Månedlig</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </MudPaper>
+        </MudItem>
+    </MudForm>
+</MudGrid>
+<style>
+    /* .summary-card {
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        margin-top: 1rem;
+        background-color: #f5f5f5; /* Set the card background color */
+    }
+
+    .summary-title {
+        margin-bottom: 0.5rem;
+    }
+
+    .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem; /* Add space below the table */
+    }
+
+        .summary-table td, .summary-table th {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem; /* Increase padding for spacing */
+        }
+
+    .font-weight-bold {
+        font-weight: bold;
+    }
+
+    /* Ensure that the MudPaper components take the full width */
+    .mud-paper {
+        width: 100%;
+        box-shadow: none; /* Remove shadow if desired */
+        background-color: transparent; /* Make the MudPaper transparent */
+        padding: 20px; /* Add some padding */
+    }
+
+    /* Add more custom styles here if needed */ */
+</style> -->
+*@
+
+@*<MudGrid Justify="Justify.Center">
+    <MudText Class="my-4" Typo="Typo.h2">Din bestilling</MudText>
+    <MudForm Model="_userOrder">
+        <MudGrid Class="background" Justify="Justify.Center">
+        <MudItem xs="12" sm="8" Class="mb-2">
+            <MudPaper Elevation="0">
+                <MudText Align="Align.Left" Typo="Typo.subtitle1">Innflyttningsdato</MudText>
+                <MudDatePicker Label="Startdato for innflyttning" Editable="true" TitleDateFormat="dddd, dd MMMM" @bind-Value="_userOrder.StartDate"></MudDatePicker>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="8" Class="mb-2">
+            <MudPaper Elevation="0">
+                <MudText Color="Color.Primary" Align="Align.Left" Typo="Typo.subtitle1">Rabattkode</MudText>
+                <MudText Color="Color.Dark">Har du en rabattkode?</MudText>
+                <MudCheckBox @bind-Value="_userOrder.CouponCode" Color="Color.Primary">Legg til en rabattkode</MudCheckBox>
+                <!--Show coupon code text field on click-->
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="8" Class="mb-2">
+            <MudPaper Elevation="0">
+                <MudText Align="Align.Left" Typo="Typo.h5">Oppsumering av din bestilling</MudText>
+            </MudPaper>
+        </MudItem>
+        </MudGrid>
+    </MudForm>
+</MudGrid> *@
+
+<MudText Class="my-4" Typo="Typo.h2">Din bestilling</MudText>
+<MudContainer Class="mud-container">
+    <MudForm Model="_userOrder">
+        <MudGrid>
+            <MudItem xs="12" sm="12">
+                <MudPaper Class="mud-paper" Elevation="0">
+                    <MudItem xs="12" sm="6">
+                        <MudText Align="Align.Left" Typo="Typo.subtitle1">Innflyttningsdato</MudText>
+                        <MudTextField T="string" Class="form-text-field" Required="true" Label="Startdato" InputType="@InputType.Date" @bind-Value="_userOrder.StartDate" For="@(() => _userOrder.StartDate)" />
+                    </MudItem>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="12">
+                <MudPaper Class="mud-paper" Elevation="0">
+                    <MudItem xs="12" sm="6">
+                        <MudText Align="Align.Left" Typo="Typo.subtitle1">Oppsummmering av din bestilling</MudText>
+                        <div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                Avdeling
+                                            </p>
+                                        </td>
+                                        <td>Skien</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                Lagerstørrelse
+                                            </p>
+                                        </td>
+                                        <td>12 m<sup>2</sup></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                Innflyttingsdato
+                                            </p>
+                                        </td>
+                                        <td>2024-02-01</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                Kampanje
+                                            </p>
+                                        </td>
+                                        <td >50% inntil 1 mnd</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                Avtaletype
+                                            </p>
+                                        </td>
+                                        <td>Månedlig</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>
+                                                Rabattkode
+                                            </p>
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </MudItem>
+                    <MudCheckBox T="bool" Label="Meld deg på vårt nyhetsbrev"></MudCheckBox>
+                    <MudText Typo="Typo.subtitle1">Ved å bestille godtar du våre personvernvilkår, les mer <a href="~/favicon.ico">her</a></MudText>
+                    <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SendOrder())" Variant="Variant.Filled" Color="Color.Primary">Bestill nå</MudButton>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+</MudContainer>
+
+<style>
+    .mud-paper {
+        gap: 10px;
+        /* background-color: #fef7f1 */
+        padding: 15px;
+    }
+
+    .mud-container {
+        background-color: #f0f0fa
+    }
+</style>
+@code {
+    private readonly UserOrder _userOrder = new();
+    private readonly User user = new();
+    private readonly StorageUnit storageUnit;
+    private readonly Order order;
+    private readonly List<string> orderData;
+
+    public class UserOrder
+    {
+        public string StartDate { get; set; } = DateTime.Today.ToString();
+
+        public string? Comment { get; set; }
+
+        public bool? CouponCode { get; set; }
+
+        public string? CouponCodeTag { get; set; }
+
+    }
+
+    public void SendOrder()
+    {
+        
+    }
+}
