@@ -8,11 +8,44 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
-        <MudMenu Label="Open Menu" FullWidth="true" Variant="Variant.Text" Color="Color.Inherit" ActivationEvent="@MouseEvent.MouseOver">
-            <MudMenuItem><MudLink Href="/Lagerhotell/Rjukan">Rjukan</MudLink></MudMenuItem>
-            <MudMenuItem><MudLink Href="/Lagerhotell/Eidsvoll">Eidsvoll</MudLink></MudMenuItem>
-            <MudMenuItem><MudLink Href="/Lagerhotell/Snaasa">Snåsa</MudLink></MudMenuItem>
+        @*<MudMenu Label="Lokasjoner" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.TopLeft" Dense Variant="Variant.Text" Color="Color.Inherit" ActivationEvent="@MouseEvent.MouseOver">
+        <MudMenuItem>
+        <MudMenu Label="" Variant="Variant.Text" Color="Color.Inherit" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.TopRight" TransformOrigin="Origin.TopLeft" Dense>
+        <ActivatorContent>
+        <MudMenuItem><MudLink Href="/Lagerhotell/Rjukan">Kristiansund</MudLink></MudMenuItem>
+        </ActivatorContent>
+        <ChildContent>
+        <MudMenuItem><MudLink Href="/Lagerhotell/Bremsnes"></MudLink>Bremsnes</MudMenuItem>
+        <MudMenuItem><MudLink Href="/Lagerhotell/Rensvik"></MudLink>Renvik</MudMenuItem>
+        </ChildContent>
         </MudMenu>
+        </MudMenuItem>
+        </MudMenu> *@
+        <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenDrawer(Anchor.End))">Lokasjoner</MudButton>
+        <MudDrawer @bind-Open="@open" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+            <MudDrawerHeader>
+                <MudText Typo="Typo.h6">Lokasjoner</MudText>
+            </MudDrawerHeader>
+            <MudNavMenu>
+                <MudExpansionPanels MultiExpansion="true">
+                    <MudExpansionPanel Text="Geilo">
+                        <MudLink Href="Lagerhotell/Geilovegen">Geilovegen</MudLink>
+                        <MudDivider Class="my-4" />
+                        <MudLink Href="Lagerhotell/Lienvegen">Lienvegen</MudLink>
+                    </MudExpansionPanel>
+                    <MudExpansionPanel Text="Kristiansund">
+                        <MudLink Href="Lagerhotell/Bremsnes">Bremsnes</MudLink>
+                        <MudDivider Class="my-4" />
+                        <MudLink Href="Lagerhotell/Rensvik">Rensvik</MudLink>
+                    </MudExpansionPanel>
+                    <MudExpansionPanel Text="Moss">
+                        <MudLink Href="Lagerhotell/Dilling">Dilling</MudLink>
+                        <MudDivider Class="my-4" />
+                        <MudLink Href="Lagerhotell/Jeløy">Jeløy</MudLink>
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+            </MudNavMenu>
+        </MudDrawer>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
@@ -29,14 +62,22 @@
 
 @code {
     bool _drawerOpen = true;
+    bool open;
+    Anchor anchor;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
 
+    void OpenDrawer(Anchor anchor)
+    {
+        open = true;
+        this.anchor = anchor;
+    }
+
     async void DisplayWareHouseHotelLocations()
     {
-        
+
     }
 }
