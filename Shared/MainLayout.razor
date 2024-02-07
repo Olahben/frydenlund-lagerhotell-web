@@ -27,23 +27,18 @@
                 <MudText Typo="Typo.h6">Lokasjoner</MudText>
             </MudDrawerHeader>
             <MudNavMenu>
-                <MudExpansionPanels MultiExpansion="true">
-                    <MudExpansionPanel Text="Geilo">
-                        <MudLink Href="Lagerhotell/Geilovegen">Geilovegen</MudLink>
-                        <MudDivider Class="my-4" />
-                        <MudLink Href="Lagerhotell/Lienvegen">Lienvegen</MudLink>
-                    </MudExpansionPanel>
-                    <MudExpansionPanel Text="Kristiansund">
-                        <MudLink Href="Lagerhotell/Bremsnes">Bremsnes</MudLink>
-                        <MudDivider Class="my-4" />
-                        <MudLink Href="Lagerhotell/Rensvik">Rensvik</MudLink>
-                    </MudExpansionPanel>
-                    <MudExpansionPanel Text="Moss">
-                        <MudLink Href="Lagerhotell/Dilling">Dilling</MudLink>
-                        <MudDivider Class="my-4" />
-                        <MudLink Href="Lagerhotell/Jeløy">Jeløy</MudLink>
-                    </MudExpansionPanel>
-                </MudExpansionPanels>
+                <MudNavGroup Title="Geilo">
+                    <MudNavLink Href="/Lagerhotell/Geilovegen">Geilovegen</MudNavLink>
+                    <MudNavLink Href="/Lagerhotell/Lienvegen">Lienvegen</MudNavLink>
+                </MudNavGroup>
+                <MudNavGroup Title="Kristiansund">
+                    <MudNavLink Href="/Lagerhotell/Bremsnes">Bremsnes</MudNavLink>
+                    <MudNavLink Href="/Lagerhotell/Rensvik">Rensvik</MudNavLink>
+                </MudNavGroup>
+                <MudNavGroup Title="Moss">
+                    <MudNavLink Href="/Lagerhotell/Dilling">Dilling</MudNavLink>
+                    <MudNavLink Href="/Lagerhotell/Jeloy">Jeløy</MudNavLink>
+                </MudNavGroup>
             </MudNavMenu>
         </MudDrawer>
     </MudAppBar>
