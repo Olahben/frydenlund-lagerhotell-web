@@ -8,6 +8,11 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
+        <MudMenu Label="Open Menu" FullWidth="true" Variant="Variant.Text" Color="Color.Inherit" ActivationEvent="@MouseEvent.MouseOver">
+            <MudMenuItem><MudLink Href="/Lagerhotell/Rjukan">Rjukan</MudLink></MudMenuItem>
+            <MudMenuItem><MudLink Href="/Lagerhotell/Eidsvoll">Eidsvoll</MudLink></MudMenuItem>
+            <MudMenuItem><MudLink Href="/Lagerhotell/Snaasa">Snåsa</MudLink></MudMenuItem>
+        </MudMenu>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
@@ -28,5 +33,10 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    async void DisplayWareHouseHotelLocations()
+    {
+        
     }
 }
