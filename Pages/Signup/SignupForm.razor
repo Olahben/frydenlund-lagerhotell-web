@@ -38,6 +38,9 @@
         <MudItem xs="12" sm="6">
             <MudTextField T="string" Class="form-text-field" Required="true" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="accountFormValues.PasswordRepeat" For="@(() => accountFormValues.PasswordRepeat)" />
         </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudCheckBox T="bool" Required="true" Label="Er du en administrator?" @bind-Value="accountFormValues.IsAdministrator" For="@(() => accountFormValues.IsAdministrator)"></MudCheckBox>
+        </MudItem>
         <MudItem xs="12" sm="6">
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Registrer deg</MudButton>
         </MudItem>
@@ -61,44 +64,46 @@
     {
         [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
         [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Ett etternavn er obligatorisk")]
         [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
         [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
-        public string BirthDate { get; set; }
+        public string BirthDate { get; set; } = string.Empty;
 
         [StringLength(112, ErrorMessage = "Addressen din kan være 2-112 bokstaver/tall lang")]
         [Required(ErrorMessage = "En addresse er obligatorisk")]
         [UserServiceSignup.ContainsNumbersAndLetters(ErrorMessage = "Dette feltet må inneholde bokstaver og tall")]
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Dette feltet er obligatorisk")]
         [StringLength(4, ErrorMessage = "Dette må inneholde fire siffer", MinimumLength = 4)]
-        public string PostalCode { get; set; }
+        public string PostalCode { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Dette feltet er obligatorisk")]
         [StringLength(140, ErrorMessage = "Dette feltet må være 2-140 bokstaver langt")]
         [UserServiceSignup.ContainsOnlyLetters(ErrorMessage = "Dette feltet kan bare inneholde bokstaver")]
-        public string City { get; set; }
+        public string City { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Ett passord er obligatorisk")]
         [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
         [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Du må repetere passordet ditt")]
         [Compare(nameof(Password), ErrorMessage = "Passordene samstemmer ikke")]
-        public string PasswordRepeat { get; set; }
+        public string PasswordRepeat { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Obligatorisk")]
+        public bool IsAdministrator { get; set; }
     }
 
     public async Task? SignupUser()
@@ -113,15 +118,15 @@
         try
         {
             // Should be returned the user and call navigate with user id
-            string userId;
-            string token;
+            string? userId;
+            string? token;
             (userId, token) = await userServiceSignup.SignupUser(accountFormValues, client);
             await sessionService.AddJwtToLocalStorage(token);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             NavigationManager.NavigateTo($"/user/{userId}");
             StateHasChanged();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             ErrorMessage = "En bruker med dette telefonnummeret er allerede registrert";
             Snackbar.Add(ErrorMessage, Severity.Error);
