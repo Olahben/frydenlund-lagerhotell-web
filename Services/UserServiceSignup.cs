@@ -1,5 +1,5 @@
 ﻿using Lagerhotell.Pages.Signup;
-using LagerhotellAPI.Models;
+using LagerhotellAPI.Models.FrontendModels;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text;
@@ -10,14 +10,12 @@ namespace Lagerhotell.Services.UserService
 {
     public class UserServiceSignup
     {
-        // private static readonly HttpClient client = new();
-        // public Signup signup = new();
         private readonly string _baseUrl = "https://localhost:7272/users";
         protected string? CustomError;
         protected bool UserRegistered;
-        public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, HttpClient client)
+        public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, bool IsAdministrator, HttpClient client)
         {
-            var request = new LagerhotellAPI.Models.AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password };
+            var request = new AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password, IsAdministrator = IsAdministrator };
             string url = _baseUrl + "/add-user";
             string jsonData = JsonSerializer.Serialize(request);
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -57,10 +55,10 @@ namespace Lagerhotell.Services.UserService
             try
             {
                 await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
-                (userId, token) = await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, client);
+                (userId, token) = await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, accountFormValues.IsAdministrator, client);
                 return (userId, token);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Brukeren er allerede registrert");
             }
@@ -69,9 +67,9 @@ namespace Lagerhotell.Services.UserService
         public class ContainsNumberAttribute : ValidationAttribute
         {
             // Overrides the existing method IsValid in the ValidationAttribute class
-            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
             {
-                string password = value as string;
+                string? password = value as string;
                 // Checks if the password contains a number
                 if (password.Any(char.IsDigit))
                 {
@@ -86,9 +84,9 @@ namespace Lagerhotell.Services.UserService
 
         public class ContainsOnlyNumbersAttribute : ValidationAttribute
         {
-            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
             {
-                string phoneNumber = value as string;
+                string? phoneNumber = value as string;
                 if (int.TryParse(phoneNumber, out int result))
                 {
                     return ValidationResult.Success;
@@ -103,9 +101,9 @@ namespace Lagerhotell.Services.UserService
         public class IsOverLegalAgeAttribute : ValidationAttribute
         {
             // Overrides the existing method IsValid in the ValidationAttribute class
-            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
             {
-                string birthDateStr = value as string;
+                string? birthDateStr = value as string;
                 // format is with hyphens
                 DateTime birthDate = DateTime.ParseExact(birthDateStr, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 int age = DateTime.Now.Year - birthDate.Year;
@@ -125,11 +123,11 @@ namespace Lagerhotell.Services.UserService
             }
         }
 
-        public class ContainsNumbersAndLetters : ValidationAttribute
+        public class ContainsNumbersAndLettersAttribute : ValidationAttribute
         {
             protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
             {
-                string addressStr = value as string;
+                string? addressStr = value as string;
                 bool containsInt = addressStr.Any(char.IsDigit);
                 bool containsLetter = addressStr.Any(char.IsLetter);
                 if (containsInt && containsLetter)
@@ -143,11 +141,11 @@ namespace Lagerhotell.Services.UserService
 
             }
         }
-        public class ContainsOnlyLetters : ValidationAttribute
+        public class ContainsOnlyLettersAttribute : ValidationAttribute
         {
             protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
             {
-                string valueStr = value as string;
+                string? valueStr = value as string;
                 if (Regex.IsMatch(valueStr, @"^[a-zA-Z]+$"))
                 {
                     return ValidationResult.Success;
