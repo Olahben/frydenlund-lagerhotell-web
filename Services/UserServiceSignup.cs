@@ -35,7 +35,7 @@ namespace Lagerhotell.Services.UserService
         }
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
         {
-            string url = _baseUrl + "/is-phone-number-registered-registration/" + phoneNumber;
+            string url = _baseUrl + "/check-phone/" + phoneNumber;
 
             try
             {
