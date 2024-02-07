@@ -4,7 +4,6 @@ namespace Lagerhotell.Services.UserService
 {
     public class SessionService
     {
-        private readonly string _baseUrl = "https://localhost:7272/users";
         private readonly IJSRuntime _jsRuntime;
         public SessionService(IJSRuntime jsRuntime)
         {

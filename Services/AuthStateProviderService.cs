@@ -28,7 +28,7 @@ namespace Lagerhotell.Services
             var keyValuePairs = JsonSerializer
                 .Deserialize<Dictionary<string, object>>(jsonBytes);
 
-            var claims = keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
+            IEnumerable<Claim> claims = keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
 
             return claims;
         }
@@ -45,7 +45,7 @@ namespace Lagerhotell.Services
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string accessToken = await _sessionService.GetJwtFromLocalStorage();
+            string? accessToken = await _sessionService.GetJwtFromLocalStorage();
 
             var identity = new ClaimsIdentity();
             _tokenHttpClient.DefaultRequestHeaders.Authorization = null;
