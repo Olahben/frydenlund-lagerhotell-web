@@ -1,4 +1,6 @@
-﻿using LagerhotellAPI.Models;
+﻿using LagerhotellAPI.Models.DomainModels;
+using LagerhotellAPI.Models.FrontendModels;
+using LagerhotellAPI.Models.ValueTypes;
 using System.Text;
 using System.Text.Json;
 using static Lagerhotell.Pages.UserSettings.UserSettings;
@@ -21,17 +23,9 @@ namespace Lagerhotell.Services.UserService
                 {
                     PropertyNameCaseInsensitive = true
                 };
-                UserValues? deserializedUser = JsonSerializer.Deserialize<UserValues>(result, options);
-                Console.WriteLine(deserializedUser);
-                user.FirstName = deserializedUser.FirstName;
-                user.LastName = deserializedUser.LastName;
-                user.PhoneNumber = deserializedUser.PhoneNumber;
-                user.BirthDate = deserializedUser.BirthDate;
-                user.Address = deserializedUser.Address;
-                user.PostalCode = deserializedUser.PostalCode;
-                user.City = deserializedUser.City;
-                user.Password = deserializedUser.Password;
-                return user;
+                User deserializedUser = JsonSerializer.Deserialize<User>(result, options);
+                UserValues userValues = new UserValues { Id = deserializedUser.Id, FirstName = deserializedUser.FirstName, LastName = deserializedUser.LastName, PhoneNumber = deserializedUser.PhoneNumber, BirthDate = deserializedUser.BirthDate, Password = deserializedUser.Password, StreetAddress = deserializedUser.Address.StreetAddress, PostalCode = deserializedUser.Address.PostalCode, City = deserializedUser.Address.City, IsAdministrator = deserializedUser.IsAdministrator };
+                return userValues;
             }
             else
             {
@@ -43,7 +37,8 @@ namespace Lagerhotell.Services.UserService
         public async Task<bool>? UpdateUserValues(HttpClient httpClient, UserValues userValues, string jwtToken)
         {
             string url = _baseUrl + "/update-user-values";
-            UpdateUserValuesRequest request = new UpdateUserValuesRequest { FirstName = userValues.FirstName, LastName = userValues.LastName, PhoneNumber = userValues.PhoneNumber, BirthDate = userValues.BirthDate, Address = userValues.Address, PostalCode = userValues.PostalCode, City = userValues.City, Password = userValues.Password };
+            Address addressRequest = new(userValues.StreetAddress, userValues.PostalCode, userValues.City);
+            UpdateUserValuesRequest request = new UpdateUserValuesRequest { FirstName = userValues.FirstName, LastName = userValues.LastName, PhoneNumber = userValues.PhoneNumber, BirthDate = userValues.BirthDate, Address = addressRequest, Password = userValues.Password, IsAdministrator = userValues.IsAdministrator };
             string jsonData = JsonSerializer.Serialize(request);
             StringContent stringContentRequest = new StringContent(jsonData, Encoding.UTF8, "application/json");
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);

@@ -1,4 +1,5 @@
-﻿using LagerhotellAPI.Models;
+﻿using LagerhotellAPI.Models.DomainModels;
+using LagerhotellAPI.Models.FrontendModels;
 using System.Text;
 using System.Text.Json;
 
@@ -14,7 +15,12 @@ namespace Lagerhotell.Services.UserService
             string url = _baseUrl + "/check-phone/" + phoneNumber;
 
             HttpResponseMessage response = await client.GetAsync(url);
-            return response.IsSuccessStatusCode;
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            CheckPhoneNumber.CheckPhoneNumberResponse deserializedResponse = JsonSerializer.Deserialize<CheckPhoneNumber.CheckPhoneNumberResponse>(await response.Content.ReadAsStringAsync(), options);
+            return deserializedResponse.PhoneNumberExistence;
         }
         public async Task<(string, bool)> CheckPassword(string password, string phoneNumber)
         {
@@ -54,7 +60,7 @@ namespace Lagerhotell.Services.UserService
             {
                 PropertyNameCaseInsensitive = true
             };
-            LagerhotellAPI.Models.User userDeserialized = JsonSerializer.Deserialize<LagerhotellAPI.Models.User>(responseContent, options);
+            User userDeserialized = JsonSerializer.Deserialize<User>(responseContent, options);
             string userId = userDeserialized.Id;
             return userId;
         }
@@ -62,7 +68,7 @@ namespace Lagerhotell.Services.UserService
         public async Task<(string Token, string UserId)> LoginUser(string phoneNumber, string password)
         {
             bool userExistence = await CheckPhoneNumber(phoneNumber);
-            if (userExistence)
+            if (!userExistence)
             {
                 throw new Exception("Brukeren eksisterer ikke");
             }

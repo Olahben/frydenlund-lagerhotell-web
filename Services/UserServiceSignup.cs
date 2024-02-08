@@ -36,17 +36,19 @@ namespace Lagerhotell.Services.UserService
         public async Task? PhoneNumberExistence(string phoneNumber, HttpClient client)
         {
             string url = _baseUrl + "/check-phone/" + phoneNumber;
+            HttpResponseMessage response = await client.GetAsync(url);
 
-            try
+            var options = new JsonSerializerOptions
             {
-                HttpResponseMessage response = await client.GetAsync(url);
-                CustomError = "";
-                UserRegistered = false;
-            }
-            catch (Exception ex)
+                PropertyNameCaseInsensitive = true
+            };
+            CheckPhoneNumber.CheckPhoneNumberResponse deserializedResponse = JsonSerializer.Deserialize<CheckPhoneNumber.CheckPhoneNumberResponse>(await response.Content.ReadAsStringAsync(), options);
+            if (deserializedResponse.PhoneNumberExistence)
             {
-                throw new Exception(ex.Message);
+                throw new InvalidOperationException("Brukeren er allerede registrert");
             }
+            CustomError = "";
+            UserRegistered = false;
         }
         public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
         {
@@ -58,8 +60,9 @@ namespace Lagerhotell.Services.UserService
                 (userId, token) = await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, accountFormValues.IsAdministrator, client);
                 return (userId, token);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine("In SignupUser in SignupService" + ex);
                 throw new Exception("Brukeren er allerede registrert");
             }
 
