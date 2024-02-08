@@ -66,8 +66,9 @@
             StateHasChanged();
             navigationManager.NavigateTo($"user/{userId}");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine("Login form" + ex);
             ErrorMessage = "Mobilnummer eller passord er feil";
             snackbar.Add(ErrorMessage, Severity.Error);
         }

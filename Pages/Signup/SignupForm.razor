@@ -126,8 +126,9 @@
             NavigationManager.NavigateTo($"/user/{userId}");
             StateHasChanged();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine(ex);
             ErrorMessage = "En bruker med dette telefonnummeret er allerede registrert";
             Snackbar.Add(ErrorMessage, Severity.Error);
             StateHasChanged();
