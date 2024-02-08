@@ -10,7 +10,7 @@
  @code {
     public async Task? LogOutUser()
     {
-        sessionService.RemoveItemAsync("jwtToken");
+        await sessionService.RemoveItemAsync("jwtToken");
         navigationManager.NavigateTo(navigationManager.Uri, true);
 
     }
