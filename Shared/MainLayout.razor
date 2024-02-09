@@ -21,26 +21,13 @@
         </MudMenu>
         </MudMenuItem>
         </MudMenu> *@
-        <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenDrawer(Anchor.End))">Lokasjoner</MudButton>
-        <MudDrawer @bind-Open="@open" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
-            <MudDrawerHeader>
-                <MudText Typo="Typo.h6">Lokasjoner</MudText>
-            </MudDrawerHeader>
-            <MudNavMenu>
-                <MudNavGroup Title="Geilo">
-                    <MudNavLink Href="/Lagerhotell/Geilovegen">Geilovegen</MudNavLink>
-                    <MudNavLink Href="/Lagerhotell/Lienvegen">Lienvegen</MudNavLink>
-                </MudNavGroup>
-                <MudNavGroup Title="Kristiansund">
-                    <MudNavLink Href="/Lagerhotell/Bremsnes">Bremsnes</MudNavLink>
-                    <MudNavLink Href="/Lagerhotell/Rensvik">Rensvik</MudNavLink>
-                </MudNavGroup>
-                <MudNavGroup Title="Moss">
-                    <MudNavLink Href="/Lagerhotell/Dilling">Dilling</MudNavLink>
-                    <MudNavLink Href="/Lagerhotell/Jeloy">Jeløy</MudNavLink>
-                </MudNavGroup>
-            </MudNavMenu>
-        </MudDrawer>
+        <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Lokasjoner</MudButton>
+        @if (rightSideBarOpen)
+        {
+            <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+            <Lagerhotell.Pages.NewFolder.LocationsSideBar />
+            </MudDrawer>
+        }
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
@@ -57,7 +44,7 @@
 
 @code {
     bool _drawerOpen = true;
-    bool open;
+    bool rightSideBarOpen;
     Anchor anchor;
 
     void DrawerToggle()
@@ -65,14 +52,10 @@
         _drawerOpen = !_drawerOpen;
     }
 
-    void OpenDrawer(Anchor anchor)
+    void OpenRightDrawer(Anchor anchor)
     {
-        open = true;
+        rightSideBarOpen = true;
         this.anchor = anchor;
-    }
-
-    async void DisplayWareHouseHotelLocations()
-    {
-
+        StateHasChanged();
     }
 }
