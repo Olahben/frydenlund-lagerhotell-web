@@ -4,23 +4,30 @@
 </MudDrawerHeader>
 <MudNavMenu>
     <MudNavGroup Title="Geilo">
-        <MudNavLink Href="/Lagerhotell/Geilovegen">Geilovegen</MudNavLink>
-        <MudNavLink Href="/Lagerhotell/Lienvegen">Lienvegen</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Geilovegen">Geilovegen</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Lienvegen">Lienvegen</MudNavLink>
+        <AuthorizeView Roles="Administrator">
+            <Authorized><MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink></Authorized>
+        </AuthorizeView>
     </MudNavGroup>
     <MudNavGroup Title="Kristiansund">
-        <MudNavLink Href="/Lagerhotell/Bremsnes">Bremsnes</MudNavLink>
-        <MudNavLink Href="/Lagerhotell/Rensvik">Rensvik</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Bremsnes">Bremsnes</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Rensvik">Rensvik</MudNavLink>
+        <AuthorizeView Roles="Administrator">
+        <Authorized><MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink></Authorized>
+        </AuthorizeView>
     </MudNavGroup>
     <MudNavGroup Title="Moss">
-        <MudNavLink Href="/Lagerhotell/Dilling">Dilling</MudNavLink>
-        <MudNavLink Href="/Lagerhotell/Jeloy">Jeløy</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Dilling">Dilling</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Jeloy">Jeløy</MudNavLink>
+        <AuthorizeView Roles="Administrator">
+            <Authorized><MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink></Authorized>
+        </AuthorizeView>
     </MudNavGroup>
-        <MudNavLink Icon="@Icons.Material.Filled.Add">Legg til en lokasjon</MudNavLink>
+    <AuthorizeView Roles="Administrator">
+        <Authorized><MudNavLink Icon="@Icons.Material.Filled.Add">Legg til en lokasjon</MudNavLink></Authorized>
+    </AuthorizeView>
 </MudNavMenu>
-
 @code {
     async void DisplayWareHouseHotelLocations()
     {
