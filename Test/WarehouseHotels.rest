@@ -1,0 +1,96 @@
+
+@phoneNumberAdmin = 00005555
+@passwordAdmin = passord1
+@api = https://localhost:7272
+
+@locationNameToOperateWith = Halden
+@newLocationNameToOperateWith = Odda
+@skip = 0
+@take = 0
+@includeNonActive = true
+
+### Get token
+# @name login
+POST {{api}}/users/log-in
+Content-Type: application/json
+
+{
+    "phoneNumber": "{{phoneNumberAdmin}}",
+  "password": "{{passwordAdmin}}"
+}
+
+### Add warehouse hotel
+# @name add
+POST {{api}}/warehouse-hotels/add
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "warehouseHotel": {
+    "warehouseHotelId": "string",
+    "coordinate": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "address": {
+      "streetAddress": "string",
+      "postalCode": "string",
+      "city": "string"
+    },
+    "name": "string",
+    "openingHours": {
+      "opens": 0,
+      "closes": 0
+    },
+    "phoneNumber": "string",
+    "detailedDescription": "string",
+    "containsTemperatedStorageUnits": true,
+    "isActive": true,
+    "storageUnitsSizes": {
+      "minSize": 0,
+      "maxSize": 0
+    }
+  }
+}
+
+### Modify warehouse hotel
+# @name modify
+PUT {{api}}/warehouse-hotels/modify
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "warehouseHotel": {
+    "warehouseHotelId": "{{add.response.body.warehouseHotelId}}",
+    "coordinate": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "address": {
+      "streetAddress": "string",
+      "postalCode": "string",
+      "city": "string"
+    },
+    "name": "string",
+    "openingHours": {
+      "opens": 0,
+      "closes": 0
+    },
+    "phoneNumber": "string",
+    "detailedDescription": "string",
+    "containsTemperatedStorageUnits": false,
+    "isActive": true,
+    "storageUnitsSizes": {
+      "minSize": 0,
+      "maxSize": 0
+    }
+  }
+}
+
+
+
+### Add warehouse hotel
+# @name delete
+DELETE  {{api}}/warehouse-hotels/{{add.response.body.warehouseHotelId}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
