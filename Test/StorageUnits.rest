@@ -1,0 +1,85 @@
+
+@phoneNumberAdmin = 00005555
+@passwordAdmin = passord1
+@api = https://localhost:7272
+
+@locationNameToOperateWith = Halden
+@newLocationNameToOperateWith = Odda
+@skip = 0
+@take = 0
+@includeNonActive = true
+
+### Get token
+# @name login
+POST {{api}}/users/log-in
+Content-Type: application/json
+
+{
+    "phoneNumber": "{{phoneNumberAdmin}}",
+  "password": "{{passwordAdmin}}"
+}
+
+### Add storage unit
+# @name add
+POST {{api}}/storage-units/add
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "storageUnit": {
+    "dimensions": {
+      "length": 0,
+      "width": 0,
+      "height": 0
+    },
+    "temperated": true,
+    "lockCode": "string",
+    "name": "string",
+    "occupied": true,
+    "userId": "string",
+    "coordinate": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "pricePerMonth": {
+      "amount": 0,
+      "currency": "string"
+    }
+  }
+}
+
+### Modify storage unit
+# @name modify
+PUT {{api}}/storage-units/modify
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "storageUnit": {
+    "storageUnitId": "{{add.response.body.storageUnitId}}",
+    "dimensions": {
+      "length": 0,
+      "width": 0,
+      "height": 0
+    },
+    "temperated": true,
+    "lockCode": "string",
+    "name": "string",
+    "occupied": false,
+    "userId": "string",
+    "coordinate": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "pricePerMonth": {
+      "amount": 0,
+      "currency": "string"
+    }
+  }
+}
+
+### Delete storage unit
+# @name delete
+DELETE {{api}}/storage-units/{{add.response.body.storageUnitId}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}

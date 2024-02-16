@@ -1,0 +1,60 @@
+
+@phoneNumberAdmin = 00005555
+@passwordAdmin = passord1
+@api = https://localhost:7272
+
+@locationNameToOperateWith = Halden
+@newLocationNameToOperateWith = Odda
+@skip = 0
+@take = 0
+@includeNonActive = true
+
+### Get token
+# @name login
+POST {{api}}/users/log-in
+Content-Type: application/json
+
+{
+    "phoneNumber": "{{phoneNumberAdmin}}",
+  "password": "{{passwordAdmin}}"
+}
+
+
+### Add location
+# @name add
+POST {{api}}/locations/add
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "location": {
+    "name": "{{locationNameToOperateWith}}",
+    "isActive": false
+    }
+}
+
+### Delete location
+# @name delete
+DELETE {{api}}/locations/{{locationNameToOperateWith}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+### Modify location
+# @name modify
+PUT {{api}}/locations/modify
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+ "oldLocationName": "{{locationNameToOperateWith}}",
+ "location": {
+    "name": "{{newLocationNameToOperateWith}}",
+    "isActive": false
+ }
+}
+
+### Get all locations
+# @name GetAll
+GET {{api}}/locations?includeNonActive={{includeNonActive}}&skip={{skip}}&take={{take}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}

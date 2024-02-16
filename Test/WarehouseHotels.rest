@@ -91,6 +91,6 @@ Authorization: Bearer {{login.response.body.token}}
 
 ### Add warehouse hotel
 # @name delete
-DELETE  {{api}}/warehouse-hotels/{{add.response.body.warehouseHotelId}}
+DELETE  {{api}}/warehouse-hotels{{add.response.body.warehouseHotelId}}
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
