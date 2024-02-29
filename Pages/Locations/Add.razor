@@ -1,0 +1,26 @@
+﻿@inject IDialogService dialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudTextField T="string" @bind-Value="location.Name" Label="Navn" Placeholder="Oslo og omegn" Required="true" ></MudTextField>
+            <MudSwitch Style="margin-top: 10px" T="bool" @bind-Value="location.IsActive" Label="Aktiv?"></MudSwitch>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="AddLocation">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<style>
+
+</style>
+
+@code {
+    private readonly Location location = new Location();
+
+    private async Task AddLocation()
+    {
+        // Call location service to add location
+    }
+}
