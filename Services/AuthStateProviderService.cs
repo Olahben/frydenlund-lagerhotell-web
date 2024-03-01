@@ -1,5 +1,4 @@
-﻿using Lagerhotell.Services.UserService;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
