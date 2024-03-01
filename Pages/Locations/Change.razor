@@ -1,0 +1,58 @@
+﻿@inject SessionService sessionService
+@inject NavigationManager navigationManager
+@inject LocationService locationService
+
+<MudDialog>
+<DialogContent>
+    <MudText>Denne lokasjonen vil beholde alle tilhørende lagerhotell</MudText>
+        <MudForm>
+            <MudTextField T="string" @bind-Value="_oldName" Label="Gammelt navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
+            <MudTextField T="string" @bind-Value="_location.Name" Label="Nytt navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
+            <MudSwitch Style="margin-top: 10px" T="bool" @bind-Value="_location.IsActive" Label="Aktiv?"></MudSwitch>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="ChangeLocation">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private Location _location = new Location();
+    private string _oldName = string.Empty;
+    private string _newName = string.Empty;
+    private string? _jwtToken;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _jwtToken = await sessionService.GetJwtFromLocalStorage();
+        if (_jwtToken == null)
+        {
+            navigationManager.NavigateTo("/login");
+        }
+    }
+
+    private async Task ChangeLocation()
+    {
+        try
+        {
+            await locationService.ChangeLocation(_oldName, _location.Name, _location.IsActive, _jwtToken);
+            Snackbar.Add("Lokasjonen ble endret", Severity.Success);
+        } catch (InvalidOperationException e)
+        {
+            Console.WriteLine($"{e}");
+            Snackbar.Add("Lokasjonen eksisterer fra før av", Severity.Error);
+        } catch (UnauthorizedAccessException e)
+        {
+            Console.WriteLine($"{e}");
+            Snackbar.Add("Du har ikke tilgang til å endre lokasjoner", Severity.Error);
+        } catch (Exception e)
+        {
+            Console.WriteLine($"{e}");
+            Snackbar.Add("Noe gikk galt", Severity.Error);
+        }
+    }
+}
+
+@code {
+
+}

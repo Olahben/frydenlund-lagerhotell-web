@@ -1,0 +1,61 @@
+﻿@inject IDialogService dialogService
+@inject SessionService _sessionService
+@inject LocationService _locationService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudTextField T="string" @bind-Value="location.Name" Label="Navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="ProceedToDeleteLocationBox">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<style>
+
+</style>
+
+@code {
+    private readonly Location location = new Location();
+
+    private async Task DeleteLocation()
+    {
+        try
+        {
+            string? jwtToken = await _sessionService.GetJwtFromLocalStorage();
+            await _locationService.DeleteLocation(location.Name, jwtToken);
+            Snackbar.Add("Lokasjonen ble slettet", Severity.Success);
+        }
+        catch (KeyNotFoundException e)
+        {
+            Snackbar.Add("Lokasjonen eksisterer ikke", Severity.Error);
+            Console.WriteLine($"{e}");
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            Snackbar.Add("Du har ikke tilgang til å slette lokasjoner", Severity.Error);
+            Console.WriteLine($"{e}");
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Noe gikk galt", Severity.Error);
+            Console.WriteLine($"{e}");
+        }
+    }
+
+    private async Task ProceedToDeleteLocationBox()
+    {
+        var result = await dialogService.ShowMessageBox(
+            "Er du sikker på at du vil slette denne lokasjonen?",
+            "Slett lokasjon",
+            yesText: "Ja",
+            cancelText: "Nei");
+
+        if (result == true)
+        {
+            await DeleteLocation();
+        }
+    }
+}
