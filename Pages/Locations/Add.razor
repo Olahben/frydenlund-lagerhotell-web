@@ -1,9 +1,13 @@
-﻿@inject IDialogService dialogService
+﻿@using Lagerhotell.Services;
+
+@inject IDialogService _dialogService
+@inject SessionService _sessionService
+@inject LocationService _locationService
 
 <MudDialog>
     <DialogContent>
         <MudForm>
-            <MudTextField T="string" @bind-Value="location.Name" Label="Navn" Placeholder="Oslo og omegn" Required="true" ></MudTextField>
+            <MudTextField T="string" @bind-Value="location.Name" Label="Navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
             <MudSwitch Style="margin-top: 10px" T="bool" @bind-Value="location.IsActive" Label="Aktiv?"></MudSwitch>
         </MudForm>
     </DialogContent>
@@ -19,8 +23,29 @@
 @code {
     private readonly Location location = new Location();
 
-    private async Task AddLocation()
+    private async Task? AddLocation()
     {
-        // Call location service to add location
+        try
+        {
+            string jwtToken = await _sessionService.GetJwtFromLocalStorage();
+            await _locationService.AddLocation(location.Name, location.IsActive, jwtToken);
+            Snackbar.Add("Lokasjonen ble lagt til", Severity.Success);
+        }
+        catch (InvalidOperationException e)
+        {
+            Snackbar.Add("Lokasjonen eksisterer fra før av", Severity.Error);
+            Console.WriteLine($"{e}");
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            Snackbar.Add("Du har ikke tilgang til å legge til lokasjoner", Severity.Error);
+            Console.WriteLine($"{e}");
+        }
+
+        catch (Exception e)
+        {
+            Snackbar.Add("Noe gikk galt", Severity.Error);
+            Console.WriteLine($"{e}");
+        }
     }
 }

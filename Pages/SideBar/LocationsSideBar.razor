@@ -1,32 +1,70 @@
 ﻿@inject IDialogService DialogService
 
+<style>
+    .lagerhotell-link-change {
+        margin-right: -30px;
+    }
+
+
+
+    .lagerhotell-link-text {
+        display: inline-block;
+        width: 90px;
+    }
+
+    .lagerhotell-link {
+        display: flex;
+        align-items: stretch;
+    }
+</style>
+
 <MudDrawerHeader>
     <MudText Typo="Typo.h6">Lokasjoner</MudText>
 </MudDrawerHeader>
 <MudNavMenu>
     <MudNavGroup Title="Geilo">
-        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Geilovegen">Geilovegen</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Lienvegen">Lienvegen</MudNavLink>
         <AuthorizeView Roles="Administrator">
-            <Authorized><MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink></Authorized>
+            <Authorized>
+                <MudNavLink ActiveClass="test" Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Geilovegen</div><MudIconButton Class="lagerhotell-link-change" Icon="@Icons.Material.Filled.MoreVert"></MudIconButton></MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Lienvegen</div><MudIconButton Class="lagerhotell-link-change" Icon="@Icons.Material.Filled.MoreVert"></MudIconButton></MudNavLink>
+            </Authorized>
+            <NotAuthorized>
+                <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Geilovegen</div></MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Lienvegen</div></MudNavLink>
+            </NotAuthorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <MudNavLink Class="add-or-delete-link" Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
+                <MudNavLink Class="add-or-delete-link" Icon="@Icons.Material.Filled.Delete">Slett ett lagerhotell</MudNavLink>
+            </Authorized>
         </AuthorizeView>
     </MudNavGroup>
     <MudNavGroup Title="Kristiansund">
         <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Bremsnes">Bremsnes</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Rensvik">Rensvik</MudNavLink>
         <AuthorizeView Roles="Administrator">
-        <Authorized><MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink></Authorized>
+            <Authorized>
+                <MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Add">Slett ett lagerhotell</MudNavLink>
+            </Authorized>
         </AuthorizeView>
     </MudNavGroup>
     <MudNavGroup Title="Moss">
         <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Dilling">Dilling</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.MyLocation" Href="/Lagerhotell/Jeloy">Jeløy</MudNavLink>
         <AuthorizeView Roles="Administrator">
-            <Authorized><MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink></Authorized>
+            <Authorized>
+                <MudNavLink Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Add">Slett ett lagerhotell</MudNavLink>
+            </Authorized>
         </AuthorizeView>
     </MudNavGroup>
     <AuthorizeView Roles="Administrator">
-        <Authorized><MudNavLink @onclick="OpenAddLocationDialog" Icon="@Icons.Material.Filled.Add">Legg til en lokasjon</MudNavLink></Authorized>
+        <Authorized>
+            <MudNavLink @onclick="OpenAddLocationDialog" Icon="@Icons.Material.Filled.Add">Legg til en lokasjon</MudNavLink>
+            <MudNavLink @onclick="OpenDeleteLocationDialog" Icon="@Icons.Material.Filled.Add">Slett en lokasjon og tilhørende info</MudNavLink>
+        </Authorized>
     </AuthorizeView>
 </MudNavMenu>
 
@@ -45,14 +83,15 @@
 
     }
 
-    async void AddLocation()
-    {
-        
-    }
-
     private void OpenAddLocationDialog()
     {
-        var options = new DialogOptions { ClassBackground = "custom-class"};
+        var options = new DialogOptions { ClassBackground = "custom-class" };
         DialogService.Show<Pages.Locations.Add>("Legg til en lokasjon", options);
+    }
+
+    private void OpenDeleteLocationDialog()
+    {
+        var options = new DialogOptions { ClassBackground = "custom-class" };
+        DialogService.Show<Pages.Locations.Delete>("Slett en lokasjon", options);
     }
 }
