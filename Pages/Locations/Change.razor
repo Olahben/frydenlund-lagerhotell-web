@@ -3,12 +3,12 @@
 @inject LocationService locationService
 
 <MudDialog>
-<DialogContent>
-    <MudText>Denne lokasjonen vil beholde alle tilhørende lagerhotell</MudText>
-        <MudForm>
-            <MudTextField T="string" @bind-Value="_oldName" Label="Gammelt navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
-            <MudTextField T="string" @bind-Value="_location.Name" Label="Nytt navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
-            <MudSwitch Style="margin-top: 10px" T="bool" @bind-Value="_location.IsActive" Label="Aktiv?"></MudSwitch>
+    <DialogContent>
+        <MudText>Denne lokasjonen vil beholde alle tilhørende lagerhotell</MudText>
+        <MudForm Model="_oldLocation" @ref="form" Validation="@(_locationValidator.ValidateValue)">
+            <MudTextField T="string" @bind-Value="_oldLocation.Name" For="@(() => _oldLocation.Name)" Immediate="true" Label="Gammelt navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
+            <MudTextField T="string" @bind-Value="_newLocation.Name" For="@(() => _oldLocation.Name)" Immediate="true" Label="Nytt navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
+            <MudSwitch Style="margin-top: 10px" T="bool" @bind-Value="_newLocation.IsActive" For="@(() => _oldLocation.IsActive)" Label="Aktiv?"></MudSwitch>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -17,9 +17,10 @@
 </MudDialog>
 
 @code {
-    private Location _location = new Location();
-    private string _oldName = string.Empty;
-    private string _newName = string.Empty;
+    private Location _oldLocation = new Location();
+    private Location _newLocation = new Location();
+    private readonly LocationValidator _locationValidator = new LocationValidator();
+    MudForm form;
     private string? _jwtToken;
 
     protected override async Task OnInitializedAsync()
@@ -35,20 +36,29 @@
     {
         try
         {
-            await locationService.ChangeLocation(_oldName, _location.Name, _location.IsActive, _jwtToken);
-            Snackbar.Add("Lokasjonen ble endret", Severity.Success);
-        } catch (InvalidOperationException e)
+            await form.Validate();
+            if (!form.IsValid)
+            {
+                Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
+                return;
+            }
+            await locationService.ChangeLocation(_oldLocation.Name, _newLocation.Name, _newLocation.IsActive, _jwtToken);
+            Snackbar.Add("Lokasjonen ble endret", MudBlazor.Severity.Success);
+        }
+        catch (InvalidOperationException e)
         {
             Console.WriteLine($"{e}");
-            Snackbar.Add("Lokasjonen eksisterer fra før av", Severity.Error);
-        } catch (UnauthorizedAccessException e)
+            Snackbar.Add("Lokasjonen eksisterer fra før av", MudBlazor.Severity.Error);
+        }
+        catch (UnauthorizedAccessException e)
         {
             Console.WriteLine($"{e}");
-            Snackbar.Add("Du har ikke tilgang til å endre lokasjoner", Severity.Error);
-        } catch (Exception e)
+            Snackbar.Add("Du har ikke tilgang til å endre lokasjoner", MudBlazor.Severity.Error);
+        }
+        catch (Exception e)
         {
             Console.WriteLine($"{e}");
-            Snackbar.Add("Noe gikk galt", Severity.Error);
+            Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
         }
     }
 }

@@ -6,9 +6,9 @@
 
 <MudDialog>
     <DialogContent>
-        <MudForm>
-            <MudTextField T="string" @bind-Value="location.Name" Label="Navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
-            <MudSwitch Style="margin-top: 10px" T="bool" @bind-Value="location.IsActive" Label="Aktiv?"></MudSwitch>
+        <MudForm @ref="form" Model="location" Validation="@(_locationValidator.ValidateValue)">
+            <MudTextField T="string" @bind-Value="location.Name" For="@(() => location.Name)" Immediate="true" Label="Navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
+            <MudSwitch Style="margin-top: 10px" T="bool" @bind-Value="location.IsActive" For="@(() => location.IsActive)" Label="Aktiv?"></MudSwitch>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -21,30 +21,38 @@
 </style>
 
 @code {
+    private readonly LocationValidator _locationValidator = new LocationValidator();
     private readonly Location location = new Location();
+    MudForm form;
 
     private async Task? AddLocation()
     {
         try
         {
+            await form.Validate();
+            if (!form.IsValid)
+            {
+                Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
+                return;
+            }
             string jwtToken = await _sessionService.GetJwtFromLocalStorage();
             await _locationService.AddLocation(location.Name, location.IsActive, jwtToken);
-            Snackbar.Add("Lokasjonen ble lagt til", Severity.Success);
+            Snackbar.Add("Lokasjonen ble lagt til", MudBlazor.Severity.Success);
         }
         catch (InvalidOperationException e)
         {
-            Snackbar.Add("Lokasjonen eksisterer fra før av", Severity.Error);
+            Snackbar.Add("Lokasjonen eksisterer fra før av", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
         }
         catch (UnauthorizedAccessException e)
         {
-            Snackbar.Add("Du har ikke tilgang til å legge til lokasjoner", Severity.Error);
+            Snackbar.Add("Du har ikke tilgang til å legge til lokasjoner", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
         }
 
         catch (Exception e)
         {
-            Snackbar.Add("Noe gikk galt", Severity.Error);
+            Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
         }
     }

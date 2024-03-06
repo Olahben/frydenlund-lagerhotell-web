@@ -4,8 +4,8 @@
 
 <MudDialog>
     <DialogContent>
-        <MudForm>
-            <MudTextField T="string" @bind-Value="location.Name" Label="Navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
+        <MudForm @ref="form" Model="location" Validation="@(_locationValidator.ValidateValue)">
+            <MudTextField T="string" For="@(() => location.Name)" Immediate="true" @bind-Value="location.Name" Label="Navn" Placeholder="Oslo og omegn" Required="true"></MudTextField>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -18,29 +18,37 @@
 </style>
 
 @code {
+    private readonly LocationValidator _locationValidator = new LocationValidator();
     private readonly Location location = new Location();
+    MudForm form;
 
     private async Task DeleteLocation()
     {
         try
         {
+            await form.Validate();
+            if (!form.IsValid)
+            {
+                Snackbar.Add("Det er noe galt med verdiene du har fyllt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
+                return;
+            }
             string? jwtToken = await _sessionService.GetJwtFromLocalStorage();
             await _locationService.DeleteLocation(location.Name, jwtToken);
-            Snackbar.Add("Lokasjonen ble slettet", Severity.Success);
+            Snackbar.Add("Lokasjonen ble slettet", MudBlazor.Severity.Success);
         }
         catch (KeyNotFoundException e)
         {
-            Snackbar.Add("Lokasjonen eksisterer ikke", Severity.Error);
+            Snackbar.Add("Lokasjonen eksisterer ikke", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
         }
         catch (UnauthorizedAccessException e)
         {
-            Snackbar.Add("Du har ikke tilgang til å slette lokasjoner", Severity.Error);
+            Snackbar.Add("Du har ikke tilgang til å slette lokasjoner", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
         }
         catch (Exception e)
         {
-            Snackbar.Add("Noe gikk galt", Severity.Error);
+            Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
         }
     }
@@ -58,4 +66,5 @@
             await DeleteLocation();
         }
     }
+
 }
