@@ -5,7 +5,6 @@
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @using System.Collections.Generic
-@using Lagerhotell.Services.UserService
 
 <h2>Registrer deg her:</h2>
 <EditForm Model="@accountFormValues" OnValidSubmit="SignupUser">
@@ -130,7 +129,7 @@
         {
             Console.WriteLine(ex);
             ErrorMessage = "En bruker med dette telefonnummeret er allerede registrert";
-            Snackbar.Add(ErrorMessage, Severity.Error);
+            Snackbar.Add(ErrorMessage, MudBlazor.Severity.Error);
             StateHasChanged();
         }
     }
