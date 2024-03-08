@@ -1,4 +1,5 @@
 using Lagerhotell;
+using Lagerhotell.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -10,9 +11,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddMudServices();
-builder.Services.AddScoped<Lagerhotell.Services.UserService.SessionService>();
-builder.Services.AddScoped<AuthStateProvider>();
+builder.Services.AddScoped<SessionService>();
+builder.Services.AddScoped<AuthStateProviderService>();
 builder.Services.AddAuthorizationCore();
-builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProviderService>();
+builder.Services.AddScoped<LocationService>();
+builder.Services.AddScoped<WarehouseHotelService>();
 
 await builder.Build().RunAsync();
