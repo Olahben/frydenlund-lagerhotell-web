@@ -27,59 +27,30 @@ public class WarehouseHotelService
 
     public async Task<(string, string)> DeleteWarehouseHotel(string warehouseHotelName, string token)
     {
-        string getUrl = _baseUrl + $"/get-by-name/{warehouseHotelName}";
+        WarehouseHotel warehouseHotel = await GetWarehouseHotelByName(warehouseHotelName, token);
+
+        string url = _baseUrl + $"/{warehouseHotel.WarehouseHotelId}";
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-        var warehouseHotelResponse = await client.GetAsync(getUrl);
-        if (warehouseHotelResponse.StatusCode == HttpStatusCode.NotFound)
+        HttpResponseMessage response = await client.DeleteAsync(url);
+        string deserializedResponse = string.Empty;
+        if (response.IsSuccessStatusCode)
+        {
+            deserializedResponse = await response.Content.ReadAsStringAsync();
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
         {
             throw new KeyNotFoundException("Lagerhotellet eksisterer ikke");
         }
-        else if (warehouseHotelResponse.StatusCode == HttpStatusCode.Unauthorized)
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            throw new UnauthorizedAccessException("Noe gikk galt");
-        }
-        else if (warehouseHotelResponse.StatusCode == HttpStatusCode.InternalServerError)
-        {
-            throw new Exception("Noe gikk galt");
-        }
-        else if (warehouseHotelResponse.StatusCode == HttpStatusCode.OK)
-        {
-            string warehouseHotelResponseString = await warehouseHotelResponse.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            GetWarehouseHotelByIdResponse warehouseHotel = JsonSerializer.Deserialize<GetWarehouseHotelByIdResponse>(warehouseHotelResponseString, options);
-
-            string url = _baseUrl + $"/{warehouseHotel.WarehouseHotel.WarehouseHotelId}";
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-
-            HttpResponseMessage response = await client.DeleteAsync(url);
-            string deserializedResponse = string.Empty;
-            if (response.IsSuccessStatusCode)
-            {
-                deserializedResponse = await response.Content.ReadAsStringAsync();
-            }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new KeyNotFoundException("Lagerhotellet eksisterer ikke");
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedAccessException("Noe er galt med JWT");
-            }
-            else
-            {
-                throw new Exception("Noe gikk galt");
-            }
-            return (warehouseHotel.WarehouseHotel.WarehouseHotelId, warehouseHotel.WarehouseHotel.Name);
+            throw new UnauthorizedAccessException("Noe er galt med JWT");
         }
         else
         {
             throw new Exception("Noe gikk galt");
         }
-
+        return (warehouseHotel.WarehouseHotelId, warehouseHotel.Name);
     }
 
     public async Task<string> ChangeWarehouseHotel(string oldWarehouseHotelName, WarehouseHotel newWarehouseHotel, string token)
@@ -105,5 +76,31 @@ public class WarehouseHotelService
             throw new Exception("Noe gikk galt");
         }
         return deserializedResponse;
+    }
+
+    public async Task<WarehouseHotel> GetWarehouseHotelByName(string warehouseHotelName, string token)
+    {
+        string url = _baseUrl + $"/get-by-name/{warehouseHotelName}";
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = await client.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            GetWarehouseHotelByIdResponse warehouseHotel = JsonSerializer.Deserialize<GetWarehouseHotelByIdResponse>(responseContent, options);
+            return warehouseHotel.WarehouseHotel;
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Lagerhotellet eksisterer ikke");
+        }
+        else
+        {
+            throw new Exception("Noe gikk galt");
+        }
     }
 }
