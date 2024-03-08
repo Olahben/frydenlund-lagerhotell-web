@@ -1,0 +1,59 @@
+﻿@using Lagerhotell.Services;
+@using LagerhotellAPI.Models.DomainModels.Validators;
+@using LagerhotellAPI.Models.ValueTypes;
+
+@inject IDialogService _dialogService
+@inject SessionService _sessionService
+@inject WarehouseHotelService _warehouseHotelService
+
+<MudDialog>
+    <DialogContent>
+        <MudText>Dette lagerhotellet og alle tilhørende data vil bli slettet</MudText>
+        <MudForm @ref="form" Model="_warehouseHotel" Validation="@(_warehouseHotelValidator.ValidateValue)">
+            <MudTextField Required="true" @bind-Value="_warehouseHotel.Name" For="(() => _warehouseHotel.Name)" Immediate="true" Label="Navn"></MudTextField>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="ProceedToDelete">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm form;
+    private readonly WarehouseHotelValidator _warehouseHotelValidator = new WarehouseHotelValidator();
+    private WarehouseHotel _warehouseHotel = new WarehouseHotel
+        {
+            Coordinate = new Coordinate(),
+            OpeningHours = new OpeningHours(),
+            Address = new Address(),
+            StorageUnitsSizes = new StorageUnitSizes()
+        };
+
+    private async Task ProceedToDelete()
+    {
+        var result = await _dialogService.ShowMessageBox(
+            "Er du sikker på at du vil slette dette lagerhotellet?",
+            "Dette vil fjerne lagerhotellet og alt av tilhørende data",
+            yesText: "Ja",
+            cancelText: "Avbryt"
+        );
+
+        if (result == true)
+        {
+            try
+            {
+                string warehouseHotelName;
+                string warehouseHotelId;
+                string jwtToken = await _sessionService.GetJwtFromLocalStorage();
+                (warehouseHotelName, warehouseHotelId) = await _warehouseHotelService.DeleteWarehouseHotel(_warehouseHotel.Name, jwtToken);
+                Snackbar.Add("Lagerhotellet ble slettet", MudBlazor.Severity.Success);
+                await form.ResetAsync();
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
+                Console.WriteLine(ex);
+            }
+        }
+    }
+}
