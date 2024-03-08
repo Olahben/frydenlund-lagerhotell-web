@@ -1,5 +1,5 @@
 @phoneNumber = 12345678
-@password = karakter1
+@password = passord123
 @api = https://localhost:7272
 
 ### Get token
