@@ -198,17 +198,17 @@
                 _userValues.City = user.City;
                 _userValues.Password = user.Password;
                 _userValues.IsAdministrator = user.IsAdministrator;
-                snackBar.Add("Vellykket innlogging!", Severity.Success);
+                snackBar.Add("Vellykket innlogging!", MudBlazor.Severity.Success);
             }
             else
             {
-                snackBar.Add("Kunne ikke laste inn brukeren", Severity.Error);
+                snackBar.Add("Kunne ikke laste inn brukeren", MudBlazor.Severity.Error);
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            snackBar.Add("Kunne ikke laste inn brukeren" + ex, Severity.Error);
+            snackBar.Add("Kunne ikke laste inn brukeren" + ex, MudBlazor.Severity.Error);
         }
         StateHasChanged();
     }
@@ -241,7 +241,7 @@
 
         if (!_form.IsValid)
         {
-            snackBar.Add("Skjemaet er ikke gyldig", Severity.Error);
+            snackBar.Add("Skjemaet er ikke gyldig", MudBlazor.Severity.Error);
             return false;
         }
 
@@ -256,7 +256,7 @@
             // The form is valid, proceed with the save operation
             await _userServiceUserSettings.UpdateUserValues(client, _userValues, token);
             // Show a success message
-            snackBar.Add("Dine data ble oppdatert", Severity.Success);
+            snackBar.Add("Dine data ble oppdatert", MudBlazor.Severity.Success);
             ToggleEditMode();
             StateHasChanged();
         }
