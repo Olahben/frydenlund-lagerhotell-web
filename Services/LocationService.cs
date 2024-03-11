@@ -11,6 +11,15 @@ public class LocationService
     private readonly HttpClient client = new HttpClient();
     private readonly string _baseUrl = "https://localhost:7272/locations";
 
+    /// <summary>
+    /// Legger til en ny lokasjon i databasen (kan bare bli kallet av administratorere)
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="active"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="UnauthorizedAccessException"></exception>
     public async Task<bool> AddLocation(string name, bool active, string token)
     {
         Location location = new Location(name, active);
@@ -39,6 +48,14 @@ public class LocationService
         }
     }
 
+    /// <summary>
+    /// Sletter lokasjonen med det gitte navnet (kan bare bli kallet av administratorere)
+    /// </summary>
+    /// <param name="locationName"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    /// <exception cref="KeyNotFoundException"></exception>
+    /// <exception cref="UnauthorizedAccessException"></exception>
     public async Task<bool> DeleteLocation(string locationName, string token)
     {
         string url = _baseUrl + $"/{locationName}";
@@ -63,6 +80,17 @@ public class LocationService
         }
     }
 
+    /// <summary>
+    /// Endrer navnet på en lokasjon (kan bare bli kallet av administratorere)
+    /// </summary>
+    /// <param name="oldLocationName"></param>
+    /// <param name="newLocationName"></param>
+    /// <param name="active"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    /// <exception cref="KeyNotFoundException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="UnauthorizedAccessException"></exception>
     public async Task<bool> ChangeLocation(string oldLocationName, string newLocationName, bool active, string token)
     {
         Location location = new Location(newLocationName, active);
@@ -94,4 +122,6 @@ public class LocationService
             return false;
         }
     }
+
+
 }
