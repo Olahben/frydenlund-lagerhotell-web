@@ -153,10 +153,9 @@ public class WarehouseHotelService
     /// <exception cref="KeyNotFoundException"></exception>
     /// <exception cref="Exception"></exception>
 
-    public async Task<List<WarehouseHotel>> GetAllWarehouseHotels(string token)
+    public async Task<List<WarehouseHotel>> GetAllWarehouseHotels()
     {
         string url = _baseUrl;
-        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         HttpResponseMessage response = await client.GetAsync(url);
         if (response.IsSuccessStatusCode)

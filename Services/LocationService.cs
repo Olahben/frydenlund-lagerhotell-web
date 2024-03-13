@@ -124,4 +124,31 @@ public class LocationService
     }
 
 
+    /// <summary>
+    /// Henter alle lokasjoner fra databasen
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    /// <exception cref="UnauthorizedAccessException"></exception>
+    /// <exception cref="Exception"></exception>
+    public async Task<List<Location>> GetAllLocations()
+    {
+        string url = _baseUrl;
+
+        HttpResponseMessage response = await client.GetAsync(url);
+        string deserializedResponse = string.Empty;
+        if (response.IsSuccessStatusCode)
+        {
+            deserializedResponse = await response.Content.ReadAsStringAsync();
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            throw new UnauthorizedAccessException("Sessionen har gått ut");
+        }
+        else
+        {
+            throw new Exception("Noe gikk galt");
+        }
+        return JsonSerializer.Deserialize<List<Location>>(deserializedResponse);
+    }
 }
