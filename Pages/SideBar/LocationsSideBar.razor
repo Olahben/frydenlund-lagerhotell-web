@@ -1,4 +1,6 @@
 ﻿@inject IDialogService DialogService
+@inject WarehouseHotelService _warehouseHotelService
+@inject LocationService _locationService
 
 <style>
     .lagerhotell-link-change {
@@ -70,6 +72,25 @@
     </AuthorizeView>
 </MudNavMenu>
 
+<MudNavMenu>
+    @if (isInitialized)
+    {
+        @foreach (var location in locations)
+        {
+            <MudNavGroup Title="@location.Name">
+                @foreach (var warehouseHotel in warehouseHotels)
+                {
+                    if (warehouseHotel.LocationName == location.Name)
+                    {
+                        string url = "/Lagerhotell/" + warehouseHotel.Name;
+                        <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href=@url><div class="lagerhotell-link-text">@warehouseHotel.Name </div></MudNavLink>
+                    }
+                }
+            </MudNavGroup>
+        }
+    }
+</MudNavMenu>
+
 <style>
     .custom-class {
         backdrop-filter: blur(10px);
@@ -80,9 +101,26 @@
     }
 </style>
 @code {
-    async void DisplayWareHouseHotelLocations()
-    {
+    private List<Location> locations;
+    private List<WarehouseHotel> warehouseHotels;
+    private bool isInitialized = false;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllLocations();
+        await GetAllWarehouseHotels();
+        isInitialized = true;
+    }
+
+
+    private async Task GetAllLocations()
+    {
+        locations = await _locationService.GetAllLocations();
+    }
+
+    private async Task GetAllWarehouseHotels()
+    {
+        warehouseHotels = await _warehouseHotelService.GetAllWarehouseHotels();
     }
 
     private void OpenAddLocationDialog()
