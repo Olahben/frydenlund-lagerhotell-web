@@ -23,54 +23,6 @@
 <MudDrawerHeader>
     <MudText Typo="Typo.h6">Lokasjoner</MudText>
 </MudDrawerHeader>
-<MudNavMenu>
-    <MudNavGroup Title="Geilo">
-        <AuthorizeView Roles="Administrator">
-            <Authorized>
-                <MudNavLink ActiveClass="test" Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Geilovegen</div></MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Lienvegen</div></MudNavLink>
-            </Authorized>
-            <NotAuthorized>
-                <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Geilovegen</div></MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href="/Lagerhotell/Geilovegen"><div class="lagerhotell-link-text">Lienvegen</div></MudNavLink>
-            </NotAuthorized>
-        </AuthorizeView>
-        <AuthorizeView Roles="Administrator">
-            <Authorized>
-                <MudNavLink @onclick="OpenAddWarehouseHotelDialog" Class="add-or-delete-link" Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
-                <MudNavLink Class="add-or-delete-link" Icon="@Icons.Material.Filled.Delete">Slett ett lagerhotell</MudNavLink>
-            </Authorized>
-        </AuthorizeView>
-    </MudNavGroup>
-    <MudNavGroup Title="Kristiansund">
-        <MudNavLink @onclick="OpenAddWarehouseHotelDialog" Icon="@Icons.Material.Filled.LocationCity" Href="/Lagerhotell/Bremsnes">Bremsnes</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Href="/Lagerhotell/Rensvik">Rensvik</MudNavLink>
-        <AuthorizeView Roles="Administrator">
-            <Authorized>
-                <MudNavLink @onclick="OpenAddWarehouseHotelDialog" Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Add">Slett ett lagerhotell</MudNavLink>
-            </Authorized>
-        </AuthorizeView>
-    </MudNavGroup>
-    <MudNavGroup Title="Moss">
-        <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Href="/Lagerhotell/Dilling">Dilling</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Href="/Lagerhotell/Jeloy">Jeløy</MudNavLink>
-        <AuthorizeView Roles="Administrator">
-            <Authorized>
-                <MudNavLink @onclick="OpenAddWarehouseHotelDialog" Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Delete" OnClick="OpenDeleteWarehouseHotelDialog">Slett ett lagerhotell</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.ChangeCircle" OnClick="OpenChangeWarehouseHotelDialog">Endre på ett lagerhotell</MudNavLink>
-            </Authorized>
-        </AuthorizeView>
-    </MudNavGroup>
-    <AuthorizeView Roles="Administrator">
-        <Authorized>
-            <MudNavLink @onclick="OpenAddLocationDialog" Icon="@Icons.Material.Filled.Add">Legg til en lokasjon</MudNavLink>
-            <MudNavLink @onclick="OpenDeleteLocationDialog" Icon="@Icons.Material.Filled.Delete">Slett en lokasjon og tilhørende info</MudNavLink>
-            <MudNavLink @onclick="OpenChangeLocationDialog" Icon="@Icons.Material.Filled.ChangeCircle">Endre en lokasjon</MudNavLink>
-        </Authorized>
-    </AuthorizeView>
-</MudNavMenu>
 
 <MudNavMenu>
     @if (isInitialized)
@@ -84,10 +36,27 @@
                     {
                         string url = "/Lagerhotell/" + warehouseHotel.Name;
                         <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href=@url><div class="lagerhotell-link-text">@warehouseHotel.Name </div></MudNavLink>
+                    } else
+                    {
+                        Console.WriteLine($"No warehouse hotels found for this location, {warehouseHotel.LocationName} does not match {location.Name}");
                     }
                 }
+                <AuthorizeView Roles="Administrator">
+                    <Authorized>
+                        <MudNavLink @onclick="OpenAddWarehouseHotelDialog" Icon="@Icons.Material.Filled.Add">Legg til ett lagerhotell</MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Delete" OnClick="OpenDeleteWarehouseHotelDialog">Slett ett lagerhotell</MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.ChangeCircle" OnClick="OpenChangeWarehouseHotelDialog">Endre på ett lagerhotell</MudNavLink>
+                    </Authorized>
+                </AuthorizeView>
             </MudNavGroup>
         }
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <MudNavLink @onclick="OpenAddLocationDialog" Icon="@Icons.Material.Filled.Add">Legg til en lokasjon</MudNavLink>
+                <MudNavLink @onclick="OpenDeleteLocationDialog" Icon="@Icons.Material.Filled.Delete">Slett en lokasjon og tilhørende info</MudNavLink>
+                <MudNavLink @onclick="OpenChangeLocationDialog" Icon="@Icons.Material.Filled.ChangeCircle">Endre en lokasjon</MudNavLink>
+            </Authorized>
+        </AuthorizeView>
     }
 </MudNavMenu>
 
