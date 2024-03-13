@@ -74,6 +74,11 @@
     private List<WarehouseHotel> warehouseHotels;
     private bool isInitialized = false;
 
+
+    /// <summary>
+    /// Laster inn alle lokasjoner og lagerhotellene til lokasjonene
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         await GetAllLocations();
