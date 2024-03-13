@@ -136,10 +136,16 @@ public class LocationService
         string url = _baseUrl;
 
         HttpResponseMessage response = await client.GetAsync(url);
-        string deserializedResponse = string.Empty;
+        string deserializedResponseString = string.Empty;
         if (response.IsSuccessStatusCode)
         {
-            deserializedResponse = await response.Content.ReadAsStringAsync();
+            deserializedResponseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            GetAllLocationsResponse deserializedResponse = JsonSerializer.Deserialize<GetAllLocationsResponse>(deserializedResponseString, options);
+            return deserializedResponse.Locations;
         }
         else if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
@@ -149,6 +155,5 @@ public class LocationService
         {
             throw new Exception("Noe gikk galt");
         }
-        return JsonSerializer.Deserialize<List<Location>>(deserializedResponse);
     }
 }
