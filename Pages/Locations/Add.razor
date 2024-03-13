@@ -38,6 +38,7 @@
             string jwtToken = await _sessionService.GetJwtFromLocalStorage();
             await _locationService.AddLocation(location.Name, location.IsActive, jwtToken);
             Snackbar.Add("Lokasjonen ble lagt til", MudBlazor.Severity.Success);
+            await form.ResetAsync();
         }
         catch (InvalidOperationException e)
         {

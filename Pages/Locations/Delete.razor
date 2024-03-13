@@ -35,6 +35,7 @@
             string? jwtToken = await _sessionService.GetJwtFromLocalStorage();
             await _locationService.DeleteLocation(location.Name, jwtToken);
             Snackbar.Add("Lokasjonen ble slettet", MudBlazor.Severity.Success);
+            await form.ResetAsync();
         }
         catch (KeyNotFoundException e)
         {

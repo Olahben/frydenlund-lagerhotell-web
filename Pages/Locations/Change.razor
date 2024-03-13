@@ -44,6 +44,7 @@
             }
             await locationService.ChangeLocation(_oldLocation.Name, _newLocation.Name, _newLocation.IsActive, _jwtToken);
             Snackbar.Add("Lokasjonen ble endret", MudBlazor.Severity.Success);
+            await form.ResetAsync();
         }
         catch (InvalidOperationException e)
         {
