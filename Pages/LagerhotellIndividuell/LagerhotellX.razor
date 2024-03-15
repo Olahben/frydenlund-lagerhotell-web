@@ -1,0 +1,46 @@
+﻿@page "/lagerhotell/{warehouseHotelName}"
+@inject WarehouseHotelService _warehouseHotelService
+@inject NavigationManager _navigationManager
+@inject SessionService _sessionService
+
+<style>
+    .lagerhotell-card-header {
+        background-color: rgb(89, 74, 226);
+    }
+
+    .pt-16 {
+        padding-top: 0 !important;
+    }
+
+    .my-16 {
+        margin-top: 32px !important;
+    }
+
+    .mud-container {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+</style>
+
+<MudBreadcrumbs></MudBreadcrumbs>
+<MudPaper Class="lagerhotell-card-header" Elevation="0" Color="Color.Primary" Height="300px" Width="100%">
+
+</MudPaper>
+
+@code {
+    [Parameter]
+    public string? warehouseHotelName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            string token = await _sessionService.GetJwtFromLocalStorage();
+            await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add($"Lagerhotell ${warehouseHotelName} kunne ikke hentes inn", MudBlazor.Severity.Error);
+        }
+    }
+}
