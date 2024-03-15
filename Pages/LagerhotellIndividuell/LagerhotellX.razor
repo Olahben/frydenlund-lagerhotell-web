@@ -22,7 +22,7 @@
     }
 </style>
 
-<MudBreadcrumbs></MudBreadcrumbs>
+<MudBreadcrumbs Items="BreadcrumbItems"></MudBreadcrumbs>
 <MudPaper Class="lagerhotell-card-header" Elevation="0" Color="Color.Primary" Height="300px" Width="100%">
 
 </MudPaper>
@@ -30,13 +30,23 @@
 @code {
     [Parameter]
     public string? warehouseHotelName { get; set; }
+    private WarehouseHotel? relevantWarehouseHotel { get; set; }
+    private List<BreadcrumbItem> BreadcrumbItems { get; set; } = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Hjem", href: "/", icon: Icons.Material.Filled.Home),
+        new BreadcrumbItem("Lagerhotell", href: null, disabled: true, icon: Icons.Material.Filled.LocationCity),
+    };
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             string token = await _sessionService.GetJwtFromLocalStorage();
-            await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
+            relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
+            // Change href for location
+            BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
+            BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
+
         }
         catch (Exception e)
         {
