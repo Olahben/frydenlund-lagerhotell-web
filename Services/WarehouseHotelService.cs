@@ -3,7 +3,7 @@
 public class WarehouseHotelService
 {
     private readonly string _baseUrl = "https://localhost:7272/warehouse-hotels";
-    private readonly HttpClient client = new HttpClient();
+    private readonly HttpClient client = new();
 
     /// <summary>
     /// Legger til et nytt lagerhotell i databasen
@@ -17,11 +17,11 @@ public class WarehouseHotelService
         var request = new AddWarehouseHotelRequest(warehouseHotel);
         string url = _baseUrl + "/add";
         string jsonData = JsonSerializer.Serialize(request);
-        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        StringContent content = new(jsonData, Encoding.UTF8, "application/json");
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         HttpResponseMessage response = await client.PostAsync(url, content);
-        string deserializedResponse = string.Empty;
+        string deserializedResponse;
         if (response.IsSuccessStatusCode)
         {
             deserializedResponse = await response.Content.ReadAsStringAsync();
@@ -51,10 +51,9 @@ public class WarehouseHotelService
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         HttpResponseMessage response = await client.DeleteAsync(url);
-        string deserializedResponse = string.Empty;
         if (response.IsSuccessStatusCode)
         {
-            deserializedResponse = await response.Content.ReadAsStringAsync();
+            _ = await response.Content.ReadAsStringAsync();
         }
         else if (response.StatusCode == HttpStatusCode.NotFound)
         {
@@ -90,11 +89,11 @@ public class WarehouseHotelService
         var request = new ModifyWarehouseHotelRequest(newWarehouseHotel, oldWarehouseHotelName);
         string url = _baseUrl + "/modify";
         string jsonData = JsonSerializer.Serialize(request);
-        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        StringContent content = new(jsonData, Encoding.UTF8, "application/json");
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         HttpResponseMessage response = await client.PutAsync(url, content);
-        string deserializedResponse = string.Empty;
+        string deserializedResponse;
         if (response.IsSuccessStatusCode)
         {
             deserializedResponse = await response.Content.ReadAsStringAsync();
