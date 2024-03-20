@@ -2,6 +2,7 @@
 @inject WarehouseHotelService _warehouseHotelService
 @inject NavigationManager _navigationManager
 @inject SessionService _sessionService
+@inject LagerhotellXService _lagerhotellXService
 
 <style>
     .lagerhotell-card-header {
@@ -78,50 +79,13 @@ else
             BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
             OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
             ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
-            if (OpeningTime.Length == 1)
-            {
-                OpeningTime = "0" + OpeningTime;
-            }
-            if (ClosingTime.Length == 1)
-            {
-                ClosingTime.Insert(0, "0");
-                ClosingTime = "0" + ClosingTime;
-            }
-            if (OpeningTime.Length == 2 && !(relevantWarehouseHotel.OpeningHours.Opens % 1 != 0))
-            {
-                OpeningTime += ":00";
-            }
-            if (OpeningTime.Length == 2 && relevantWarehouseHotel.OpeningHours.Opens % 1 != 0)
-            {
-                OpeningTime += ":30";
-            }
-            if (OpeningTime.Length == 3 && relevantWarehouseHotel.OpeningHours.Opens % 1 != 0)
-            {
-                OpeningTime.Insert(0, "0");
-                OpeningTime = OpeningTime.Insert(1, ":");
-                OpeningTime = OpeningTime.Remove(OpeningTime.Length - 2);
-                OpeningTime += "30";
-            }
-            if (ClosingTime.Length == 2 && !(relevantWarehouseHotel.OpeningHours.Closes % 1 != 0))
-            {
-                ClosingTime += ":00";
-            }
-            if (ClosingTime.Length == 2 && relevantWarehouseHotel.OpeningHours.Closes % 1 != 0)
-            {
-                ClosingTime += ":30";
-            }
-            if (ClosingTime.Length == 3 && relevantWarehouseHotel.OpeningHours.Closes % 1 != 0)
-            {
-                ClosingTime.Insert(0, "0");
-                ClosingTime = ClosingTime.Insert(1, ":");
-                ClosingTime = ClosingTime.Remove(ClosingTime.Length - 2);
-                ClosingTime += "30";
-            }
+            _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
             isInitialized = true;
         }
         catch (Exception e)
         {
             Snackbar.Add($"Lagerhotell ${warehouseHotelName} kunne ikke hentes inn", MudBlazor.Severity.Error);
+            Console.WriteLine($"{e}");
         }
     }
 }
