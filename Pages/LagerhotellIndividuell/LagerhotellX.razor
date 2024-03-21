@@ -50,6 +50,11 @@
                 <MudImage ObjectFit="ObjectFit.Cover" Elevation="25" Height="400" Src="../../Data/Bilder/lagerhotell-bilde.jpg"></MudImage>
             </MudPaper>
         </MudContainer>
+
+    <MudContainer Style="color: red;" Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+        // Load each single storage unit connected to the relevant warehouse hotel here
+        <div>YUFBUYFHUddd</div>
+    </MudContainer>
 }
 else
 {
@@ -65,6 +70,7 @@ else
         new BreadcrumbItem("Hjem", href: "/", icon: Icons.Material.Filled.Home),
         new BreadcrumbItem("Lagerhotell", href: null, disabled: true, icon: Icons.Material.Filled.LocationCity),
     };
+    private List<StorageUnit> RelevantStorageUnits { get; set; } = new List<StorageUnit>();
     private bool isInitialized = false;
     private string OpeningTime { get; set; }
     private string ClosingTime { get; set; }
@@ -81,7 +87,12 @@ else
             OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
             ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
             _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
+            RelevantStorageUnits = await _lagerhotellXService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
             isInitialized = true;
+        } catch (KeyNotFoundException e)
+        {
+            Snackbar.Add("Fant ingen lagerenheter tilknyttet dette lagerhotellet", MudBlazor.Severity.Error);
+            Console.WriteLine($"{e}");
         }
         catch (Exception e)
         {
