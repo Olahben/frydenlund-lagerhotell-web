@@ -52,4 +52,30 @@ public class LagerhotellXService
 
         return (newOpeningTime, newClosingTime);
     }
+
+    /// <summary>
+    /// Gets the linked storage units to the warehouse hotel with the given Id
+    /// </summary>
+    /// <param name="warehouseHotelId"></param>
+    /// <returns>A list of the storage units</returns>
+    /// <exception cref="KeyNotFoundException"></exception>
+    /// <exception cref="Exception"></exception>
+    public async Task<List<StorageUnit>> GetRelevantStorageUnits(string warehouseHotelId)
+    {
+        var response = await client.GetAsync($"{_baseUrl}/get-by-warehouse-hotel-id/{warehouseHotelId}");
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Fant ingen lagerenheter for dette lagerhotellet");
+        }
+        else if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var storageUnits = JsonSerializer.Deserialize<List<StorageUnit>>(content);
+            return storageUnits;
+        }
+        else
+        {
+            throw new Exception("Noe gikk galt");
+        }
+    }
 }
