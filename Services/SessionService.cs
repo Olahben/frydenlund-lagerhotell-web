@@ -32,4 +32,8 @@ public class SessionService
         await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", key);
     }
 
+    public async Task LogUserOut()
+    {
+        await RemoveItemAsync("jwtToken");
+    }
 }

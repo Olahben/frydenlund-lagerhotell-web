@@ -1,4 +1,7 @@
-﻿<MudNavMenu>
+﻿@inject SessionService _sessionService
+@inject NavigationManager _navigationManager
+
+<MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
     <AuthorizeView>
     <NotAuthorized>
@@ -6,6 +9,16 @@
             <MudNavLink Href="/log-in" Icon="@Icons.Material.Filled.Login">Logg inn</MudNavLink>
     </NotAuthorized>
     <Authorized>
+        <MudNavLink @onclick="LogOut" Icon="@Icons.Material.Filled.Logout">Logg ut</MudNavLink>
     </Authorized>          
 </AuthorizeView>
 </MudNavMenu>
+
+
+@code {
+    private void LogOut()
+    {
+        _sessionService.LogUserOut();
+        _navigationManager.NavigateTo("/log-in", true);
+    }
+}
