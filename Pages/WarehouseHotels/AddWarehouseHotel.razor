@@ -5,6 +5,7 @@
 @inject IDialogService _dialogService
 @inject SessionService _sessionService
 @inject WarehouseHotelService _warehouseHotelService
+@inject FileHandler _fileService
 
 <MudDialog>
     <DialogContent>
@@ -83,17 +84,8 @@
         }
     }
 
-    public static async Task<byte[]> ConvertToByteArray(IBrowserFile file)
-    {
-        using (var memoryStream = new MemoryStream())
-        {
-            await file.OpenReadStream().CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
-        }
-    }
-
     private async Task UploadFiles(IBrowserFile file)
     {
-       _newWarehouseHotel.ImageData = await ConvertToByteArray(file);
+       _newWarehouseHotel.ImageData = await _fileService.ConvertToByteArray(file);
     }
 }

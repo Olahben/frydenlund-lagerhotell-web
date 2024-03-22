@@ -17,5 +17,7 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProviderService>();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<WarehouseHotelService>();
+builder.Services.AddScoped<LagerhotellXService>();
+builder.Services.AddScoped<FileHandler>();
 
 await builder.Build().RunAsync();
