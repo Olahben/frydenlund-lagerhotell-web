@@ -22,6 +22,17 @@
             <MudTextField Required="true" T="double" Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
             <MudTextField Required="true" T="double" Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
             <MudTextField Required="true" T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
+            <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                <ButtonTemplate>
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.CloudUpload"
+                               for="@context.Id">
+                        Lagerhotellbilde
+                    </MudButton>
+                </ButtonTemplate>
+            </MudFileUpload>
             <MudSwitch Required="true" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
             <MudSwitch Required="true" T="bool" Label="Er dette lagerhotellet aktivt?" @bind-Value="_newWarehouseHotel.IsActive"></MudSwitch>
         </MudForm>
@@ -47,6 +58,7 @@
 
         };
 
+
     public async Task Add()
     {
         try
@@ -58,14 +70,30 @@
                 string id = await _warehouseHotelService.AddWarehouseHotel(_newWarehouseHotel, jwtToken);
                 Snackbar.Add($"Lagerhotellet ble lagt til med følgende ID: {id}", MudBlazor.Severity.Success);
                 await form.ResetAsync();
-            } else
+            }
+            else
             {
                 Snackbar.Add("Noe gikk galt, vennligst fyll ut alle feltene riktig", MudBlazor.Severity.Error);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
             Console.WriteLine(e);
         }
+    }
+
+    public static async Task<byte[]> ConvertToByteArray(IBrowserFile file)
+    {
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
+        }
+    }
+
+    private async Task UploadFiles(IBrowserFile file)
+    {
+       _newWarehouseHotel.ImageData = await ConvertToByteArray(file);
     }
 }
