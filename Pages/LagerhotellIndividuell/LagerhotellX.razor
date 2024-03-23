@@ -3,6 +3,7 @@
 @inject NavigationManager _navigationManager
 @inject SessionService _sessionService
 @inject LagerhotellXService _lagerhotellXService
+@inject StorageUnitService _storageUnitService
 
 <style>
     .lagerhotell-card-header {
@@ -105,7 +106,7 @@ else
             OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
             ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
             _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
-            RelevantStorageUnits = await _lagerhotellXService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
+            RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
             isInitialized = true;
         } catch (KeyNotFoundException e)
         {
