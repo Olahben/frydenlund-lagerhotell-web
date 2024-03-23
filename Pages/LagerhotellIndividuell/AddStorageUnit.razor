@@ -1,0 +1,66 @@
+﻿@inject WarehouseHotelService _warehouseHotelService
+@inject IDialogService _dialogService
+@inject SessionService _sessionService
+@inject StorageUnitService _storageUnitService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form" Model="storageUnitToAdd" Validation="@(_storageUnitValidator.ValidateValue)">
+            <MudTextField @bind-Value="storageUnitToAdd.Name" For="@(() => storageUnitToAdd.Name)" Label="Navn" Placeholder="Bod 15C"></MudTextField>
+            <MudTextField @bind-Value="storageUnitToAdd.Dimensions.Length" For="@(() => storageUnitToAdd.Dimensions.Length)" Label="Lengde i M" Placeholder="3.35"></MudTextField>
+            <MudTextField @bind-Value="storageUnitToAdd.Dimensions.Width" For="@(() => storageUnitToAdd.Dimensions.Width)" Label="Bredde i M" Placeholder="6.61"></MudTextField>
+            <MudTextField @bind-Value="storageUnitToAdd.Dimensions.Height" For="@(() => storageUnitToAdd.Dimensions.Height)" Label="Høyde i M" Placeholder="2.8"></MudTextField>
+            <MudTextField @bind-Value="storageUnitToAdd.Coordinate.Latitude" For="@(() => storageUnitToAdd.Coordinate.Latitude)" Label="Breddegrad" Placeholder="59.81753"></MudTextField>
+            <MudTextField @bind-Value="storageUnitToAdd.Coordinate.Longitude" For="@(() => storageUnitToAdd.Coordinate.Longitude)" Label="Lengdegrad" Placeholder="10.662982"></MudTextField>
+            <MudTextField @bind-Value="storageUnitToAdd.PricePerMonth.Amount" For="@(() => storageUnitToAdd.PricePerMonth.Amount)" Label="Normal pris per mnd" Placeholder="1200 (kr)"></MudTextField>
+            <MudSwitch @bind-Value="storageUnitToAdd.Temperated" For="@(() => storageUnitToAdd.Temperated)" Label="Temperert"></MudSwitch>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Avbryt</MudButton>
+        <MudButton Color="Color.Primary" OnClick="_AddStorageUnit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    private StorageUnit storageUnitToAdd { get; set; } = new StorageUnit
+        {
+            Dimensions = new Dimensions(),
+            Coordinate = new Coordinate(),
+            PricePerMonth = new Money(),
+        };
+    MudForm form;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private readonly StorageUnitValidator _storageUnitValidator = new StorageUnitValidator();
+
+    private async Task _AddStorageUnit() // Continue here
+    {
+        try
+        {
+            string token = await _sessionService.GetJwtFromLocalStorage();
+            string storageUnitId = await _storageUnitService.AddStorageUnit(storageUnitToAdd, token);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (BadRequestException ex)
+        {
+            Snackbar.Add("Requesten var ugyldig", MudBlazor.Severity.Error);
+            Console.WriteLine($"{ex}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Snackbar.Add("Lagerhotellet eksisterer fra før av", MudBlazor.Severity.Error);
+            Console.WriteLine($"{ex}");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            Snackbar.Add("Din session har gått ut, vær så snill og logg inn på nytt igjen", MudBlazor.Severity.Error);
+            Console.WriteLine($"{ex}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex}");
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+}
