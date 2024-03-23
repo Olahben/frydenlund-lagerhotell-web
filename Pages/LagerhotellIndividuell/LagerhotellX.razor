@@ -51,9 +51,25 @@
             </MudPaper>
         </MudContainer>
 
-    <MudContainer Style="color: red;" Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
-        // Load each single storage unit connected to the relevant warehouse hotel here
-        <div>YUFBUYFHUddd</div>
+    <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+        <MudText Typo="Typo.h5">Våre størrelser</MudText>
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <MudButton Color="Color.Primary" @onclick="OpenAddStorageUnitDialog" Variant="Variant.Filled">Legg til lagerenhet</MudButton>
+            </Authorized><NotAuthorized></NotAuthorized></AuthorizeView>
+        @if (RelevantStorageUnits.Count == 0)
+        {
+            <MudText Typo="Typo.h6">Fant ingen lagerenheter tilknyttet dette lagerhotellet</MudText>
+        }
+        else
+        {
+            <MudGrid>
+                @foreach (var storageUnit in RelevantStorageUnits)
+                {
+                    <MudText Typo="Typo.h6">@storageUnit.PricePerMonth lagerenhet</MudText>
+                }
+            </MudGrid>
+        }
     </MudContainer>
 }
 else
@@ -74,6 +90,8 @@ else
     private bool isInitialized = false;
     private string OpeningTime { get; set; }
     private string ClosingTime { get; set; }
+    public StorageUnit StorageUnitToAdd { get; set; } = new StorageUnit();
+    private bool ShowAddStorageUnitDialog = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,13 +109,22 @@ else
             isInitialized = true;
         } catch (KeyNotFoundException e)
         {
-            Snackbar.Add("Fant ingen lagerenheter tilknyttet dette lagerhotellet", MudBlazor.Severity.Error);
+            // Snackbar.Add("Fant ingen lagerenheter tilknyttet dette lagerhotellet", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
+            isInitialized = true;
         }
         catch (Exception e)
         {
             Snackbar.Add($"Lagerhotell ${warehouseHotelName} kunne ikke hentes inn", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
         }
+    }
+
+    private void OpenAddStorageUnitDialog()
+    {
+        var options = new DialogOptions { ClassBackground = "custom-class" };
+        DialogService.Show<AddStorageUnit>("Legg til en lokasjon", options);
+        ShowAddStorageUnitDialog = true;
+        StateHasChanged();
     }
 }
