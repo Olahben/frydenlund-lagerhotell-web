@@ -39,6 +39,7 @@
         </MudForm>
     </DialogContent>
     <DialogActions>
+        <MudButton OnClick="Cancel">Avbryt</MudButton>
         <MudButton Color="Color.Primary" OnClick="Add">Ok</MudButton>
     </DialogActions>
 </MudDialog>
@@ -58,6 +59,7 @@
             StorageUnitsSizes = new StorageUnitSizes()
 
         };
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
 
     public async Task Add()
@@ -88,4 +90,6 @@
     {
        _newWarehouseHotel.ImageData = await _fileService.ConvertToByteArray(file);
     }
+
+    void Cancel() => MudDialog.Cancel();
 }

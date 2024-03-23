@@ -12,6 +12,7 @@
         </MudForm>
     </DialogContent>
     <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
         <MudButton Color="Color.Primary" OnClick="ChangeLocation">Ok</MudButton>
     </DialogActions>
 </MudDialog>
@@ -22,6 +23,7 @@
     private readonly LocationValidator _locationValidator = new LocationValidator();
     MudForm form;
     private string? _jwtToken;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,6 +64,8 @@
             Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
         }
     }
+
+    void Cancel() => MudDialog.Cancel();
 }
 
 @code {

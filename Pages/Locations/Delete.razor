@@ -9,6 +9,7 @@
         </MudForm>
     </DialogContent>
     <DialogActions>
+        <MudButton OnClick="Cancel">Avbryt</MudButton>
         <MudButton Color="Color.Primary" OnClick="ProceedToDeleteLocationBox">Ok</MudButton>
     </DialogActions>
 </MudDialog>
@@ -21,6 +22,7 @@
     private readonly LocationValidator _locationValidator = new LocationValidator();
     private readonly Location location = new Location();
     MudForm form;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     private async Task DeleteLocation()
     {
@@ -68,4 +70,5 @@
         }
     }
 
+    void Cancel() => MudDialog.Cancel();
 }
