@@ -16,10 +16,10 @@ public class StorageUnitService
     /// <exception cref="BadRequestException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
     /// <exception cref="Exception"></exception>
-    public async Task<string> AddStorageUnit(StorageUnit storageUnitRequest, string token)
+    public async Task<string> AddStorageUnit(StorageUnit storageUnitRequest, string linkedWarehouseHotelName, string token)
     {
         string url = _baseUrl + "/add";
-        CreateStorageUnitRequest request = new CreateStorageUnitRequest { StorageUnit = storageUnitRequest };
+        CreateStorageUnitRequest request = new CreateStorageUnitRequest { StorageUnit = storageUnitRequest, LinkedWarehouseHotelName = linkedWarehouseHotelName };
         string jsonData = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
@@ -27,9 +27,10 @@ public class StorageUnitService
         HttpResponseMessage response = await client.PostAsync(url, content);
         if (response.IsSuccessStatusCode)
         {
-            string deserializedResponse = await response.Content.ReadAsStringAsync();
-            string storageUnitId = JsonSerializer.Deserialize<CreateStorageUnitResponse>(deserializedResponse).StorageUnitId;
-            return storageUnitId;
+            string deserializedResponseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var deserializedResponse = JsonSerializer.Deserialize<CreateStorageUnitResponse>(deserializedResponseString, options);
+            return deserializedResponse.StorageUnitId;
         }
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
