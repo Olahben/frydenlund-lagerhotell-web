@@ -105,7 +105,7 @@ else
             BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
             OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
             ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
-            _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
+            (OpeningTime, ClosingTime) = _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
             RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
             isInitialized = true;
         } catch (KeyNotFoundException e)

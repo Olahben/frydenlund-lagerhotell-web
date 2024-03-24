@@ -27,10 +27,9 @@ public class LagerhotellXService
         {
             newOpeningTime += ":30";
         }
-        if (newOpeningTime.Length == 3 && relevantWarehouseHotel.OpeningHours.Opens % 1 != 0)
+        if (newOpeningTime.Length == 4 && relevantWarehouseHotel.OpeningHours.Opens % 1 != 0)
         {
-            newOpeningTime = newOpeningTime.Insert(0, "0");
-            newOpeningTime = newOpeningTime.Insert(1, ":");
+            newOpeningTime = newOpeningTime.Insert(2, ":");
             newOpeningTime = newOpeningTime.Remove(newOpeningTime.Length - 2);
             newOpeningTime += "30";
         }
@@ -42,10 +41,9 @@ public class LagerhotellXService
         {
             newClosingTime += ":30";
         }
-        if (newClosingTime.Length == 3 && relevantWarehouseHotel.OpeningHours.Closes % 1 != 0)
+        if (newClosingTime.Length == 4 && relevantWarehouseHotel.OpeningHours.Closes % 1 != 0)
         {
-            newClosingTime = newClosingTime.Insert(0, "0");
-            newClosingTime = newClosingTime.Insert(1, ":");
+            newClosingTime = newClosingTime.Insert(2, ":");
             newClosingTime = newClosingTime.Remove(newClosingTime.Length - 2);
             newClosingTime += "30";
         }
