@@ -1,5 +1,6 @@
 using Lagerhotell;
 using Lagerhotell.Services;
+using LagerhotellAPI.Models.DomainModels.Validators;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -19,5 +20,7 @@ builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<WarehouseHotelService>();
 builder.Services.AddScoped<LagerhotellXService>();
 builder.Services.AddScoped<FileHandler>();
+builder.Services.AddScoped<StorageUnitService>();
+builder.Services.AddScoped<StorageUnitValidator>();
 
 await builder.Build().RunAsync();
