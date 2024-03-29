@@ -28,28 +28,28 @@
         color: white;
     }
 
-    .lagerhotell-header-section {
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        padding-top: 32px;
-        padding-bottom: 32px;
-    }
+    
 </style>
 
 @if (isInitialized)
 {
     <MudBreadcrumbs Items="BreadcrumbItems"></MudBreadcrumbs>
     <MudContainer Class="lagerhotell-header-section" Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
-        <MudPaper Square="true" Style="display: inline-block;" Class="lagerhotell-card-header" Elevation="0" Height="400px" Width="50%" Color="Color.Primary">
-            <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
-                <MudText Style="font-weight: 500;" Typo="Typo.h4" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
-                <MudText Style="font-weight: 300;" Typo="Typo.h6" Class="lagerhotell-header-info">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
-                <MudText Style="color: white; font-weight: 400;">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
-            </MudPaper>
-            <MudPaper Elevation="0" Style="display: inline-block;" Height="400px" Width="50%">
-                <MudImage ObjectFit="ObjectFit.Cover" Elevation="25" Height="400" Src="../../Data/Bilder/lagerhotell-bilde.jpg"></MudImage>
-            </MudPaper>
+        <MudGrid Justify="Justify.Center">
+            <MudItem Style="padding-right: 0;" xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+            <MudPaper Square="true" Class="lagerhotell-card-header" Elevation="0" Height="400px" Color="Color.Primary">
+                <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
+                    <MudText Style="font-weight: 500;" Typo="Typo.h4" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
+                    <MudText Style="font-weight: 300;" Typo="Typo.h6" Class="lagerhotell-header-info">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
+                    <MudText Style="color: white; font-weight: 400;">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
+                </MudPaper>
+                </MudItem>
+                <MudItem Style="padding-left: 0;" xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+                <MudPaper Elevation="0" Style="display: inline-block;" Height="400px">
+                    <MudImage ObjectFit="ObjectFit.Cover" Elevation="25" Height="400" Src="../../Data/Bilder/lagerhotell-bilde.jpg"></MudImage>
+                </MudPaper>
+                </MudItem>
+            </MudGrid>
         </MudContainer>
 
     <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
@@ -57,17 +57,18 @@
         <AuthorizeView Roles="Administrator">
             <Authorized>
                 <MudButton Color="Color.Primary" @onclick="OpenAddStorageUnitDialog" Variant="Variant.Filled">Legg til lagerenhet</MudButton>
-            </Authorized><NotAuthorized></NotAuthorized></AuthorizeView>
+            </Authorized><NotAuthorized></NotAuthorized>
+        </AuthorizeView>
         @if (RelevantStorageUnits.Count == 0)
         {
             <MudText Typo="Typo.h6">Fant ingen lagerenheter tilknyttet dette lagerhotellet</MudText>
         }
         else
         {
-            <MudGrid>
-                @foreach (var storageUnit in RelevantStorageUnits)
+            <MudGrid Justify="Justify.Center">
+                @foreach (var size in RelevantStorageUnitsSizes)
                 {
-                    <MudText Typo="Typo.h6">@storageUnit.PricePerMonth lagerenhet</MudText>
+                    <StorageUnitUi Size="size"></StorageUnitUi>
                 }
             </MudGrid>
         }
@@ -88,6 +89,7 @@ else
         new BreadcrumbItem("Lagerhotell", href: null, disabled: true, icon: Icons.Material.Filled.LocationCity),
     };
     private List<StorageUnit> RelevantStorageUnits { get; set; } = new List<StorageUnit>();
+    private List<double> RelevantStorageUnitsSizes { get; set; } = new List<double>();
     private bool isInitialized = false;
     private string OpeningTime { get; set; }
     private string ClosingTime { get; set; }
@@ -107,8 +109,10 @@ else
             ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
             (OpeningTime, ClosingTime) = _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
             RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
+            RelevantStorageUnitsSizes = await _lagerhotellXService.GetUniqueStorageUnitAreas(RelevantStorageUnits);
             isInitialized = true;
-        } catch (KeyNotFoundException e)
+        }
+        catch (KeyNotFoundException e)
         {
             // Snackbar.Add("Fant ingen lagerenheter tilknyttet dette lagerhotellet", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
