@@ -67,6 +67,7 @@ public class LagerhotellXService
                 uniqueAreas.Add(storageUnit.Dimensions.Area);
             }
         }
+        uniqueAreas.Sort();
         return uniqueAreas;
     }
 }
