@@ -50,4 +50,23 @@ public class LagerhotellXService
 
         return (newOpeningTime, newClosingTime);
     }
+
+
+    /// <summary>
+    /// Returns a list of the unique area sizes of the provided list of storage units
+    /// </summary>
+    /// <param name="storageUnits"></param>
+    /// <returns></returns>
+    public async Task<List<double>> GetUniqueStorageUnitAreas(List<StorageUnit> storageUnits)
+    {
+        List<double> uniqueAreas = new();
+        foreach (var storageUnit in storageUnits)
+        {
+            if (!uniqueAreas.Contains(storageUnit.Dimensions.Area))
+            {
+                uniqueAreas.Add(storageUnit.Dimensions.Area);
+            }
+        }
+        return uniqueAreas;
+    }
 }
