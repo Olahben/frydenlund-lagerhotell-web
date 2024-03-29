@@ -63,7 +63,8 @@ public class StorageUnitService
         else if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-            var storageUnits = JsonSerializer.Deserialize<List<StorageUnit>>(content);
+            JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var storageUnits = JsonSerializer.Deserialize<List<StorageUnit>>(content, options);
             return storageUnits;
         }
         else
