@@ -1,0 +1,24 @@
+﻿@using LagerhotellAPI.Models.FrontendModels.Custom
+
+<MudItem xs="12" sm="6">
+    <MudPaper Style="padding: 5%" Class="d-flex align-center justify-center mud-width-full py-8">
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="6" lg="6" xl="6">
+                <MudGrid>
+                    <MudItem>
+                        <MudImage Height="140" Width="100" Src="../../Data/Bilder/image-placeholder.jpg">
+                        </MudImage>
+                    </MudItem>
+                    <MudItem>
+                        <MudText Color="Color.Primary" Typo="Typo.h6">@Size.Area M2</MudText>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+
+    @code {
+    [Parameter]
+    public StorageUnitSize Size { get; set; }
+}
