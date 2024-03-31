@@ -4,6 +4,7 @@
 @inject SessionService _sessionService
 @inject LagerhotellXService _lagerhotellXService
 @inject StorageUnitService _storageUnitService
+@using LagerhotellAPI.Models.FrontendModels.Custom
 
 <style>
     .lagerhotell-card-header {
@@ -66,7 +67,7 @@
         else
         {
             <MudGrid Justify="Justify.Center">
-                @foreach (var size in RelevantStorageUnitsSizes)
+                @foreach (var size in RelevantStorageUnitsFrontend)
                 {
                     <StorageUnitUi Size="size"></StorageUnitUi>
                 }
@@ -89,7 +90,7 @@ else
         new BreadcrumbItem("Lagerhotell", href: null, disabled: true, icon: Icons.Material.Filled.LocationCity),
     };
     private List<StorageUnit> RelevantStorageUnits { get; set; } = new List<StorageUnit>();
-    private List<double> RelevantStorageUnitsSizes { get; set; } = new List<double>();
+    private List<StorageUnitSize> RelevantStorageUnitsFrontend { get; set; } = new List<StorageUnitSize>();
     private bool isInitialized = false;
     private string OpeningTime { get; set; }
     private string ClosingTime { get; set; }
@@ -109,7 +110,7 @@ else
             ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
             (OpeningTime, ClosingTime) = _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
             RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
-            RelevantStorageUnitsSizes = await _lagerhotellXService.GetUniqueStorageUnitAreas(RelevantStorageUnits);
+            RelevantStorageUnitsFrontend = await _lagerhotellXService.GetUniqueStorageUnitAreas(RelevantStorageUnits);
             isInitialized = true;
         }
         catch (KeyNotFoundException e)

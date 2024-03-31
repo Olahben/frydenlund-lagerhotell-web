@@ -1,4 +1,6 @@
-﻿namespace Lagerhotell.Services;
+﻿using LagerhotellAPI.Models.FrontendModels.Custom;
+
+namespace Lagerhotell.Services;
 
 public class LagerhotellXService
 {
@@ -57,17 +59,33 @@ public class LagerhotellXService
     /// </summary>
     /// <param name="storageUnits"></param>
     /// <returns></returns>
-    public async Task<List<double>> GetUniqueStorageUnitAreas(List<StorageUnit> storageUnits)
+    public async Task<List<StorageUnitSize>> GetUniqueStorageUnitAreas(List<StorageUnit> storageUnits)
     {
-        List<double> uniqueAreas = new();
+        List<StorageUnitSize> storageUnitSizes = new();
         foreach (var storageUnit in storageUnits)
         {
-            if (!uniqueAreas.Contains(storageUnit.Dimensions.Area))
+            if (!storageUnitSizes.Any(storageUnitSize => storageUnitSize.Area == storageUnit.Dimensions.Area))
             {
-                uniqueAreas.Add(storageUnit.Dimensions.Area);
+                storageUnitSizes.Add(new StorageUnitSize
+                {
+                    Area = storageUnit.Dimensions.Area,
+                    Volume = storageUnit.Dimensions.Volume,
+                    Price = storageUnit.PricePerMonth,
+                    Temperated = storageUnit.Temperated
+                });
+            }
+            else if (storageUnitSizes.Any(storageUnitSize => storageUnitSize.Area == storageUnit.Dimensions.Area && storageUnitSize.Temperated != storageUnit.Temperated))
+            {
+                storageUnitSizes.Add(new StorageUnitSize
+                {
+                    Area = storageUnit.Dimensions.Area,
+                    Volume = storageUnit.Dimensions.Volume,
+                    Price = storageUnit.PricePerMonth,
+                    Temperated = storageUnit.Temperated
+                });
             }
         }
-        uniqueAreas.Sort();
-        return uniqueAreas;
+        storageUnitSizes.Sort((x, y) => x.Area.CompareTo(y.Area));
+        return storageUnitSizes;
     }
 }
