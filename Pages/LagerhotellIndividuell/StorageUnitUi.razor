@@ -1,16 +1,33 @@
 ﻿@using LagerhotellAPI.Models.FrontendModels.Custom
 
-<MudItem xs="12" sm="6">
+<MudItem xs="12" sm="12" md="12" lg="12" xl="6" xxl="6">
     <MudPaper Style="padding: 5%" Class="d-flex align-center justify-center mud-width-full py-8">
         <MudGrid>
-            <MudItem xs="12" sm="6" md="6" lg="6" xl="6">
+            <MudItem xs="12" sm="7" md="7" lg="7" xl="7">
                 <MudGrid>
                     <MudItem>
-                        <MudImage Height="140" Width="100" Src="../../Data/Bilder/image-placeholder.jpg">
+                        <MudImage Height="170" Width="140" Src="../../Data/Bilder/image-placeholder.jpg">
                         </MudImage>
                     </MudItem>
-                    <MudItem>
+                    <MudItem Style="padding-top: 5%">
                         <MudText Color="Color.Primary" Typo="Typo.h6">@Size.Area M2</MudText>
+                        @if (Size.Temperated)
+                        {
+                            <MudText Style="font-weight:600;" Typo="Typo.body1">Temperert</MudText>
+                        }
+                        else
+                        {
+                            <MudText Style="font-weight:600; color: red;" Typo="Typo.body1">Ikke temperert</MudText>
+                        }
+                        <MudText Style="font-weight: 600;" Typo="Typo.body1">Total volum: @Size.Volume M3</MudText>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="12" sm="5" md="5" lg="5" xl="5">
+                <MudGrid>
+                    <MudItem Style="padding-left: 5%; padding-top: 5%;">
+                        <MudText Style="font-weight: 700; font-size: 2rem" Color="Color.Primary" Typo="Typo.body1">@Size.Price.Amount <MudText Style="color: black; display: inline-block;" Typo="Typo.body1">Kr / mnd</MudText></MudText>
+                        <MudButton Style="padding-left: 0;" ButtonType="ButtonType.Button">Bestill her! <MudIcon Icon="@Icons.Material.Filled.ArrowRight"></MudIcon></MudButton>
                         </MudItem>
                     </MudGrid>
                 </MudItem>
