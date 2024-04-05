@@ -18,8 +18,8 @@
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
-            <MudSwitch Required="true" RequiredError="Dette feltet kan ikke være tomt" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
-            <MudSwitch Required="true" RequiredError="Dette feltet kan ikke være tomt" T="bool" Label="Er dette lagerhotellet aktivt?" @bind-Value="_newWarehouseHotel.IsActive"></MudSwitch>
+            <MudSwitch Required="true" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
+            <MudSwitch Required="true" T="bool" Label="Er dette lagerhotellet aktivt?" @bind-Value="_newWarehouseHotel.IsActive"></MudSwitch>
         </MudForm>
         <MudDialog @bind-IsVisible="SecondDialogOpen">
             <DialogContent>
@@ -60,6 +60,7 @@
         };
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private int descriptionParas = 1;
+    private List<string> detailedDescriptionParas = new List<string>();
 
 
     private async Task Change()
@@ -103,7 +104,7 @@
             }
             else
             {
-                Snackbar.Add("Det er noe galt med verdiene du har fyllt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
+                Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
             }
         }
         catch (Exception e)
