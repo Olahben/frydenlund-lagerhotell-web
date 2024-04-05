@@ -35,9 +35,9 @@
 @if (isInitialized)
 {
     <MudBreadcrumbs Items="BreadcrumbItems"></MudBreadcrumbs>
-    <MudContainer Class="lagerhotell-header-section" Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+    <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
         <MudGrid Justify="Justify.Center">
-            <MudItem Style="padding-right: 0;" xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+            <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="7" xl="7" xxl="7">
             <MudPaper Square="true" Class="lagerhotell-card-header" Elevation="0" Height="400px" Color="Color.Primary">
                 <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
                     <MudText Style="font-weight: 500;" Typo="Typo.h4" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
@@ -45,7 +45,7 @@
                     <MudText Style="color: white; font-weight: 400;">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
                 </MudPaper>
                 </MudItem>
-                <MudItem Style="padding-left: 0;" xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+                <MudItem Style="padding-left: 0;" xs="5" sm="5" md="5" lg="5" xl="5" xxl="5">
                 <MudPaper Elevation="0" Style="display: inline-block;" Height="400px">
                     <MudImage ObjectFit="ObjectFit.Cover" Elevation="25" Height="400" Src="../../Data/Bilder/lagerhotell-bilde.jpg"></MudImage>
                 </MudPaper>
@@ -73,6 +73,9 @@
                 }
             </MudGrid>
         }
+    </MudContainer>
+    <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+        <DetailedDescription RelevantWarehouseHotel="@relevantWarehouseHotel"></DetailedDescription>
     </MudContainer>
 }
 else
@@ -115,7 +118,7 @@ else
         }
         catch (KeyNotFoundException e)
         {
-            // Snackbar.Add("Fant ingen lagerenheter tilknyttet dette lagerhotellet", MudBlazor.Severity.Error);
+            Snackbar.Add("Fant ingen lagerenheter tilknyttet dette lagerhotellet", MudBlazor.Severity.Error);
             Console.WriteLine($"{e}");
             isInitialized = true;
         }
