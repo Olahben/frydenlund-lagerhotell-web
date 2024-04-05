@@ -98,7 +98,6 @@ else
     private string OpeningTime { get; set; }
     private string ClosingTime { get; set; }
     public StorageUnit StorageUnitToAdd { get; set; } = new StorageUnit();
-    private bool ShowAddStorageUnitDialog = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -131,9 +130,13 @@ else
 
     private void OpenAddStorageUnitDialog()
     {
-        var options = new DialogOptions { ClassBackground = "custom-class" };
-        DialogService.Show<AddStorageUnit>("Legg til en lokasjon", options);
-        ShowAddStorageUnitDialog = true;
+        var dialogParameterOptions = new DialogParameters<AddStorageUnit>
+        {
+            { "LinkedWarehouseHotelName", warehouseHotelName }
+        };
+
+        var dialogOptions = new DialogOptions { ClassBackground = "custom-class" };
+        DialogService.Show<AddStorageUnit>("Legg til en lokasjon", dialogParameterOptions, dialogOptions);
         StateHasChanged();
     }
 }
