@@ -5,18 +5,18 @@
 <MudDialog @bind-IsVisible="MainDialogOpen">
     <DialogContent>
         <MudForm @ref="mainForm" Model="_newWarehouseHotel" Validation="@(_warehouseHotelValidator.ValidateValue)">
-            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="double" Label="Breddegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Latitude" For="(() => _newWarehouseHotel.Coordinate.Latitude)"></MudTextField>
-            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="double" Label="Lengdegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Longitude" For="(() => _newWarehouseHotel.Coordinate.Longitude)"></MudTextField>
-            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="double" Label="Hvor stor er den minste utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MinSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MinSize)"></MudTextField>
-            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="double" Label="Hvor stor er den største utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MaxSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MaxSize)"></MudTextField>
+            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Breddegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Latitude" For="(() => _newWarehouseHotel.Coordinate.Latitude)"></MudTextField>
+            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Lengdegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Longitude" For="(() => _newWarehouseHotel.Coordinate.Longitude)"></MudTextField>
+            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Hvor stor er den minste utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MinSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MinSize)"></MudTextField>
+            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Hvor stor er den største utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MaxSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MaxSize)"></MudTextField>
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Gateaddresse" Immediate="true" @bind-Value="_newWarehouseHotel.Address.StreetAddress" For="(() => _newWarehouseHotel.Address.StreetAddress)"></MudTextField>
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Postkode" Immediate="true" @bind-Value="_newWarehouseHotel.Address.PostalCode" For="(() => _newWarehouseHotel.Address.PostalCode)"></MudTextField>
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Poststed" Immediate="true" @bind-Value="_newWarehouseHotel.Address.City" For="(() => _newWarehouseHotel.Address.City)"></MudTextField>
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Navn" Immediate="true" @bind-Value="_newWarehouseHotel.Name" For="(() => _newWarehouseHotel.Name)"></MudTextField>
             <MudTextField Required="true" T="string" Label="Tilhørende lokasjonsnavn" Immediate="true" @bind-Value="_newWarehouseHotel.LocationName" For="(() => _newWarehouseHotel.LocationName)"></MudTextField>
-            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Detaljert beskrivelse" Immediate="true" @bind-Value="_newWarehouseHotel.DetailedDescription" For="(() => _newWarehouseHotel.DetailedDescription)"></MudTextField>
-            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="double" Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
-            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="double" Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
+            <MudTextField Required="true" T="string" Lines="8" Label="Beskrivelse" Variant="Variant.Outlined" Immediate="true" @bind-Value="_oldWarehouseHotel.DetailedDescription" For="(() => _oldWarehouseHotel.DetailedDescription)"></MudTextField>
+            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
+            <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
             <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
             <MudSwitch Required="true" RequiredError="Dette feltet kan ikke være tomt" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
             <MudSwitch Required="true" RequiredError="Dette feltet kan ikke være tomt" T="bool" Label="Er dette lagerhotellet aktivt?" @bind-Value="_newWarehouseHotel.IsActive"></MudSwitch>
@@ -49,16 +49,17 @@
             Coordinate = new Coordinate(),
             OpeningHours = new OpeningHours(),
             Address = new Address(),
-            StorageUnitsSizes = new StorageUnitSizes()
+            StorageUnitsSizes = new StorageUnitSizes(),
         };
     private WarehouseHotel _newWarehouseHotel = new WarehouseHotel
         {
             Coordinate = new Coordinate(),
             OpeningHours = new OpeningHours(),
             Address = new Address(),
-            StorageUnitsSizes = new StorageUnitSizes()
+            StorageUnitsSizes = new StorageUnitSizes(),
         };
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private int descriptionParas = 1;
 
 
     private async Task Change()
@@ -94,7 +95,7 @@
             {
                 string jwtToken = await _sessionService.GetJwtFromLocalStorage();
                 _oldWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(_oldWarehouseHotel.Name, jwtToken);
-                _newWarehouseHotel= _oldWarehouseHotel;
+                _newWarehouseHotel = _oldWarehouseHotel;
                 Snackbar.Add("Lagerhotellet ble hentet", MudBlazor.Severity.Success);
                 await secondaryForm.ResetAsync();
                 MainDialogOpen = true;
