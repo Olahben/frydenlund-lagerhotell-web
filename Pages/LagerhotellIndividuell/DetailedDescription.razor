@@ -1,0 +1,41 @@
+﻿
+<MudGrid>
+    <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+        <MudPaper Style="background-color: rgba(89, 74, 226, 1); padding: 5%;">
+            <MudText Style="color: white; font-weight: 580;" Typo="Typo.body1">Ett lagerhotell med stort utvalg</MudText>
+            <MudText Style="color: white" Typo="Typo.h3">Lagring ved @RelevantWarehouseHotel.Name</MudText>
+                @foreach (var para in DetailedDescriptionParas)
+            {
+                <MudText Style="color: white; margin-top: 5%; margin-bottom: 5%; font-size: 16px" Typo="Typo.body1">@para</MudText>
+            }
+            <MudText Typo="Typo.h5" Style="color: white;">Åpningstider</MudText>
+            <MudText Typo="Typo.body1" Style="color: white;">@OpeningTime - @ClosingTime</MudText>
+                <MudText Typo="Typo.body2" Style="color: white;">*Er ikke åpent på helligdager</MudText>
+                <MudText Typo="Typo.body1" Style="color: white;">Kundeservice: </MudText>
+                <MudText Typo="Typo.h6" Style="color: white;">Kontaktinformasjon</MudText>
+                <MudText Typo="Typo.body1" Style="color: white;">Telefon: @RelevantWarehouseHotel.PhoneNumber</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+            <MudGrid>
+                VERTICAL GRID
+                <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                    // Image carousel
+                </MudItem>
+                <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                    // Useful information
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+
+    @code {
+    [Parameter]
+    public WarehouseHotel RelevantWarehouseHotel { get; set; }
+    [Parameter]
+    public List<string> DetailedDescriptionParas { get; set; } = new List<string>();
+    [Parameter]
+    public string OpeningTime { get; set; }
+    [Parameter]
+    public string ClosingTime { get; set; }
+}
