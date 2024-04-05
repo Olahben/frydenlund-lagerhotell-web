@@ -7,7 +7,7 @@
     <DialogContent>
         <MudForm @ref="form" Model="storageUnitToAdd" Validation="@(_storageUnitValidator.ValidateValue)">
             <MudTextField @bind-Value="storageUnitToAdd.Name" For="@(() => storageUnitToAdd.Name)" Label="Navn" Placeholder="Bod 15C"></MudTextField>
-            <MudTextField @bind-Value="linkedWarehouseHotelName" For="@(() => linkedWarehouseHotelName)" Label="Hva er navnet på det tilhørende lagerhotellet?" Placeholder="Bjørndalen"></MudTextField>
+            <MudTextField @bind-Value="LinkedWarehouseHotelName" For="@(() => LinkedWarehouseHotelName)" Label="Hva er navnet på det tilhørende lagerhotellet?" Placeholder="Bjørndalen"></MudTextField>
             <MudTextField @bind-Value="storageUnitToAdd.Dimensions.Length" For="@(() => storageUnitToAdd.Dimensions.Length)" Label="Lengde i M" Placeholder="3.35"></MudTextField>
             <MudTextField @bind-Value="storageUnitToAdd.Dimensions.Width" For="@(() => storageUnitToAdd.Dimensions.Width)" Label="Bredde i M" Placeholder="6.61"></MudTextField>
             <MudTextField @bind-Value="storageUnitToAdd.Dimensions.Height" For="@(() => storageUnitToAdd.Dimensions.Height)" Label="Høyde i M" Placeholder="2.8"></MudTextField>
@@ -31,11 +31,11 @@
             Coordinate = new Coordinate(),
             PricePerMonth = new Money(),
         };
-    private string linkedWarehouseHotelName { get; set; } = string.Empty;
     MudForm form;
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private readonly StorageUnitValidator _storageUnitValidator = new StorageUnitValidator();
-
+    [Parameter]
+    public string? LinkedWarehouseHotelName { get; set; }
     private async Task _AddStorageUnit() // Continue here
     {
         try
@@ -43,17 +43,17 @@
             await form.Validate();
             if (!form.IsValid)
             {
-                Snackbar.Add("Det er noe galt med verdiene du har fyllt inn, vær så snill å sjekk tilhørende feilmeldinger", MudBlazor.Severity.Error);
+                Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vær så snill å sjekk tilhørende feilmeldinger", MudBlazor.Severity.Error);
                 return;
             }
             string token = await _sessionService.GetJwtFromLocalStorage();
-            string storageUnitId = await _storageUnitService.AddStorageUnit(storageUnitToAdd, linkedWarehouseHotelName, token);
+            string storageUnitId = await _storageUnitService.AddStorageUnit(storageUnitToAdd, LinkedWarehouseHotelName, token);
             Snackbar.Add($"Lagerenheten ble lagt til med følgende Id: {storageUnitId}", MudBlazor.Severity.Success);
             MudDialog.Close(DialogResult.Ok(true));
         }
         catch (BadRequestException ex)
         {
-            Snackbar.Add("Requesten var ugyldig", MudBlazor.Severity.Error);
+            Snackbar.Add("Forespørselen var ugyldig", MudBlazor.Severity.Error);
             Console.WriteLine($"{ex}");
         }
         catch (InvalidOperationException ex)
@@ -63,7 +63,7 @@
         }
         catch (UnauthorizedAccessException ex)
         {
-            Snackbar.Add("Din session har gått ut, vær så snill og logg inn på nytt igjen", MudBlazor.Severity.Error);
+            Snackbar.Add("Din økt har utløpt, vær så snill og logg inn på nytt igjen", MudBlazor.Severity.Error);
             Console.WriteLine($"{ex}");
         }
         catch (Exception ex)
