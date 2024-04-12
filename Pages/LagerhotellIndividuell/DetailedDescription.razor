@@ -22,8 +22,10 @@
                     <MudImage Style="width: 100%;" Src="././Data/Bilder/image-placeholder.jpg"></MudImage>
                 </MudItem>
                 <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-                    <MudPaper Style="background-color: rgba(89, 74, 226, 1); padding: 5%; height: 100%;">
-                        <MudNavLink Style="color: white;" Icon="@Icons.Material.Sharp.ArrowRight">Test av testing</MudNavLink>
+                    <MudPaper Style="background-color: rgba(89, 74, 226, 1); padding: 5px;">
+                        @foreach(string bulletPoint in BulletPoints) {
+                            <MudNavLink Icon="@Icons.Material.Filled.ArrowRight" Style="color: white; margin-top: 0;" IconColor="Color.Inherit">@bulletPoint</MudNavLink>
+                        }
                     </MudPaper>
                 </MudItem>
             </MudGrid>
@@ -35,6 +37,8 @@
     public WarehouseHotel RelevantWarehouseHotel { get; set; }
     [Parameter]
     public List<string> DetailedDescriptionParas { get; set; } = new List<string>();
+    [Parameter]
+    public List<string> BulletPoints { get; set; } = new List<string>();
     [Parameter]
     public string OpeningTime { get; set; }
     [Parameter]
