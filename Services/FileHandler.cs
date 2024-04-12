@@ -18,5 +18,9 @@ namespace Lagerhotell.Services
                 return memoryStream.ToArray();
             }
         }
+        public async Task<string> ImageByteArrayToBase64(byte[] image)
+        {
+            return await Task.Run(() => Convert.ToBase64String(image));
+        }
     }
 }
