@@ -22,5 +22,6 @@ builder.Services.AddScoped<LagerhotellXService>();
 builder.Services.AddScoped<FileHandler>();
 builder.Services.AddScoped<StorageUnitService>();
 builder.Services.AddScoped<StorageUnitValidator>();
+builder.Services.AddScoped<TextHandler>();
 
 await builder.Build().RunAsync();
