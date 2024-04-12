@@ -18,4 +18,15 @@ public class TextHandler
         }
         return paragraphs;
     }
+
+    public List<string> ParseBulletPoints(string text)
+    {
+        List<string> paragraphs = new List<string>();
+        string[] lines = text.Split("\n");
+        foreach (string line in lines)
+        {
+            paragraphs.Add(line);
+        }
+        return paragraphs;
+    }
 }
