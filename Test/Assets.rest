@@ -1,6 +1,10 @@
 @phoneNumberAdmin = 00005555
 @passwordAdmin = passord1
 @api = https://localhost:7272
+@assetId = 11db6a71-023b-4c5b-a594-ea82dada6800
+@skip = 0
+@take = 0
+@warehouseHotelId = string
 
 ### Get token
 # @name login
@@ -29,3 +33,35 @@ Authorization: Bearer {{login.response.body.token}}
     "warehouseHotelId": "string"
   }
 }
+
+### Modiy asset
+# @name modifyAsset
+PUT {{api}}/assets/modify
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+   "assetId": "{{assetId}}",
+  "asset": {
+    "assetId": "will not change",
+    "name": "string2",
+    "tags": [
+      "string"
+    ],
+    "imageBytes": "0x48656c6c6f20576f726c64",
+    "warehouseHotelId": "string"
+  }
+}
+
+### Get asset
+# @name getAsset
+GET {{api}}/assets/{{assetId}}
+
+### Get all assets
+# @name getAllAssets
+GET {{api}}/assets/{{skip}}/{{take}}/{{warehouseHotelId}}
+
+### Delete asset
+# @name deleteAsset
+DELETE {{api}}/assets/{{assetId}}
+Authorization: Bearer {{login.response.body.token}}
