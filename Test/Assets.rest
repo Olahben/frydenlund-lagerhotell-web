@@ -1,0 +1,31 @@
+@phoneNumberAdmin = 00005555
+@passwordAdmin = passord1
+@api = https://localhost:7272
+
+### Get token
+# @name login
+POST {{api}}/users/log-in
+Content-Type: application/json
+
+{
+    "phoneNumber": "{{phoneNumberAdmin}}",
+  "password": "{{passwordAdmin}}"
+}
+
+### Add asset
+# @name addAsset
+POST {{api}}/assets/add
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "asset": {
+    "assetId": "string",
+    "name": "string",
+    "tags": [
+      "string"
+    ],
+    "imageBytes": "0x48656c6c6f20576f726c64",
+    "warehouseHotelId": "string"
+  }
+}
