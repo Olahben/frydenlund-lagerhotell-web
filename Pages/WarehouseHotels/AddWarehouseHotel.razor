@@ -24,17 +24,28 @@
             <MudTextField Required="true" Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
             <MudTextField Required="true" Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
             <MudTextField Required="true" T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
-            <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+
+            <MudFileUpload T="IBrowserFile" Accept=".png, .jpg, .jpeg, .webP" FilesChanged="UploadFiles" MaximumFileCount="100">
                 <ButtonTemplate>
                     <MudButton HtmlTag="label"
                                Variant="Variant.Filled"
                                Color="Color.Primary"
                                StartIcon="@Icons.Material.Filled.CloudUpload"
                                for="@context.Id">
-                        Lagerhotellbilde
+                        Last opp bilder
                     </MudButton>
                 </ButtonTemplate>
             </MudFileUpload>
+            @if (images.Count > 0)
+            {
+                <MudText Typo="Typo.body1">Du har valgt følgende bilder:</MudText>
+                <MudList Clickable="false">
+                @foreach (var image in images)
+                {
+                    <MudListItem Icon="@Icons.Material.Filled.Image">@image.Name</MudListItem>
+                }
+                </MudList>
+            }
             <MudSwitch Required="true" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
             <MudSwitch Required="true" T="bool" Label="Er dette lagerhotellet aktivt?" @bind-Value="_newWarehouseHotel.IsActive"></MudSwitch>
         </MudForm>
@@ -60,6 +71,7 @@
             StorageUnitsSizes = new StorageUnitSizes(),
         };
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    List<IBrowserFile> images = new List<IBrowserFile>();
 
 
     public async Task Add()
@@ -86,10 +98,10 @@
         }
     }
 
-    private async Task UploadFiles(IBrowserFile file)
-    {
-        _newWarehouseHotel.ImageData = await _fileService.ConvertToByteArray(file);
-    }
-
     void Cancel() => MudDialog.Cancel();
+
+    private void UploadFiles(IBrowserFile file)
+    {
+        images.Add(file);
+    }
 }
