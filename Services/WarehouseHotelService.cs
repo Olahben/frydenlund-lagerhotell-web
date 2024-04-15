@@ -18,10 +18,15 @@ public class WarehouseHotelService
     public async Task<string> AddWarehouseHotel(WarehouseHotel warehouseHotel, List<IBrowserFile> images, string token)
     {
         // The list of images should be validated somewhere
-        List<byte[]> newImages = new();
+        List<ImageAsset> newImages = new();
         foreach (var image in images)
         {
-            newImages.Add(await _fileHandler.ConvertToByteArray(image));
+            ImageAsset imageAsset = new()
+            {
+                ImageBytes = await _fileHandler.ConvertToByteArray(image),
+                Name = image.Name,
+            };
+            newImages.Add(imageAsset);
         }
         var request = new AddWarehouseHotelRequest(warehouseHotel, newImages);
         string url = _baseUrl + "/add";
@@ -96,10 +101,15 @@ public class WarehouseHotelService
     public async Task<string> ChangeWarehouseHotel(string oldWarehouseHotelName, WarehouseHotel newWarehouseHotel, List<IBrowserFile> images, string token)
     {
         // The list of images should be validated somewhere
-        List<byte[]> newImages = new();
+        List<ImageAsset> newImages = new();
         foreach (var image in images)
         {
-            newImages.Add(await _fileHandler.ConvertToByteArray(image));
+            ImageAsset imageAsset = new()
+            {
+                ImageBytes = await _fileHandler.ConvertToByteArray(image),
+                Name = image.Name,
+            };
+            newImages.Add(imageAsset);
         }
         var request = new ModifyWarehouseHotelRequest(newWarehouseHotel, oldWarehouseHotelName, newImages);
         string url = _baseUrl + "/modify";
