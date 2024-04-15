@@ -94,7 +94,7 @@
             if (mainForm.IsValid)
             {
                 string jwtToken = await _sessionService.GetJwtFromLocalStorage();
-                await _warehouseHotelService.ChangeWarehouseHotel(_oldWarehouseHotel.Name, _newWarehouseHotel, jwtToken);
+                await _warehouseHotelService.ChangeWarehouseHotel(_oldWarehouseHotel.Name, _newWarehouseHotel, images, jwtToken);
                 Snackbar.Add("Lagerhotellet ble endret", MudBlazor.Severity.Success);
                 await mainForm.ResetAsync();
             }

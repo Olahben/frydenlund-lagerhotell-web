@@ -1,9 +1,12 @@
-﻿namespace Lagerhotell.Services;
+﻿using Microsoft.AspNetCore.Components.Forms;
+
+namespace Lagerhotell.Services;
 
 public class WarehouseHotelService
 {
     private readonly string _baseUrl = "https://localhost:7272/warehouse-hotels";
     private readonly HttpClient client = new();
+    private FileHandler _fileHandler { get; set; } = new();
 
     /// <summary>
     /// Legger til et nytt lagerhotell i databasen
@@ -12,9 +15,15 @@ public class WarehouseHotelService
     /// <param name="token"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public async Task<string> AddWarehouseHotel(WarehouseHotel warehouseHotel, string token)
+    public async Task<string> AddWarehouseHotel(WarehouseHotel warehouseHotel, List<IBrowserFile> images, string token)
     {
-        var request = new AddWarehouseHotelRequest(warehouseHotel);
+        // The list of images should be validated somewhere
+        List<byte[]> newImages = new();
+        foreach (var image in images)
+        {
+            newImages.Add(await _fileHandler.ConvertToByteArray(image));
+        }
+        var request = new AddWarehouseHotelRequest(warehouseHotel, newImages);
         string url = _baseUrl + "/add";
         string jsonData = JsonSerializer.Serialize(request);
         StringContent content = new(jsonData, Encoding.UTF8, "application/json");
@@ -84,9 +93,15 @@ public class WarehouseHotelService
     /// <returns></returns>
     /// <exception cref="KeyNotFoundException"></exception>
     /// <exception cref="Exception"></exception>
-    public async Task<string> ChangeWarehouseHotel(string oldWarehouseHotelName, WarehouseHotel newWarehouseHotel, string token)
+    public async Task<string> ChangeWarehouseHotel(string oldWarehouseHotelName, WarehouseHotel newWarehouseHotel, List<IBrowserFile> images, string token)
     {
-        var request = new ModifyWarehouseHotelRequest(newWarehouseHotel, oldWarehouseHotelName);
+        // The list of images should be validated somewhere
+        List<byte[]> newImages = new();
+        foreach (var image in images)
+        {
+            newImages.Add(await _fileHandler.ConvertToByteArray(image));
+        }
+        var request = new ModifyWarehouseHotelRequest(newWarehouseHotel, oldWarehouseHotelName, newImages);
         string url = _baseUrl + "/modify";
         string jsonData = JsonSerializer.Serialize(request);
         StringContent content = new(jsonData, Encoding.UTF8, "application/json");

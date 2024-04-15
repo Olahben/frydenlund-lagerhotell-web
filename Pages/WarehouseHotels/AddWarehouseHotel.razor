@@ -82,7 +82,7 @@
             if (form.IsValid)
             {
                 string jwtToken = await _sessionService.GetJwtFromLocalStorage();
-                string id = await _warehouseHotelService.AddWarehouseHotel(_newWarehouseHotel, jwtToken);
+                string id = await _warehouseHotelService.AddWarehouseHotel(_newWarehouseHotel, images, jwtToken);
                 Snackbar.Add($"Lagerhotellet ble lagt til med følgende ID: {id}", MudBlazor.Severity.Success);
                 await form.ResetAsync();
             }
