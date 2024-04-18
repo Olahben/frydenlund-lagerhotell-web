@@ -10,20 +10,20 @@
 <MudDialog>
     <DialogContent>
         <MudForm @ref="form" Model="_newWarehouseHotel" Validation="@(_warehouseHotelValidator.ValidateValue)">
-            <MudTextField Required="true" Label="Breddegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Latitude" For="(() => _newWarehouseHotel.Coordinate.Latitude)"></MudTextField>
-            <MudTextField Required="true" Label="Lengdegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Longitude" For="(() => _newWarehouseHotel.Coordinate.Longitude)"></MudTextField>
-            <MudTextField Required="true" Label="Hvor stor er den minste utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MinSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MinSize)"></MudTextField>
-            <MudTextField Required="true" Label="Hvor stor er den største utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MaxSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MaxSize)"></MudTextField>
-            <MudTextField Required="true" T="string" Label="Gateaddresse" Immediate="true" @bind-Value="_newWarehouseHotel.Address.StreetAddress" For="(() => _newWarehouseHotel.Address.StreetAddress)"></MudTextField>
-            <MudTextField Required="true" T="string" Label="Postkode" Immediate="true" @bind-Value="_newWarehouseHotel.Address.PostalCode" For="(() => _newWarehouseHotel.Address.PostalCode)"></MudTextField>
-            <MudTextField Required="true" T="string" Label="Poststed" Immediate="true" @bind-Value="_newWarehouseHotel.Address.City" For="(() => _newWarehouseHotel.Address.City)"></MudTextField>
-            <MudTextField Required="true" T="string" Label="Navn" Immediate="true" @bind-Value="_newWarehouseHotel.Name" For="(() => _newWarehouseHotel.Name)"></MudTextField>
-            <MudTextField Required="true" T="string" Label="Tilhørende lokasjonsnavn" Immediate="true" @bind-Value="_newWarehouseHotel.LocationName" For="(() => _newWarehouseHotel.LocationName)"></MudTextField>
-            <MudTextField Required="false" Lines="8" T="string" Label="Beskrivelse" Variant="Variant.Outlined" Immediate="true" @bind-Value="_newWarehouseHotel.DetailedDescription" For="(() => _newWarehouseHotel.DetailedDescription)"></MudTextField>
-            <MudTextField Required="false" Lines="8" T="string" Placeholder="Bytt linje for hvert stikkord" Label="Stikkord om lagerhotellet" Variant="Variant.Outlined" Immediate="true" @bind-Value="_newWarehouseHotel.BulletPoints" For="(() => _newWarehouseHotel.BulletPoints)"></MudTextField>
-            <MudTextField Required="true" Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
-            <MudTextField Required="true" Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
-            <MudTextField Required="true" T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
+            <MudTextField Label="Breddegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Latitude" For="(() => _newWarehouseHotel.Coordinate.Latitude)"></MudTextField>
+            <MudTextField Label="Lengdegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Longitude" For="(() => _newWarehouseHotel.Coordinate.Longitude)"></MudTextField>
+            <MudTextField Label="Hvor stor er den minste utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MinSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MinSize)"></MudTextField>
+            <MudTextField Label="Hvor stor er den største utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MaxSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MaxSize)"></MudTextField>
+            <MudTextField T="string" Label="Gateaddresse" Immediate="true" @bind-Value="_newWarehouseHotel.Address.StreetAddress" For="(() => _newWarehouseHotel.Address.StreetAddress)"></MudTextField>
+            <MudTextField  T="string" Label="Postkode" Immediate="true" @bind-Value="_newWarehouseHotel.Address.PostalCode" For="(() => _newWarehouseHotel.Address.PostalCode)"></MudTextField>
+            <MudTextField T="string" Label="Poststed" Immediate="true" @bind-Value="_newWarehouseHotel.Address.City" For="(() => _newWarehouseHotel.Address.City)"></MudTextField>
+            <MudTextField T="string" Label="Navn" Immediate="true" @bind-Value="_newWarehouseHotel.Name" For="(() => _newWarehouseHotel.Name)"></MudTextField>
+            <MudTextField T="string" Label="Tilhørende lokasjonsnavn" Immediate="true" @bind-Value="_newWarehouseHotel.LocationName" For="(() => _newWarehouseHotel.LocationName)"></MudTextField>
+            <MudTextField Lines="8" T="string" Label="Beskrivelse" Variant="Variant.Outlined" Immediate="true" @bind-Value="_newWarehouseHotel.DetailedDescription" For="(() => _newWarehouseHotel.DetailedDescription)"></MudTextField>
+            <MudTextField Lines="8" T="string" Placeholder="Bytt linje for hvert stikkord" Label="Stikkord om lagerhotellet" Variant="Variant.Outlined" Immediate="true" @bind-Value="_newWarehouseHotel.BulletPoints" For="(() => _newWarehouseHotel.BulletPoints)"></MudTextField>
+            <MudTextField Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
+            <MudTextField Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
+            <MudTextField T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
 
             <MudFileUpload T="IBrowserFile" Accept=".png, .jpg, .webP" FilesChanged="UploadFiles" MaximumFileCount="100">
                 <ButtonTemplate>
