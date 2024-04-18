@@ -12,10 +12,19 @@ namespace Lagerhotell.Services
         /// <returns>byte array</returns>
         public async Task<byte[]> ConvertToByteArray(IBrowserFile file)
         {
-            using (var memoryStream = new MemoryStream())
+            try
             {
-                await file.OpenReadStream().CopyToAsync(memoryStream);
-                return memoryStream.ToArray();
+                using (var memoryStream = new MemoryStream())
+                {
+                    await file.OpenReadStream(maxAllowedSize: 3000000).CopyToAsync(memoryStream);
+                    // Reset the stream position to the beginning before reading from it
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    return memoryStream.ToArray();
+                }
+            }
+            catch (IOException e)
+            {
+                throw new IOException("Error converting file to byte array, file is likely too large", e);
             }
         }
         public async Task<string> ImageByteArrayToBase64(byte[] image)
