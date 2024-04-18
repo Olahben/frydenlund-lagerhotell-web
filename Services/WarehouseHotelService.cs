@@ -19,14 +19,21 @@ public class WarehouseHotelService
     {
         // The list of images should be validated somewhere
         List<ImageAsset> newImages = new();
-        foreach (var image in images)
+        try
         {
-            ImageAsset imageAsset = new()
+            foreach (var image in images)
             {
-                ImageBytes = await _fileHandler.ConvertToByteArray(image),
-                Name = image.Name,
-            };
-            newImages.Add(imageAsset);
+                ImageAsset imageAsset = new()
+                {
+                    ImageBytes = await _fileHandler.ConvertToByteArray(image),
+                    Name = image.Name,
+                };
+                newImages.Add(imageAsset);
+            }
+        }
+        catch (IOException e)
+        {
+            throw new IOException("Error converting file to byte array, file is likely too large", e);
         }
         var request = new AddWarehouseHotelRequest(warehouseHotel, newImages);
         string url = _baseUrl + "/add";
