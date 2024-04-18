@@ -102,6 +102,10 @@
             {
                 Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
             }
+        } catch(IOException e)
+        {
+            Snackbar.Add("Noe er galt med bildene du har lastet opp, maksimumsstørrelse er 3MB. .JPEG er IKKE akseptert", MudBlazor.Severity.Error);
+            Console.WriteLine(e);
         }
         catch (Exception e)
         {

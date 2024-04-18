@@ -40,10 +40,10 @@
             {
                 <MudText Typo="Typo.body1">Du har valgt følgende bilder:</MudText>
                 <MudList Clickable="false">
-                @foreach (var image in images)
-                {
-                    <MudListItem Icon="@Icons.Material.Filled.Image">@image.Name</MudListItem>
-                }
+                    @foreach (var image in images)
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.Image">@image.Name</MudListItem>
+                    }
                 </MudList>
             }
             <MudSwitch Required="true" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
@@ -90,6 +90,11 @@
             {
                 Snackbar.Add("Noe gikk galt, vennligst fyll ut alle feltene riktig", MudBlazor.Severity.Error);
             }
+        }
+        catch (IOException e)
+        {
+            Snackbar.Add("Noe er galt med bildene du har lastet opp, maksimumsstørrelse er 3MB. .JPEG er IKKE akseptert", MudBlazor.Severity.Error);
+            Console.WriteLine(e);
         }
         catch (Exception e)
         {
