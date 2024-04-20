@@ -116,7 +116,6 @@ else
             relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
             detailedDescriptionParagraphs = _textHandler.ParseParagraphs(relevantWarehouseHotel.DetailedDescription);
             warehouseHotelBulletPoints = _textHandler.ParseBulletPoints(relevantWarehouseHotel.BulletPoints);
-            WarehouseHotelImage = await _fileHandler.ImageByteArrayToBase64(relevantWarehouseHotel.ImageData);
 
             // Change href for location
             BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
