@@ -1,6 +1,7 @@
-﻿
-<MudGrid>
-    <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+﻿@using System.Drawing;
+
+<MudGrid Style="width: 100%; margin: 0;">
+    <MudItem Style="padding-right:0; padding-left: 0;" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
         <MudPaper Style="background-color: rgba(89, 74, 226, 1); padding: 5%;">
             <MudText Style="color: white; font-weight: 580;" Typo="Typo.body1">Ett lagerhotell med stort utvalg</MudText>
             <MudText Style="color: white" Typo="Typo.h3">Lagring ved @RelevantWarehouseHotel.Name</MudText>
@@ -16,23 +17,64 @@
                 <MudText Typo="Typo.body1" Style="color: white;">Telefon: @RelevantWarehouseHotel.PhoneNumber</MudText>
             </MudPaper>
         </MudItem>
-        <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
-            <MudGrid>
-                <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-                    <MudImage Style="width: 100%;" Src="././Data/Bilder/image-placeholder.jpg"></MudImage>
+        <MudItem Style="padding-left: 12px;" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+            <MudGrid Style="height: 100%; margin: 0;">
+                <MudItem Style="height: 70%; padding-left: 0; padding-top: 0; padding-bottom: 0;" xs="6" sm="6" md="12" lg="12" xl="12" xxl="12">
+                    <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+                        @foreach (string image in ImageCarouselImages)
+                    {
+                        <MudCarouselItem>
+                            <img style="height: 100%;" src="data:Image/jpg+png;base64, @image" />
+                        </MudCarouselItem>
+                    }
+                </MudCarousel>
                 </MudItem>
-                <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-                    <MudPaper Style="background-color: rgba(89, 74, 226, 1); padding: 5px;">
-                        @foreach(string bulletPoint in BulletPoints) {
-                            <MudNavLink Icon="@Icons.Material.Filled.ArrowRight" Style="color: white; margin-top: 0;" IconColor="Color.Inherit">@bulletPoint</MudNavLink>
+            <MudItem Style="height: 30%; padding-left: 0; padding-bottom: 0;" xs="6" sm="6" md="12" lg="12" xl="12" xxl="12">
+                <MudGrid Style="padding-right: 24px; padding-left: 0; padding-top: 0; padding-bottom: 0; margin: 0;" Class="mud-height-full" Justify="Justify.FlexEnd">
+                    <MudPaper Class="mud-width-full mud-height-full" Style="background-color: rgba(89, 74, 226, 1); padding: 5px;">
+                        @foreach (string bulletPoint in BulletPoints)
+                        {
+                            <MudNavLink Icon="@Icons.Material.Filled.ArrowRight" Style="color: white; margin-top: 0;" IconColor="MudBlazor.Color.Inherit">@bulletPoint</MudNavLink>
                         }
                     </MudPaper>
+                </MudGrid>
                 </MudItem>
             </MudGrid>
         </MudItem>
     </MudGrid>
 
-    @code {
+
+        @*<MudItem Style="" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+            <MudGrid Style="height: 100%">
+                <MudItem Style="padding-left: 0; padding-right: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                    <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+                        @foreach (string image in ImageCarouselImages)
+                        {
+                            <MudCarouselItem>
+                            <img src="data:Image/jpg+png;base64, @image" />
+                            </MudCarouselItem>
+                        }
+                    </MudCarousel>
+
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                    <MudGrid Class="mud-height-full" Justify="Justify.FlexEnd">
+                    <MudPaper Class="mud-width-full mud-height-full" Style="background-color: rgba(89, 74, 226, 1); padding: 5px;">
+                        @foreach(string bulletPoint in BulletPoints) {
+                            <MudNavLink Icon="@Icons.Material.Filled.ArrowRight" Style="color: white; margin-top: 0;" IconColor="MudBlazor.Color.Inherit">@bulletPoint</MudNavLink>
+                        }
+                    </MudPaper>
+                </MudGrid>
+                </MudItem>
+            </MudGrid>
+</MudItem>*@
+
+@code {
+    private bool arrows = true;
+    private bool bullets = true;
+    private bool enableSwipeGesture = true;
+    private bool autocycle = true;
+    private Transition transition = Transition.Slide;
     [Parameter]
     public WarehouseHotel RelevantWarehouseHotel { get; set; }
     [Parameter]
@@ -43,4 +85,7 @@
     public string OpeningTime { get; set; }
     [Parameter]
     public string ClosingTime { get; set; }
+    [Parameter]
+    public List<string> ImageCarouselImages { get; set; } = new List<string>();
+
 }
