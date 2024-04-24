@@ -23,5 +23,6 @@ builder.Services.AddScoped<FileHandler>();
 builder.Services.AddScoped<StorageUnitService>();
 builder.Services.AddScoped<StorageUnitValidator>();
 builder.Services.AddScoped<TextHandler>();
+builder.Services.AddScoped<AssetService>();
 
 await builder.Build().RunAsync();
