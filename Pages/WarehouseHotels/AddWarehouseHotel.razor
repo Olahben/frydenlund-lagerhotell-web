@@ -15,7 +15,7 @@
             <MudTextField Label="Hvor stor er den minste utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MinSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MinSize)"></MudTextField>
             <MudTextField Label="Hvor stor er den største utleieenheten? (Oppgitt i meter2)" Immediate="true" @bind-Value="_newWarehouseHotel.StorageUnitsSizes.MaxSize" For="(() => _newWarehouseHotel.StorageUnitsSizes.MaxSize)"></MudTextField>
             <MudTextField T="string" Label="Gateaddresse" Immediate="true" @bind-Value="_newWarehouseHotel.Address.StreetAddress" For="(() => _newWarehouseHotel.Address.StreetAddress)"></MudTextField>
-            <MudTextField  T="string" Label="Postkode" Immediate="true" @bind-Value="_newWarehouseHotel.Address.PostalCode" For="(() => _newWarehouseHotel.Address.PostalCode)"></MudTextField>
+            <MudTextField T="string" Label="Postkode" Immediate="true" @bind-Value="_newWarehouseHotel.Address.PostalCode" For="(() => _newWarehouseHotel.Address.PostalCode)"></MudTextField>
             <MudTextField T="string" Label="Poststed" Immediate="true" @bind-Value="_newWarehouseHotel.Address.City" For="(() => _newWarehouseHotel.Address.City)"></MudTextField>
             <MudTextField T="string" Label="Navn" Immediate="true" @bind-Value="_newWarehouseHotel.Name" For="(() => _newWarehouseHotel.Name)"></MudTextField>
             <MudTextField T="string" Label="Tilhørende lokasjonsnavn" Immediate="true" @bind-Value="_newWarehouseHotel.LocationName" For="(() => _newWarehouseHotel.LocationName)"></MudTextField>
@@ -40,13 +40,13 @@
             {
                 <MudText Typo="Typo.body1">Du har valgt følgende bilder:</MudText>
                 <MudList Clickable="false">
-                    @foreach (var image in images)
-                    {
-                        <MudListItem Icon="@Icons.Material.Filled.Image">
-                            <span style="display: flex; align-items: center; justify-content: space-between">@image.Name<MudIconButton OnClick="@DeleteImage(image.Name)" aria-label="slett" Icon="@Icons.Material.Filled.Delete"></MudIconButton></span>
+                        @foreach (var image in images)
+                        {
+                            <MudListItem Icon="@Icons.Material.Filled.Image">
+                                <span style="display: flex; align-items: center; justify-content: space-between">@image.Name<MudIconButton OnClick="() => DeleteImage(image.Name)" aria-label="slett" Icon="@Icons.Material.Filled.Delete"></MudIconButton></span>
 
-                        </MudListItem>
-                    }
+                            </MudListItem>
+                        }
                 </MudList>
             }
             <MudSwitch Required="true" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
@@ -113,16 +113,15 @@
         images.Add(file);
     }
 
-    private EventCallback DeleteImage(string fileName)
+    private void DeleteImage(string fileName)
     {
         foreach (var image in images)
         {
             if (image.Name == fileName)
             {
                 images.Remove(image);
-                return EventCallback.Factory.Create(this, () => { });
+                return;
             }
         }
-        return EventCallback.Factory.Create(this, () => { });
     }
 }
