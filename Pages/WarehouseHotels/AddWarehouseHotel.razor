@@ -42,7 +42,10 @@
                 <MudList Clickable="false">
                     @foreach (var image in images)
                     {
-                        <MudListItem Icon="@Icons.Material.Filled.Image">@image.Name</MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.Image">
+                            <span style="display: flex; align-items: center; justify-content: space-between">@image.Name<MudIconButton OnClick="@DeleteImage(image.Name)" aria-label="slett" Icon="@Icons.Material.Filled.Delete"></MudIconButton></span>
+
+                        </MudListItem>
                     }
                 </MudList>
             }
@@ -108,5 +111,18 @@
     private void UploadFiles(IBrowserFile file)
     {
         images.Add(file);
+    }
+
+    private EventCallback DeleteImage(string fileName)
+    {
+        foreach (var image in images)
+        {
+            if (image.Name == fileName)
+            {
+                images.Remove(image);
+                return EventCallback.Factory.Create(this, () => { });
+            }
+        }
+        return EventCallback.Factory.Create(this, () => { });
     }
 }
