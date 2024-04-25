@@ -25,28 +25,21 @@
             <MudTextField Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
             <MudTextField T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
 
-            <MudFileUpload T="IBrowserFile" Accept=".png, .jpg, .webP" FilesChanged="UploadFiles" MaximumFileCount="100">
-                <ButtonTemplate>
-                    <MudButton HtmlTag="label"
-                               Variant="Variant.Filled"
-                               Color="Color.Primary"
-                               StartIcon="@Icons.Material.Filled.CloudUpload"
-                               for="@context.Id">
-                        Last opp bilder
-                    </MudButton>
-                </ButtonTemplate>
-            </MudFileUpload>
+            @for (int i = 0; i <= currentFileSelection; i++)
+            {
+                <InputFile class="file-input" OnChange="@OnInputFileChange" id="fileInput" multiple hidden="@(i != currentFileSelection)"></InputFile>
+            }
             @if (images.Count > 0)
             {
                 <MudText Typo="Typo.body1">Du har valgt følgende bilder:</MudText>
                 <MudList Clickable="false">
-                        @foreach (var image in images)
-                        {
-                            <MudListItem Icon="@Icons.Material.Filled.Image">
-                                <span style="display: flex; align-items: center; justify-content: space-between">@image.Name<MudIconButton OnClick="() => DeleteImage(image.Name)" aria-label="slett" Icon="@Icons.Material.Filled.Delete"></MudIconButton></span>
+                    @foreach (var image in images)
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.Image">
+                            <span style="display: flex; align-items: center; justify-content: space-between">@image.Name<MudIconButton OnClick="() => DeleteImage(image.Name)" aria-label="slett" Icon="@Icons.Material.Filled.Delete"></MudIconButton></span>
 
-                            </MudListItem>
-                        }
+                        </MudListItem>
+                    }
                 </MudList>
             }
             <MudSwitch Required="true" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
@@ -60,7 +53,9 @@
 </MudDialog>
 
 <style>
-
+    .file-input {
+        margin-top: 6px;
+    }
 </style>
 
 @code {
@@ -75,6 +70,7 @@
         };
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     List<IBrowserFile> images = new List<IBrowserFile>();
+    private int currentFileSelection = 0;
 
 
     public async Task Add()
@@ -108,10 +104,14 @@
 
     void Cancel() => MudDialog.Cancel();
 
-    private void UploadFiles(IBrowserFile file)
+    /* private void UploadFiles(IReadOnlyList<IBrowserFile> files)
     {
-        images.Add(file);
-    }
+        foreach (var file in files)
+        {
+            images.Add(file);
+        }
+        currentFileSelection++;
+    } */
 
     private void DeleteImage(string fileName)
     {
@@ -123,5 +123,14 @@
                 return;
             }
         }
+    }
+
+    void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var maxAllowedFiles = 10;
+
+        images.AddRange(e.GetMultipleFiles(maxAllowedFiles));
+
+        currentFileSelection++;
     }
 }

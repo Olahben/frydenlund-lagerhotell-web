@@ -19,17 +19,10 @@
             <MudTextField RequiredError="Dette feltet kan ikke være tomt" Label="Åpningstid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Opens" For="(() => _newWarehouseHotel.OpeningHours.Opens)"></MudTextField>
             <MudTextField RequiredError="Dette feltet kan ikke være tomt" Label="Stengetid" Immediate="true" Placeholder="00-24" @bind-Value="_newWarehouseHotel.OpeningHours.Closes" For="(() => _newWarehouseHotel.OpeningHours.Closes)"></MudTextField>
             <MudTextField RequiredError="Dette feltet kan ikke være tomt" T="string" Label="Mobilnummeret til kundeservice" Placeholder="12345678" Immediate="true" @bind-Value="_newWarehouseHotel.PhoneNumber" For="(() => _newWarehouseHotel.PhoneNumber)"></MudTextField>
-            <MudFileUpload T="IBrowserFile" Accept=".png, .jpg, .jpeg, .webP" FilesChanged="UploadFiles" MaximumFileCount="100">
-                <ButtonTemplate>
-                    <MudButton HtmlTag="label"
-                               Variant="Variant.Filled"
-                               Color="Color.Primary"
-                               StartIcon="@Icons.Material.Filled.CloudUpload"
-                               for="@context.Id">
-                        Last opp bilder (.png, .jpg, .webP)
-                    </MudButton>
-                </ButtonTemplate>
-            </MudFileUpload>
+            @for (int i = 0; i <= currentFileSelection; i++)
+            {
+                <InputFile class="file-input" OnChange="@OnInputFileChange" id="fileInput" multiple hidden="@(i != currentFileSelection)"></InputFile>
+            }
             @if (images.Count > 0)
             {
                 <MudText Typo="Typo.body1">Du har valgt følgende bilder:</MudText>
@@ -84,6 +77,7 @@
     private int descriptionParas = 1;
     private List<string> detailedDescriptionParas = new List<string>();
     private List<IBrowserFile> images = new List<IBrowserFile>();
+    private int currentFileSelection = 0;
 
 
     private async Task Change()
@@ -142,8 +136,12 @@
     }
     void Cancel() => MudDialog.Cancel();
 
-    private void UploadFiles(IBrowserFile file)
+    void OnInputFileChange(InputFileChangeEventArgs e)
     {
-        images.Add(file);
+        var maxAllowedFiles = 10;
+
+        images.AddRange(e.GetMultipleFiles(maxAllowedFiles));
+
+        currentFileSelection++;
     }
 }
