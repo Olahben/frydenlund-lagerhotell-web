@@ -133,4 +133,13 @@
 
         currentFileSelection++;
     }
+
+    private void InsertFiles(IReadOnlyList<IBrowserFile> files)
+    {
+        foreach (var item in files)
+        {
+            this.images.Add(item);
+        }
+        currentFileSelection++;
+    }
 }
