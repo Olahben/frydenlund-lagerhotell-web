@@ -4,7 +4,7 @@
 @implements IAsyncDisposable
 
 <MudGrid Style="width: 100%; margin: 0;">
-    <MudItem Style="padding-right:0; padding-left: 0;" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+    <MudItem Style="padding-right:0; padding-left: 0;" xs="12" sm="12" md="5" lg="5" xl="5" xxl="5">
         <MudPaper Style="background-color: rgba(89, 74, 226, 1); padding: 5%;">
             <MudText Style="color: white; font-weight: 580;" Typo="Typo.body1">Ett lagerhotell med stort utvalg</MudText>
             <MudText Style="color: white" Typo="Typo.h3">Lagring ved @RelevantWarehouseHotel.Name</MudText>
@@ -20,9 +20,9 @@
                 <MudText Typo="Typo.body1" Style="color: white;">Telefon: @RelevantWarehouseHotel.PhoneNumber</MudText>
             </MudPaper>
         </MudItem>
-        <MudItem Style="padding-left: 12px;" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+        <MudItem Style="padding-left: 12px;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
             <MudGrid Style="height: 100%; margin: 0;">
-                <MudItem Style="height: 70%; padding-left: 0; padding-top: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                <MudItem Style="height: 60%; padding-left: 0; padding-top: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
                     <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
                         @foreach (string image in ImageCarouselImages)
                     {
@@ -32,7 +32,7 @@
                     }
                 </MudCarousel>
                 </MudItem>
-            <MudItem Style="height: 30%; padding-left: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+            <MudItem Style="height: 40%; padding-left: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
                 <MudGrid Style="padding-right: 24px; padding-left: 0; padding-top: 0; padding-bottom: 0; margin: 0;" Class="mud-height-full" Justify="Justify.FlexEnd">
                     <MudPaper Class="mud-width-full mud-height-full" Style="background-color: rgba(89, 74, 226, 1); padding: 5px;">
                         @foreach (string bulletPoint in BulletPoints)
