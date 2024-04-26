@@ -30,7 +30,10 @@
                 <MudList Clickable="false">
                     @foreach (var image in warehouseHotelImages)
                     {
-                        <MudListItem Icon="@Icons.Material.Filled.Image">@image.Name</MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.Image">
+                            <span style="display: flex; align-items: center; justify-content: space-between">@image.Name<MudIconButton OnClick="() => DeleteImage(image.Name)" aria-label="slett" Icon="@Icons.Material.Filled.Delete"></MudIconButton></span>
+
+                        </MudListItem>
                     }
                 </MudList>
             }
@@ -155,5 +158,17 @@
         warehouseHotelImages.AddRange(e.GetMultipleFiles(maxAllowedFiles));
 
         currentFileSelection++;
+    }
+
+    private void DeleteImage(string fileName)
+    {
+        foreach (var image in warehouseHotelImages)
+        {
+            if (image.Name == fileName)
+            {
+                warehouseHotelImages.Remove(image);
+                return;
+            }
+        }
     }
 }
