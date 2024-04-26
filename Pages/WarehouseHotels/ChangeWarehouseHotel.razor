@@ -1,6 +1,7 @@
 ﻿@inject SessionService _sessionService
 @inject WarehouseHotelService _warehouseHotelService
 @inject IDialogService _dialogService
+@inject AssetService _assetService
 
 <MudDialog @bind-IsVisible="MainDialogOpen">
     <DialogContent>
@@ -23,11 +24,11 @@
             {
                 <InputFile class="file-input" OnChange="@OnInputFileChange" id="fileInput" multiple hidden="@(i != currentFileSelection)"></InputFile>
             }
-            @if (images.Count > 0)
+            @if (warehouseHotelImages.Count > 0)
             {
                 <MudText Typo="Typo.body1">Du har valgt følgende bilder:</MudText>
                 <MudList Clickable="false">
-                    @foreach (var image in images)
+                    @foreach (var image in warehouseHotelImages)
                     {
                         <MudListItem Icon="@Icons.Material.Filled.Image">@image.Name</MudListItem>
                     }
@@ -66,6 +67,8 @@
             Address = new Address(),
             StorageUnitsSizes = new StorageUnitSizes(),
         };
+    private List<ImageAssetBrowserFile> oldWarehouseHotelImages = new();
+    private List<IBrowserFile> warehouseHotelImages = new();
     private WarehouseHotel _newWarehouseHotel = new WarehouseHotel
         {
             Coordinate = new Coordinate(),
@@ -76,7 +79,6 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private int descriptionParas = 1;
     private List<string> detailedDescriptionParas = new List<string>();
-    private List<IBrowserFile> images = new List<IBrowserFile>();
     private int currentFileSelection = 0;
 
 
@@ -88,7 +90,7 @@
             if (mainForm.IsValid)
             {
                 string jwtToken = await _sessionService.GetJwtFromLocalStorage();
-                await _warehouseHotelService.ChangeWarehouseHotel(_oldWarehouseHotel.Name, _newWarehouseHotel, images, jwtToken);
+                await _warehouseHotelService.ChangeWarehouseHotel(_oldWarehouseHotel.Name, _newWarehouseHotel, warehouseHotelImages, jwtToken);
                 Snackbar.Add("Lagerhotellet ble endret", MudBlazor.Severity.Success);
                 await mainForm.ResetAsync();
             }
@@ -96,7 +98,8 @@
             {
                 Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
             }
-        } catch(IOException e)
+        }
+        catch (IOException e)
         {
             Snackbar.Add("Noe er galt med bildene du har lastet opp, maksimumsstørrelse er 3MB. .JPEG er IKKE akseptert", MudBlazor.Severity.Error);
             Console.WriteLine(e);
@@ -118,6 +121,15 @@
                 string jwtToken = await _sessionService.GetJwtFromLocalStorage();
                 _oldWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(_oldWarehouseHotel.Name, jwtToken);
                 _newWarehouseHotel = _oldWarehouseHotel;
+                List<ImageAsset> oldWarehouseHotelAssets = await _assetService.GetLinkedWarehouseHotelImages(_oldWarehouseHotel.WarehouseHotelId);
+                foreach (var asset in oldWarehouseHotelAssets)
+                {
+                    oldWarehouseHotelImages.Add(new ImageAssetBrowserFile(asset));
+                }
+                foreach (var asset in oldWarehouseHotelImages)
+                {
+                    warehouseHotelImages.Add(asset);
+                }
                 Snackbar.Add("Lagerhotellet ble hentet", MudBlazor.Severity.Success);
                 await secondaryForm.ResetAsync();
                 MainDialogOpen = true;
@@ -140,7 +152,7 @@
     {
         var maxAllowedFiles = 10;
 
-        images.AddRange(e.GetMultipleFiles(maxAllowedFiles));
+        warehouseHotelImages.AddRange(e.GetMultipleFiles(maxAllowedFiles));
 
         currentFileSelection++;
     }
