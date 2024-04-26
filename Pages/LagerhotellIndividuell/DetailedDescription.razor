@@ -1,4 +1,7 @@
-﻿@using System.Drawing;
+﻿@using System.Drawing
+@using MudBlazor.Services
+@implements IBrowserViewportObserver
+@implements IAsyncDisposable
 
 <MudGrid Style="width: 100%; margin: 0;">
     <MudItem Style="padding-right:0; padding-left: 0;" xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
@@ -88,4 +91,43 @@
     [Parameter]
     public List<string> ImageCarouselImages { get; set; } = new List<string>();
 
+    [Inject]
+    private IBrowserViewportService browserViewportService { get; set; }
+    private Breakpoint _start;
+    private Breakpoint _current;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await browserViewportService.SubscribeAsync(this, fireImmediately: true);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public async ValueTask DisposeAsync() => await browserViewportService.UnsubscribeAsync(this);
+
+    Guid IBrowserViewportObserver.Id { get; } = Guid.NewGuid();
+
+    ResizeOptions IBrowserViewportObserver.ResizeOptions { get; } = new()
+        {
+            ReportRate = 250,
+            NotifyOnBreakpointOnly = true
+        };
+
+    Task IBrowserViewportObserver.NotifyBrowserViewportChangeAsync(BrowserViewportEventArgs browserViewportEventArgs)
+    {
+        if (browserViewportEventArgs.IsImmediate)
+        {
+            _start = browserViewportEventArgs.Breakpoint;
+        }
+        else
+        {
+            _current = browserViewportEventArgs.Breakpoint;
+            Console.WriteLine(browserViewportEventArgs.Breakpoint.ToString());
+        }
+
+        return InvokeAsync(StateHasChanged);
+    }
 }
