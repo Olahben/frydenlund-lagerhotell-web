@@ -27,4 +27,22 @@ public class AssetService
         }
         return imagesBase64;
     }
+
+    /// <summary>
+    /// Gets all linked assets to a warehouse hotel
+    /// </summary>
+    /// <param name="warehouseHotelId"></param>
+    /// <returns>A list of image assets</returns>
+    public async Task<List<ImageAsset>> GetLinkedWarehouseHotelImages(string warehouseHotelId)
+    {
+        string url = _baseUrl + $"/0/0/{warehouseHotelId}";
+        HttpResponseMessage response = await client.GetAsync(url);
+        string responseString = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        List<ImageAsset> responseImageAssets = JsonSerializer.Deserialize<GetAllAssetsResponse>(responseString, options).Assets;
+        return responseImageAssets;
+    }
 }
