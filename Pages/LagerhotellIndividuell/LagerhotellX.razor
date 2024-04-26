@@ -6,6 +6,7 @@
 @inject StorageUnitService _storageUnitService
 @inject TextHandler _textHandler
 @inject FileHandler _fileHandler
+@inject AssetService _assetService
 @using LagerhotellAPI.Models.FrontendModels.Custom
 @using System.Drawing;
 
@@ -79,7 +80,7 @@
             }
         </MudContainer>
         <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
-            <DetailedDescription OpeningTime="@OpeningTime" ClosingTime="@ClosingTime" Image="@WarehouseHotelImage" DetailedDescriptionParas="@detailedDescriptionParagraphs" BulletPoints="@warehouseHotelBulletPoints" RelevantWarehouseHotel="@relevantWarehouseHotel"></DetailedDescription>
+            <DetailedDescription OpeningTime="@OpeningTime" ClosingTime="@ClosingTime" ImageCarouselImages="@detailedDescriptionImages" DetailedDescriptionParas="@detailedDescriptionParagraphs" BulletPoints="@warehouseHotelBulletPoints" RelevantWarehouseHotel="@relevantWarehouseHotel"></DetailedDescription>
         </MudContainer>
     </MudContainer>
 }
@@ -105,7 +106,7 @@ else
     public StorageUnit StorageUnitToAdd { get; set; } = new StorageUnit();
     private List<string> detailedDescriptionParagraphs = new List<string>();
     private List<string> warehouseHotelBulletPoints = new List<string>();
-    private string WarehouseHotelImage { get; set; }
+    private List<string> detailedDescriptionImages { get; set; } = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -116,6 +117,7 @@ else
             relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
             detailedDescriptionParagraphs = _textHandler.ParseParagraphs(relevantWarehouseHotel.DetailedDescription);
             warehouseHotelBulletPoints = _textHandler.ParseBulletPoints(relevantWarehouseHotel.BulletPoints);
+            detailedDescriptionImages = await _assetService.GetWarehouseHotelImagecarouselImages(relevantWarehouseHotel.WarehouseHotelId);
 
             // Change href for location
             BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
