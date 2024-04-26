@@ -16,7 +16,7 @@ namespace Lagerhotell.Services
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    await file.OpenReadStream(maxAllowedSize: 3000000).CopyToAsync(memoryStream);
+                    await file.OpenReadStream(maxAllowedSize: 5000000).CopyToAsync(memoryStream);
                     // Reset the stream position to the beginning before reading from it
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     return memoryStream.ToArray();
