@@ -42,13 +42,13 @@
         <MudBreadcrumbs Items="BreadcrumbItems"></MudBreadcrumbs>
         <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
             <MudGrid Justify="Justify.Center">
-                <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="7" xl="7" xxl="7">
+                <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="7" xl="7" xxl="7"> 
                     <MudPaper Square="true" Class="lagerhotell-card-header" Elevation="0" Height="400px" Color="Color.Primary">
                         <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
                             <MudText Style="font-weight: 500;" Typo="Typo.h4" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
                             <MudText Style="font-weight: 300;" Typo="Typo.h6" Class="lagerhotell-header-info">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
                             <MudText Style="color: white; font-weight: 400;">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
-                            <MudButton ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Variant="Variant.Outlined" Color="MudBlazor.Color.Info" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 12px;">Vis på kart</MudButton>
+                            <MudButton ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Variant="Variant.Outlined" Color="MudBlazor.Color.Inherit" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 12px; color:white;">Vis på kart</MudButton>
                         </MudPaper>
                     </MudItem>
                     <MudItem Style="padding-left: 0;" xs="5" sm="5" md="5" lg="5" xl="5" xxl="5">
