@@ -63,7 +63,7 @@
                 <MudText Typo="Typo.h5">Våre størrelser</MudText>
                 <AuthorizeView Roles="Administrator">
                     <Authorized>
-                        <MudButton Color="MudBlazor.Color.Primary" @onclick="OpenAddStorageUnitDialog" Variant="Variant.Filled">Legg til lagerenhet</MudButton>
+                        <MudButton Style="margin-bottom: 18px;" Color="MudBlazor.Color.Primary" @onclick="OpenAddStorageUnitDialog" Variant="Variant.Filled">Legg til lagerenhet</MudButton>
                     </Authorized><NotAuthorized></NotAuthorized>
                 </AuthorizeView>
                 @if (RelevantStorageUnits.Count == 0)
