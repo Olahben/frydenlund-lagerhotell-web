@@ -22,7 +22,7 @@
         </MudItem>
         @if (_currentBreakpoint.ToString() == "Xs" || _currentBreakpoint.ToString() == "Sm")
     {
-        <MudItem Style="padding-left: 0px;padding-right: 24px; padding-top: 0;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
+        <MudItem Style="padding-left: 0px;padding-right: 24px; padding-top: 0; padding-bottom: 0;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
             <MudGrid Style="height: 100%; margin: 0;">
                 <MudItem Style="height: 100%; padding: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
                     <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
@@ -51,7 +51,7 @@
     }
     else
     {
-        <MudItem Style="padding-left: 12px;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
+        <MudItem Style="padding-left: 12px; padding-bottom: 0;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
             <MudGrid Style="height: 100%; margin: 0;">
                 <MudItem Style="height: 40%; padding-left: 0; padding-top: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
                     <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
