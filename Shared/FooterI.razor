@@ -1,27 +1,133 @@
-﻿<MudContainer Style="padding-left: 0; padding-right: 0;margin-left: 0; margin-right: 0; width: 100%; max-width: 100%; color: white;">
-    <MudPaper Square="true" Style="background-color: rgb(89, 74, 226); color: white;">
-        <MudGrid Style="max-width: 1100px; margin-left: auto; margin-right: auto;padding-top: 36px; padding-bottom: 36px;">
-            <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                <MudImage Width="150" Height="120" Src="Data/Bilder/logoCropped.png"></MudImage>
-                <MudText Typo="Typo.body2">Lagerhotell AS</MudText>
-                <MudText Style="margin-bottom: 12px" Typo="Typo.body2">Skippergata 4, 0152 Oslo</MudText>
-                <MudText Typo="Typo.body2" Class="d-flex align-center">
-                    <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Phone" Title="Favorite" /> 09876543
-                </MudText>
-<MudText Typo="Typo.body2" Class="d-flex align-center">
-                    <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Email" Title="Favorite" /> bedrift@lagerhotell.no
+﻿@implements IBrowserViewportObserver
+@implements IAsyncDisposable
+@using MudBlazor.Services
+
+@if (_currentBreakpoint.ToString() == "Sm")
+{
+        <MudContainer Style="padding-left: 0; padding-right: 0;margin-left: 0; margin-right: 0; width: 100%; max-width: 100%; color: white;">
+        <MudPaper Square="true" Style="background-color: rgb(89, 74, 226); color: white;">
+            <MudGrid Style="max-width: 1100px; margin-left: auto; margin-right: auto;padding-top: 36px; padding-bottom: 36px; padding-left: 12px; padding-right: 12px;">
+                <MudItem Style="max-width: 280px" sm="6">
+                    <MudImage Width="150" Height="120" Src="Data/Bilder/logoCropped.png"></MudImage>
+                    <MudText Typo="Typo.body2">Lagerhotell AS</MudText>
+                    <MudText Style="margin-bottom: 12px" Typo="Typo.body2">Skippergata 4, 0152 Oslo</MudText>
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Phone" Title="Favorite" /> 09876543
                     </MudText>
-                <MudText></MudText>
-            </MudItem>
-            <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                <MudImage Src="../wwwroot/Data/Bilder/logo.png"></MudImage>
-            </MudItem>
-            <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                <MudImage Src="../wwwroot/Data/Bilder/logo.png">s</MudImage>
-            </MudItem>
-        </MudGrid>
-    </MudPaper>
-</MudContainer>
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Email" Title="Favorite" /> bedrift@lagerhotell.no
+                    </MudText>
+                    <MudText></MudText>
+                </MudItem>
+                <MudItem Style="max-width: 280px" sm="6">
+                    <MudImage Src="../wwwroot/Data/Bilder/logo.png"></MudImage>
+                </MudItem>
+                <MudItem Style="max-width: 280px" sm="6">
+                    <MudImage Src="../wwwroot/Data/Bilder/logo.png">s</MudImage>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudContainer>
+} else if (_currentBreakpoint.ToString() == "Xs")
+{
+    <MudContainer Style="padding-left: 0; padding-right: 0;margin-left: 0; margin-right: 0; width: 100%; max-width: 100%; color: white;">
+        <MudPaper Square="true" Style="background-color: rgb(89, 74, 226); color: white;">
+            <MudGrid Style="max-width: 1100px; margin-left: auto; margin-right: auto;padding-top: 36px; padding-bottom: 36px; padding-left: 12px; padding-right: 12px;">
+                <MudItem Style="max-width: 280px" xs="12">
+                    <MudImage Width="150" Height="120" Src="Data/Bilder/logoCropped.png"></MudImage>
+                    <MudText Typo="Typo.body2">Lagerhotell AS</MudText>
+                    <MudText Style="margin-bottom: 12px" Typo="Typo.body2">Skippergata 4, 0152 Oslo</MudText>
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Phone" Title="Favorite" /> 09876543
+                    </MudText>
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Email" Title="Favorite" /> bedrift@lagerhotell.no
+                    </MudText>
+                    <MudText></MudText>
+                </MudItem>
+                <MudItem Style="max-width: 280px" xs="12">
+                    <MudImage Src="../wwwroot/Data/Bilder/logo.png"></MudImage>
+                </MudItem>
+                <MudItem Style="max-width: 280px" xs="12">
+                    <MudImage Src="../wwwroot/Data/Bilder/logo.png">s</MudImage>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudContainer>
+}
+else
+{
+    <MudContainer Style="padding-left: 0; padding-right: 0;margin-left: 0; margin-right: 0; width: 100%; max-width: 100%; color: white;">
+        <MudPaper Square="true" Style="background-color: rgb(89, 74, 226); color: white;">
+            <MudGrid Style="max-width: 1100px; margin-left: auto; margin-right: auto;padding-top: 36px; padding-bottom: 36px; padding-left: 12px; padding-right: 12px;">
+                <MudItem Style="max-width: 280px" md="4" lg="4" xl="4" xxl="4">
+                    <MudImage Width="150" Height="120" Src="Data/Bilder/logoCropped.png"></MudImage>
+                    <MudText Typo="Typo.body2">Lagerhotell AS</MudText>
+                    <MudText Style="margin-bottom: 12px" Typo="Typo.body2">Skippergata 4, 0152 Oslo</MudText>
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Phone" Title="Favorite" /> 09876543
+                    </MudText>
+                    <MudText Typo="Typo.body2" Class="d-flex align-center">
+                        <MudIcon Style="margin-right: 5px;" Size="Size.Small" Icon="@Icons.Material.Filled.Email" Title="Favorite" /> bedrift@lagerhotell.no
+                    </MudText>
+                    <MudText></MudText>
+                </MudItem>
+                <MudItem Style="max-width: 280px" md="4" lg="4" xl="4" xxl="4">
+                    <MudImage Src="../wwwroot/Data/Bilder/logo.png"></MudImage>
+                </MudItem>
+                <MudItem Style="max-width: 280px" md="4" lg="4" xl="4" xxl="4">
+                    <MudImage Src="../wwwroot/Data/Bilder/logo.png">s</MudImage>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudContainer>
+
+    <style>
+        .justify-start {
+            justify-content: center !important;
+        }
+    </style>
+}
 
 @code {
+    [Inject]
+    private IBrowserViewportService browserViewportService { get; set; }
+    private Breakpoint _start;
+    private Breakpoint _currentBreakpoint;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await browserViewportService.SubscribeAsync(this, fireImmediately: true);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public async ValueTask DisposeAsync() => await browserViewportService.UnsubscribeAsync(this);
+
+    Guid IBrowserViewportObserver.Id { get; } = Guid.NewGuid();
+
+    ResizeOptions IBrowserViewportObserver.ResizeOptions { get; } = new()
+        {
+            ReportRate = 250,
+            NotifyOnBreakpointOnly = true
+        };
+
+    Task IBrowserViewportObserver.NotifyBrowserViewportChangeAsync(BrowserViewportEventArgs browserViewportEventArgs)
+    {
+        if (browserViewportEventArgs.IsImmediate)
+        {
+            _start = browserViewportEventArgs.Breakpoint;
+            _currentBreakpoint = browserViewportEventArgs.Breakpoint;
+        }
+        else
+        {
+            _currentBreakpoint = browserViewportEventArgs.Breakpoint;
+            Console.WriteLine(_currentBreakpoint.ToString());
+        }
+
+        return InvokeAsync(StateHasChanged);
+    }
 }
