@@ -44,12 +44,18 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudText Typo="Typo.h5" Class="ml-3">Lagerhotell</MudText>
-        <MudSpacer />
-        <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
-            <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
-                <Lagerhotell.Pages.SideBar.LocationsSideBar />
-            </MudDrawer>
+        <MudContainer Style="max-width: 1100px;">
+            <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+                <MudGrid>
+                    <MudText Typo="Typo.h5" Class="ml-3">Lagerhotell</MudText>
+                    <MudSpacer />
+                    <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
+                    <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+                        <Lagerhotell.Pages.SideBar.LocationsSideBar />
+                    </MudDrawer>
+                </MudGrid>
+            </MudContainer>
+        </MudContainer>
     </MudAppBar>
     <MudMainContent>
         @Body
