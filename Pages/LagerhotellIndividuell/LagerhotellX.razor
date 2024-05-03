@@ -38,8 +38,8 @@
 @if (isInitialized)
 {
     @*Split views*@
-    <MudContainer Style="justify-content: center; width: 1100px">
-        <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+    <MudContainer Style="justify-content: center; max-width: 1100px;">
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
             <MudBreadcrumbs Style="padding-left: 0;" Items="BreadcrumbItems"></MudBreadcrumbs>
             <MudGrid Justify="Justify.Center">
                 <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="7" xl="7" xxl="7"> 
@@ -59,7 +59,7 @@
                 </MudGrid>
             </MudContainer>
 
-            <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+            <MudContaine MaxWidth="MaxWidth.ExtraExtraLarge">
                 <MudText Typo="Typo.h5">Våre størrelser</MudText>
                 <AuthorizeView Roles="Administrator">
                     <Authorized>
@@ -79,8 +79,8 @@
                     }
                 </MudGrid>
             }
-        </MudContainer>
-        <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+        </MudContaine>
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
             <DetailedDescription OpeningTime="@OpeningTime" ClosingTime="@ClosingTime" ImageCarouselImages="@detailedDescriptionImages" DetailedDescriptionParas="@detailedDescriptionParagraphs" BulletPoints="@warehouseHotelBulletPoints" RelevantWarehouseHotel="@relevantWarehouseHotel"></DetailedDescription>
         </MudContainer>
     </MudContainer>
