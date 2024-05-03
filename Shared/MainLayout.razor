@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager _navigationManager
+
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -47,7 +49,7 @@
         <MudContainer Style="max-width: 1100px; padding-right: 0;">
             <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
                 <MudGrid>
-                    <MudText Typo="Typo.h5" Class="ml-3">Lagerhotell</MudText>
+                    <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
                     <MudSpacer />
                     <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
                     <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
@@ -57,10 +59,17 @@
             </MudContainer>
         </MudContainer>
     </MudAppBar>
-    <MudMainContent>
+    <MudMainContent Style="margin-bottom: 126px; min-height: 100vh;">
         @Body
     </MudMainContent>
+    <FooterI></FooterI>
 </MudLayout>
+
+<style>
+    .clickable:hover {
+        cursor: pointer;
+    }
+</style>
 
 @code {
     bool _drawerOpen = true;
@@ -77,5 +86,10 @@
         rightSideBarOpen = true;
         this.anchor = anchor;
         StateHasChanged();
+    }
+
+    void RedirectToHome()
+    {
+        _navigationManager.NavigateTo("/");
     }
 }
