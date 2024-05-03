@@ -9,6 +9,8 @@ namespace Lagerhotell.Pages
         protected ISnackbar Snackbar { get; set; }
         [Inject]
         protected IDialogService DialogService { get; set; }
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; }
 
     }
 }
