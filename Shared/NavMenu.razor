@@ -1,7 +1,7 @@
 ﻿@inject SessionService _sessionService
 @inject NavigationManager _navigationManager
 
-<MudNavMenu>
+@*<MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
     <AuthorizeView>
     <NotAuthorized>
@@ -12,7 +12,7 @@
         <MudNavLink @onclick="LogOut" Icon="@Icons.Material.Filled.Logout">Logg ut</MudNavLink>
     </Authorized>          
 </AuthorizeView>
-</MudNavMenu>
+</MudNavMenu>*@
 
 
 @code {
