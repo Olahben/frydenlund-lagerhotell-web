@@ -46,8 +46,8 @@
                     <MudPaper Square="true" Class="lagerhotell-card-header" Elevation="0" Height="400px" Color="Color.Primary">
                         <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
                             <MudText Style="font-weight: 500;" Typo="Typo.h4" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
-                            <MudText Style="font-weight: 300;" Typo="Typo.h6" Class="lagerhotell-header-info">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
-                            <MudText Style="color: white; font-weight: 400;">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
+                            <MudText Style="font-weight: 400; font-size: 18.5px;" Typo="Typo.body1" Class="lagerhotell-header-info">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
+                            <MudText Style="color: white; font-weight: 400; font-size: 18.5px;" Typo="Typo.body1">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
                             <MudButton ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Variant="Variant.Outlined" Color="MudBlazor.Color.Inherit" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 12px; color:white;">Vis på kart</MudButton>
                         </MudPaper>
                     </MudItem>
