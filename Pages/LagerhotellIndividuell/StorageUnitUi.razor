@@ -3,8 +3,10 @@
 <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
     <MudPaper Style="padding: 2%; padding-top: 8px;" Class="d-flex align-center justify-center mud-width-full">
         <MudGrid Style="width:100%; margin: 0;">
-            <MudItem Style="display: flex; justify-content: center; flex-direction: column; padding-top: 0;" xs="4" sm="4" md="4" lg="4" xl="4" xxl="4">
-                <MudText Typo="Typo.h6">@Size.Area M2</MudText>
+            <MudItem Style="display: flex; justify-content: center; flex-direction: column; padding-top: 9px;" xs="4" sm="4" md="4" lg="4" xl="4" xxl="4">
+                <MudTooltip Text="Secondary" Color="Color.Secondary" Placement="Placement.Top">
+                <MudText Typo="Typo.h6" Style="text-align: center;">@Size.Area M2 <MudIcon Style="font-size: 18px;" Icon="@Icons.Material.Filled.Info"></MudIcon></MudText>
+                </MudTooltip>
                 @if (Size.Temperated)
                 {
                     <MudText Style="font-weight: 650;" Typo="Typo.body1">Temperert</MudText>
@@ -12,13 +14,11 @@
                 {
                     <MudText Style="font-weight: 650; white-space: nowrap;" Typo="Typo.body1"><span style="text-decoration: underline;">Ikke</span> temperert</MudText>
                 }
+                <MudText Style="" Typo="Typo.body2">Total volum: @Size.Volume</MudText>
             </MudItem>
             <MudItem Style="display: flex; flex-direction: column; justify-content: center; align-content: center; flex-wrap: wrap; padding-top: 0;" xs="8" sm="8" md="8" lg="8" xl="8" xxl="8">
                 <MudText Typo="Typo.body2"><span style="font-size: 28px; font-weight:500;">@($"{Size.Price.Amount}")kr</span> mnd</MudText>
                 <MudButton Color="Color.Primary" Variant="Variant.Filled">Bestill nå</MudButton>
-            </MudItem>
-            <MudItem Style="padding: 0; display: flex; flex-wrap: wrap; justify-content: center;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-                <MudText Typo="Typo.body2" Style="text-decoration:underline;">Info om størrelsen <MudIcon Style="font-size: 14px;" Icon="@Icons.Material.Filled.ArrowDownward"></MudIcon></MudText>
             </MudItem>
         </MudGrid>
            
