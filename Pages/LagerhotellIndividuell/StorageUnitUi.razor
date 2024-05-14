@@ -14,7 +14,7 @@
                 {
                     <MudText Style="font-weight: 650; white-space: nowrap;" Typo="Typo.body1"><span style="text-decoration: underline;">Ikke</span> temperert</MudText>
                 }
-                <MudText Style="" Typo="Typo.body2">Total volum: @Size.Volume</MudText>
+                <MudText Style="" Typo="Typo.body2">Total volum: @($"{Size.Volume}M3")</MudText>
             </MudItem>
             <MudItem Style="display: flex; flex-direction: column; justify-content: center; align-content: center; flex-wrap: wrap; padding-top: 0;" xs="8" sm="8" md="8" lg="8" xl="8" xxl="8">
                 <MudText Typo="Typo.body2"><span style="font-size: 28px; font-weight:500;">@($"{Size.Price.Amount}")kr</span> mnd</MudText>
