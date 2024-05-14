@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager _navigationManager
+@implements IBrowserViewportObserver
+@implements IAsyncDisposable
 
 
 <MudThemeProvider />
@@ -48,14 +50,27 @@
     <MudAppBar Elevation="1">
         <MudContainer Style="max-width: 1100px; padding-right: 0;">
             <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
-                <MudGrid>
-                    <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
+                @if (_currentBreakpoint.ToString() != "Xs" && _currentBreakpoint.ToString() != "Sm")
+                {
+                    <MudGrid Style="padding-left: 12px; padding-right: 12px; ">
+                        <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
                     <MudSpacer />
                     <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
                     <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
                         <Lagerhotell.Pages.SideBar.LocationsSideBar />
                     </MudDrawer>
-                </MudGrid>
+                    </MudGrid>
+                } else
+                {
+                    <MudGrid>
+                        <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
+                        <MudSpacer />
+                        <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
+                        <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+                            <Lagerhotell.Pages.SideBar.LocationsSideBar />
+                        </MudDrawer>
+                    </MudGrid>
+                }
             </MudContainer>
         </MudContainer>
     </MudAppBar>
@@ -75,6 +90,9 @@
     bool _drawerOpen = true;
     bool rightSideBarOpen;
     Anchor anchor;
+    private Breakpoint _currentBreakpoint;
+    [Inject]
+    private IBrowserViewportService browserViewportService { get; set; }
 
     void DrawerToggle()
     {
@@ -91,5 +109,40 @@
     void RedirectToHome()
     {
         _navigationManager.NavigateTo("/");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await browserViewportService.SubscribeAsync(this, fireImmediately: true);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public async ValueTask DisposeAsync() => await browserViewportService.UnsubscribeAsync(this);
+
+    Guid IBrowserViewportObserver.Id { get; } = Guid.NewGuid();
+
+    ResizeOptions IBrowserViewportObserver.ResizeOptions { get; } = new()
+        {
+            ReportRate = 250,
+            NotifyOnBreakpointOnly = true
+        };
+
+    Task IBrowserViewportObserver.NotifyBrowserViewportChangeAsync(BrowserViewportEventArgs browserViewportEventArgs)
+    {
+        if (browserViewportEventArgs.IsImmediate)
+        {
+            _currentBreakpoint = browserViewportEventArgs.Breakpoint;
+        }
+        else
+        {
+            _currentBreakpoint = browserViewportEventArgs.Breakpoint;
+            Console.WriteLine(_currentBreakpoint.ToString());
+        }
+
+        return InvokeAsync(StateHasChanged);
     }
 }
