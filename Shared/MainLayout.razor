@@ -48,29 +48,23 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-            <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
-                @if (_currentBreakpoint.ToString() != "Xs" && _currentBreakpoint.ToString() != "Sm")
-                {
-                <MudGrid Style="margin: 0 !important; width: 100% !important;">
-                        <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
-                    <MudSpacer />
-                    <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
-                    <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
-                        <Lagerhotell.Pages.SideBar.LocationsSideBar />
-                    </MudDrawer>
-                    </MudGrid>
-                } else
-                {
-                    <MudGrid Style="margin: 0 !important; width: 100% !important;">
-                        <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
-                        <MudSpacer />
-                        <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
-                        <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
-                            <Lagerhotell.Pages.SideBar.LocationsSideBar />
-                        </MudDrawer>
-                    </MudGrid>
-                }
-            </MudContainer>
+        <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
+            <MudGrid Style="margin: 0 !important; width: 100% !important;">
+                <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
+                <MudSpacer />
+                <AuthorizeView Roles="Administrator">
+                    <Authorized>
+                        <MudButton Href="/admin" Color="Color.Inherit" Variant="Variant.Text">ADMIN</MudButton>
+                    </Authorized>
+                    <NotAuthorized></NotAuthorized>
+                </AuthorizeView>
+                <MudSpacer />
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
+                <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+                    <Lagerhotell.Pages.SideBar.LocationsSideBar />
+                </MudDrawer>
+            </MudGrid>
+        </MudContainer>
     </MudAppBar>
     <MudMainContent Style="margin-bottom: 126px; min-height: 100vh;">
         @Body
