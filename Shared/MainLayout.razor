@@ -49,8 +49,15 @@
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
-            <MudGrid Style="margin: 0 !important; width: 100% !important;">
+            <MudGrid Style="margin: 0 !important; width: 100% !important; color: white;">
                 <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
+                @*Add link to settings/profile*@
+                <AuthorizeView>
+                    <NotAuthorized>
+                <MudButton Style="margin-left: 8px;" Href="/logg-inn" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
+                <MudButton Color="Color.Inherit" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
+                    </NotAuthorized>
+                </AuthorizeView>
                 <MudSpacer />
                 <AuthorizeView Roles="Administrator">
                     <Authorized>
@@ -58,7 +65,6 @@
                     </Authorized>
                     <NotAuthorized></NotAuthorized>
                 </AuthorizeView>
-                <MudSpacer />
                 <MudButton Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
                 <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
                     <Lagerhotell.Pages.SideBar.LocationsSideBar />
@@ -66,7 +72,7 @@
             </MudGrid>
         </MudContainer>
     </MudAppBar>
-    <MudMainContent Style="margin-bottom: 126px; min-height: 100vh;">
+    <MudMainContent Style="margin-bottom: 126px; min-height: 100vh; display: flex; justify-content: center;">
         @Body
     </MudMainContent>
     <FooterI></FooterI>
