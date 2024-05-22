@@ -1,7 +1,15 @@
 ﻿@inject NavigationManager _navigationManager
+@inject AuthStateProviderService _authStateProviderService
+@inject UserService _userService
+
+<style>
+    .clickable:hover {
+        cursor: pointer;
+    }
+</style>
 
 <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
-    <MudGrid Style="margin: 0 !important; width: 100% !important; color: white;">
+    <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
         <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
         <MudButton Color="Color.Inherit" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
         @*Add link to settings/profile*@
@@ -9,9 +17,12 @@
         <AuthorizeView>
             <NotAuthorized>
                 <MudButton Style="margin-left: 8px;" Href="/logg-inn" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
-                <MudButton Color="Color.Inherit" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
+                <MudButton Color="Color.Error" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
             </NotAuthorized>
             <Authorized>
+                <MudAvatar @onclick="NavigateToUserSettings" class="clickable" Style="background-color: transparent; border: transparent;" Variant="Variant.Outlined" Color="Color.Inherit">
+                    <MudIcon Style="color: white;" Icon="@Icons.Material.Filled.Person"></MudIcon>
+                </MudAvatar>
             </Authorized>
         </AuthorizeView>
         <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
@@ -33,6 +44,25 @@
         rightSideBarOpen = true;
         this.anchor = anchor;
         StateHasChanged();
+    }
+
+    private async Task NavigateToUserSettings()
+    {
+        try
+        {
+            string phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
+            User user = await _userService.GetUserByPhoneNumber(phoneNumber);
+            _navigationManager.NavigateTo($"/user/{user.Id}");
+        }
+        catch (KeyNotFoundException)
+        {
+            Console.WriteLine("User phone number not found");
+            Snackbar.Add("En feil oppstod", MudBlazor.Severity.Error);
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("En feil oppstod", MudBlazor.Severity.Error);
+        }
     }
 
 }
