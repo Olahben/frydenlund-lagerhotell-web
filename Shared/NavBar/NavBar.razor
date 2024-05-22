@@ -17,7 +17,7 @@
         <AuthorizeView>
             <NotAuthorized>
                 <MudButton Style="margin-left: 8px;" Href="/logg-inn" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
-                <MudButton Color="Color.Error" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
+                <MudButton Style="color: white;" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
             </NotAuthorized>
             <Authorized>
                 <MudAvatar @onclick="NavigateToUserSettings" class="clickable" Style="background-color: transparent; border: transparent;" Variant="Variant.Outlined" Color="Color.Inherit">
