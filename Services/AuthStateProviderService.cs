@@ -31,6 +31,13 @@ public class AuthStateProviderService : AuthenticationStateProvider
         return claims;
     }
 
+    private async Task<string> ExtractUserPhoneNumber(string jwt)
+    {
+        var claims = Parse(jwt);
+        var phoneNumber = claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value;
+        return phoneNumber;
+    }
+
     private byte[] ParseBase64WithoutPadding(string base64)
     {
         switch (base64.Length % 4)
@@ -77,5 +84,16 @@ public class AuthStateProviderService : AuthenticationStateProvider
         NotifyAuthenticationStateChanged(Task.FromResult(state));
 
         return state;
+    }
+
+    public async Task<string> GetCurrentUserPhoneNumber()
+    {
+        string token = await _sessionService.GetJwtFromLocalStorage();
+        string? phoneNumber = await ExtractUserPhoneNumber(token);
+        if (phoneNumber == null)
+        {
+            throw new KeyNotFoundException("Could not extract phone number from token");
+        }
+        return phoneNumber;
     }
 }
