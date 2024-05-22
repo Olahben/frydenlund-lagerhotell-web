@@ -1,0 +1,38 @@
+﻿@inject NavigationManager _navigationManager
+
+<MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
+    <MudGrid Style="margin: 0 !important; width: 100% !important; color: white;">
+        <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
+        <MudButton Color="Color.Inherit" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
+        @*Add link to settings/profile*@
+        <MudSpacer />
+        <AuthorizeView>
+            <NotAuthorized>
+                <MudButton Style="margin-left: 8px;" Href="/logg-inn" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
+                <MudButton Color="Color.Inherit" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
+            </NotAuthorized>
+            <Authorized>
+            </Authorized>
+        </AuthorizeView>
+        <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+            <Lagerhotell.Pages.SideBar.LocationsSideBar />
+        </MudDrawer>
+    </MudGrid>
+</MudContainer>
+@code {
+    bool rightSideBarOpen;
+    Anchor anchor;
+
+    void RedirectToHome()
+    {
+        _navigationManager.NavigateTo("/");
+    }
+
+    void OpenRightDrawer(Anchor anchor)
+    {
+        rightSideBarOpen = true;
+        this.anchor = anchor;
+        StateHasChanged();
+    }
+
+}
