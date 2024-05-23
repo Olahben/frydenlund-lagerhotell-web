@@ -50,6 +50,7 @@
             string storageUnitId = await _storageUnitService.AddStorageUnit(storageUnitToAdd, LinkedWarehouseHotelName, token);
             Snackbar.Add($"Lagerenheten ble lagt til med følgende Id: {storageUnitId}", MudBlazor.Severity.Success);
             MudDialog.Close(DialogResult.Ok(true));
+            StateHasChanged();
         }
         catch (BadRequestException ex)
         {

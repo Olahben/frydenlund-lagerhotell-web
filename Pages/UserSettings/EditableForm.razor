@@ -1,0 +1,153 @@
+﻿<!--</><EditForm Model="@_userValues" OnValidSubmit="SaveUserValues" @ref="editForm">
+    <MudExpansionPanels MultiExpansion="true">
+        <MudExpansionPanel Text="Generelt">
+            <DataAnnotationsValidator />
+            <MudTextField Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Variant="Variant.Outlined"
+                            FullWidth />
+             <MudDivider Class="my-4" />
+             <MudTextField Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Variant="Variant.Outlined"
+                            FullWidth />
+             <MudDivider Class="my-4" />
+             <MudTextField @bind-Value="_userValues.Password" For="@(() => _userValues.Password)" Label="Password" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+         </MudExpansionPanel>
+
+
+         <MudExpansionPanel Text="Bosted, Addresser">
+             <DataAnnotationsValidator />
+             <MudTextField Label="Adresse" @bind-Value="@_userValues.Address" For="@(() => _userValues.Address)" Variant="Variant.Outlined"
+                            FullWidth />
+             <MudDivider Class="my-4" />
+             <MudTextField Label="Postnummer" @bind-Value="@_userValues.PostalCode" For="@(() => _userValues.PostalCode)" Variant="Variant.Outlined"
+                            FullWidth />
+             <MudDivider Class="my-4" />
+             <MudTextField Label="By, Poststed" @bind-Value="@_userValues.City" For="@(() => _userValues.City)" Variant="Variant.Outlined"
+                            FullWidth />
+         </MudExpansionPanel>
+     </MudExpansionPanels>
+     <div style="height: 8px"></div>
+     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+ </EditForm> --->
+
+
+@inject HttpClient Http
+@inject SessionService sessionService
+@inject ISnackbar snackBar
+
+ @code {
+    /* private static readonly HttpClient client = new HttpClient();
+    [Parameter] public string UserId { get; set; }
+    private UserServiceUserSettings _userServiceUserSettings = new();
+    private EditForm editForm;
+    private UserValues _userValues = new();
+    private bool _editMode = false;
+    private bool _showPassword = false;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    bool isShow;
+
+    public class UserValues
+    {
+        [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
+        [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Ett etternavn er obligatorisk")]
+        [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
+        public string LastName { get; set; }
+
+        [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
+        [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
+        [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
+        [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
+        public string BirthDate { get; set; }
+
+        [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
+        [Required(ErrorMessage = "Ett passord er obligatorisk")]
+        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Du må repetere passordet ditt")]
+        [Compare(nameof(Password), ErrorMessage = "Passordene samstemmer ikke")]
+        public string PasswordRepeat { get; set; }
+
+        [StringLength(112, ErrorMessage = "Addressen din kan være 2-112 bokstaver/tall lang")]
+        [Required(ErrorMessage = "En addresse er obligatorisk")]
+        [UserServiceSignup.ContainsNumbersAndLetters(ErrorMessage = "Dette feltet må inneholde bokstaver og tall")]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Dette feltet er obligatorisk")]
+        [StringLength(4, ErrorMessage = "Dette må inneholde fire siffer", MinimumLength = 4)]
+        public string PostalCode { get; set; }
+
+        [Required(ErrorMessage = "Dette feltet er obligatorisk")]
+        [StringLength(140, ErrorMessage = "Dette feltet må være 2-140 bokstaver langt")]
+        [UserServiceSignup.ContainsOnlyLetters(ErrorMessage = "Dette feltet kan bare inneholde bokstaver")]
+        public string City { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            string token = await sessionService.GetJwtFromLocalStorage();
+            var user = await _userServiceUserSettings.LoadUser(client, _userValues, UserId, token);
+                      // Console.WriteLine(user.LastName);
+            if (user != null)
+            {
+                _userValues.FirstName = user.FirstName;
+                _userValues.LastName = user.LastName;
+                _userValues.PhoneNumber = user.PhoneNumber;
+                _userValues.BirthDate = user.BirthDate;
+                _userValues.Address = user.Address;
+                _userValues.PostalCode = user.PostalCode;
+                _userValues.City = user.City;
+                _userValues.Password = user.Password;
+                snackBar.Add("Vellykket innlogging!", Severity.Success);
+            }
+            else
+            {
+                snackBar.Add("Kunne ikke laste inn brukeren", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            snackBar.Add("Kunne ikke laste inn brukeren", Severity.Error);
+        }
+        StateHasChanged();
+    }
+
+
+    public void ToggleEditMode()
+    {
+        _editMode = !_editMode;
+        StateHasChanged();
+    }
+
+
+    public async Task? SaveUserValues()
+    {
+        ToggleEditMode();
+        StateHasChanged();
+        Console.WriteLine("Saving user values");
+        // Save user changes if any
+    }
+
+    void ButtonTestclick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    } */
+}

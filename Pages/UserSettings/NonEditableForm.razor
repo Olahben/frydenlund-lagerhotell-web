@@ -1,0 +1,89 @@
+﻿<MudExpansionPanels MultiExpansion="true">
+    <MudExpansionPanel Text="Generelt">
+        <MudText Typo="Typo.subtitle2">Mobilnummer</MudText>
+        <MudText>@_userValues.PhoneNumber</MudText>
+            <MudDivider Class="my-4" />
+            <MudText Typo="Typo.subtitle2">Fødselsdato</MudText>
+            <MudText>@_userValues.BirthDate</MudText>
+            <MudDivider Class="my-4" />
+            <MudText Typo="Typo.subtitle2">Passord</MudText>
+            <MudTextField @bind-Value="_userValues.Password" ReadOnly="true" Label="Password" Variant="Variant.Text" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password" />
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Bosted, Addresser">
+            <MudText Typo="Typo.subtitle2">Addresse</MudText>
+            <MudText>@_userValues.Address</MudText>
+            <MudDivider Class="my-4" />
+            <MudText Typo="Typo.subtitle2">Postnummer</MudText>
+            <MudText>@_userValues.PostalCode</MudText>
+            <MudDivider Class="my-4" />
+            <MudText Typo="Typo.subtitle2">By, Poststed</MudText>
+            <MudText>@_userValues.City</MudText>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+
+    @code {
+    private UserValues _userValues = new();
+    private bool _showPassword = false;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    bool isShow;
+
+    public class UserValues
+    {
+        [Required(ErrorMessage = "Ett fornavn er obligatorisk")]
+        [StringLength(36, ErrorMessage = "Maks 36 bokstaver, minimum 2", MinimumLength = 2)]
+        public string? FirstName { get; set; }
+
+        [Required(ErrorMessage = "Ett etternavn er obligatorisk")]
+        [StringLength(112, ErrorMessage = "Maks 112 bokstaver, minimum 2", MinimumLength = 2)]
+        public string LastName { get; set; } = string.Empty;
+
+        [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
+        [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
+        [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
+        [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]
+        public string BirthDate { get; set; } = string.Empty;
+
+        [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
+        [Required(ErrorMessage = "Ett passord er obligatorisk")]
+        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
+        public string Password { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Du må repetere passordet ditt")]
+        [Compare(nameof(Password), ErrorMessage = "Passordene samstemmer ikke")]
+        public string PasswordRepeat { get; set; } = string.Empty;
+
+        [StringLength(112, ErrorMessage = "Addressen din kan være 2-112 bokstaver/tall lang")]
+        [Required(ErrorMessage = "En addresse er obligatorisk")]
+        [UserServiceSignup.ContainsNumbersAndLetters(ErrorMessage = "Dette feltet må inneholde bokstaver og tall")]
+        public string Address { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Dette feltet er obligatorisk")]
+        [StringLength(4, ErrorMessage = "Dette må inneholde fire siffer", MinimumLength = 4)]
+        public string PostalCode { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Dette feltet er obligatorisk")]
+        [StringLength(140, ErrorMessage = "Dette feltet må være 2-140 bokstaver langt")]
+        [UserServiceSignup.ContainsOnlyLetters(ErrorMessage = "Dette feltet kan bare inneholde bokstaver")]
+        public string City { get; set; } = string.Empty;
+    }
+
+    void ButtonTestclick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}

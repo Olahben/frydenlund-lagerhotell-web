@@ -36,9 +36,10 @@
                     {
                         string url = "/Lagerhotell/" + warehouseHotel.Name;
                         <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href=@url><div class="lagerhotell-link-text">@warehouseHotel.Name </div></MudNavLink>
-                    } else
+                    }
+                    else
                     {
-                        Console.WriteLine($"No warehouse hotels found for this location, {warehouseHotel.LocationName} does not match {location.Name}");
+                        // Console.WriteLine($"No warehouse hotels found for this location, {warehouseHotel.LocationName} does not match {location.Name}");
                     }
                 }
                 <AuthorizeView Roles="Administrator">
@@ -89,7 +90,20 @@
 
     private async Task GetAllLocations()
     {
-        locations = await _locationService.GetAllLocations();
+        try
+        {
+            locations = await _locationService.GetAllLocations();
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            Snackbar.Add("Økten din har utløpt, vær så snill og logg inn på nytt", MudBlazor.Severity.Error);
+            Console.WriteLine(e);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
+            Console.WriteLine(e);
+        }
     }
 
     private async Task GetAllWarehouseHotels()
