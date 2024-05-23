@@ -1,4 +1,4 @@
-﻿namespace Lagerhotell.wwwroot.Lib;
+﻿namespace Lagerhotell.Lib;
 
 public enum StorageUnitInfoTexts
 {
