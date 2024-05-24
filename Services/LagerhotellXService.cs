@@ -56,38 +56,60 @@ public class LagerhotellXService
 
 
     /// <summary>
-    /// Returns a list of the unique area sizes of the provided list of storage units
+    /// Returns a list of "StorageUnitSize" objects, which contains the unique storage unit sizes, separated by size and if they are temperated or not
+    /// if there is no available storage uniits for the size, that will be displayed on the frontend
     /// </summary>
     /// <param name="storageUnits"></param>
     /// <returns></returns>
     public async Task<List<StorageUnitSize>> GetUniqueStorageUnitAreas(List<StorageUnit> storageUnits)
     {
         List<StorageUnitSize> storageUnitSizes = new();
+
         foreach (var storageUnit in storageUnits)
         {
-            if (!storageUnitSizes.Any(storageUnitSize => storageUnitSize.Area == storageUnit.Dimensions.Area))
+            StorageUnitSize newSize = new();
+            if (!storageUnit.Occupied)
             {
-                storageUnitSizes.Add(new StorageUnitSize
+                newSize = new StorageUnitSize
                 {
                     Area = storageUnit.Dimensions.Area,
                     Volume = storageUnit.Dimensions.Volume,
                     Price = storageUnit.PricePerMonth,
-                    Temperated = storageUnit.Temperated
-                });
+                    Temperated = storageUnit.Temperated,
+                    storageUnitIds = new List<string> { storageUnit.StorageUnitId }
+                };
             }
-            else if (storageUnitSizes.Any(storageUnitSize => storageUnitSize.Area == storageUnit.Dimensions.Area && storageUnitSize.Temperated != storageUnit.Temperated))
+            else
             {
-                storageUnitSizes.Add(new StorageUnitSize
+                newSize = new StorageUnitSize
                 {
                     Area = storageUnit.Dimensions.Area,
                     Volume = storageUnit.Dimensions.Volume,
                     Price = storageUnit.PricePerMonth,
-                    Temperated = storageUnit.Temperated
-                });
+                    Temperated = storageUnit.Temperated,
+                    storageUnitIds = new List<string> { }
+                };
+                storageUnit.StorageUnitId = null;
             }
+
+            if (!storageUnitSizes.Any(storageUnitSizes => storageUnitSizes.Area == newSize.Area))
+            {
+                storageUnitSizes.Add(newSize);
+            }
+            else if (storageUnitSizes.Any(storageUnitSizes => storageUnitSizes.Area == newSize.Area && storageUnitSizes.Temperated != newSize.Temperated))
+            {
+                storageUnitSizes.Add(newSize);
+            }
+            else if (storageUnitSizes.Any(storageUnitSizes => storageUnitSizes.Area == newSize.Area))
+            {
+                if (storageUnit.StorageUnitId != null)
+                {
+                    storageUnitSizes.First(storageUnitSize => storageUnitSize.Area == newSize.Area).storageUnitIds.Add(storageUnit.StorageUnitId);
+                }
+            }
+
         }
 
-        storageUnitSizes.Sort((x, y) => x.Area.Value.CompareTo(y.Area.Value));
         return storageUnitSizes;
     }
 }

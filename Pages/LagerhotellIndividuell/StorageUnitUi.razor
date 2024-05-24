@@ -18,7 +18,14 @@
             </MudItem>
             <MudItem Style="display: flex; flex-direction: column; justify-content: center; align-content: center; flex-wrap: wrap; padding-top: 0;" xs="8" sm="8" md="8" lg="8" xl="8" xxl="8">
                 <MudText Typo="Typo.body2"><span style="font-size: 28px; font-weight:500;">@($"{Size.Price.Amount}")kr</span> mnd</MudText>
-                <MudButton Color="Color.Primary" Variant="Variant.Filled">Bestill nå</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled">@if (Size.storageUnitIds.Count > 0)
+                    {
+                        <a style="color: white;" href="/bestill/@Size.storageUnitIds[0]">Bestill Nå</a>
+                    } else
+                    {
+                        <span>Midlertidig utsolgt</span>
+                    }
+                </MudButton>
             </MudItem>
             <MudLink OnClick="toggleDetails" Style="display: flex; align-items: center; color: black; width: 100%; justify-content: center;" Color="Color.Dark" Underline="Underline.Always">Se detaljer <MudIcon Icon="@Icons.Material.Filled.ArrowDownward"></MudIcon></MudLink>
             <MudContainer hidden="@(hideDetails)" Style="padding: 8px;">
