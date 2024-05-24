@@ -20,12 +20,45 @@
                 <MudText Typo="Typo.body2"><span style="font-size: 28px; font-weight:500;">@($"{Size.Price.Amount}")kr</span> mnd</MudText>
                 <MudButton Color="Color.Primary" Variant="Variant.Filled">Bestill nå</MudButton>
             </MudItem>
+            <MudLink OnClick="toggleDetails" Style="display: flex; align-items: center; color: black;" Color="Color.Dark" Underline="Underline.Always">Se detaljer <MudIcon Icon="@Icons.Material.Filled.ArrowDownward"></MudIcon></MudLink>
+            <MudContainer hidden="@(hideDetails)" Style="padding: 8px;">
+                <MudDivider></MudDivider>
+                <MudText Typo="Typo.body1" Style="margin-top: 6px; text-align: center;">@SizeDescription
+                </MudText>
+            </MudContainer>
         </MudGrid>
            
         </MudPaper>
     </MudItem>
 
-    @code {
+@code {
     [Parameter]
     public StorageUnitSize Size { get; set; }
+    public string SizeDescription { get; set; }
+    private bool hideDetails = true;
+
+    private void toggleDetails()
+    {
+        hideDetails = !hideDetails;
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (Size.Area <= 3)
+        {
+            SizeDescription = StorageUnitStaticData.StorageUnitSizeDescriptions[StorageUnitStaticData.StorageUnitInfoTexts.XSmall];
+        } else if (Size.Area > 3 && Size.Area <= 8)
+        {
+            SizeDescription = StorageUnitStaticData.StorageUnitSizeDescriptions[StorageUnitStaticData.StorageUnitInfoTexts.Small];
+        } else if (Size.Area > 8 && Size.Area <= 12)
+        {
+            SizeDescription = StorageUnitStaticData.StorageUnitSizeDescriptions[StorageUnitStaticData.StorageUnitInfoTexts.Medium];
+        } else if (Size.Area > 12 && Size.Area <= 18)
+        {
+            SizeDescription = StorageUnitStaticData.StorageUnitSizeDescriptions[StorageUnitStaticData.StorageUnitInfoTexts.Large];
+        } else if (Size.Area > 18)
+        {
+            SizeDescription = StorageUnitStaticData.StorageUnitSizeDescriptions[StorageUnitStaticData.StorageUnitInfoTexts.XLarge];
+        }
+    }
 }
