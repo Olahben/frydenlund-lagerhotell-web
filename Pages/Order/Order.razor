@@ -1,0 +1,12 @@
+﻿@page "/bestill/{storageUnitId}"
+<MudContainer Style="max-width: 740px;">
+    <MudGrid>
+    <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
+    @*Components go here*@
+    </MudGrid>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string storageUnitId { get; set; }
+}
