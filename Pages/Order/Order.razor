@@ -1,12 +1,35 @@
 ﻿@page "/bestill/{storageUnitId}"
+
+@inject StorageUnitService _storageUnitService
+@inject NavigationManager _navigationManager
+@inject SessionService _sessionService
+
 <MudContainer Style="max-width: 740px;">
     <MudGrid>
     <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
-    @*Components go here*@
+    <Overview />
     </MudGrid>
 </MudContainer>
 
 @code {
     [Parameter]
     public string storageUnitId { get; set; }
+    string userAccessToken;
+    StorageUnit relevantStorageUnit = new StorageUnit();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            userAccessToken = await _sessionService.GetJwtFromLocalStorage();
+            relevantStorageUnit = await _storageUnitService.GetStorageUnit(storageUnitId, userAccessToken);
+            Console.WriteLine(relevantStorageUnit.Name);
+        } catch (KeyNotFoundException e)
+        {
+            Console.WriteLine($"{e}");
+        } catch (Exception e)
+        {
+            Console.WriteLine($"{e}");
+        }
+    }
 }
