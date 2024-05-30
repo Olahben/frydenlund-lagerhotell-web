@@ -4,14 +4,16 @@
 @inject NavigationManager _navigationManager
 @inject SessionService _sessionService
 
-<MudContainer Style="max-width: 740px;">
-    <MudGrid>
-    <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
-    <Overview />
+<MudContainer Style="max-width: 740px; padding: 16px;">
+    <MudGrid Justify="Justify.Center" Style="">
+        <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
+        <Overview />
     </MudGrid>
 </MudContainer>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
     [Parameter]
     public string storageUnitId { get; set; }
     string userAccessToken;
@@ -21,13 +23,30 @@
     {
         try
         {
-            userAccessToken = await _sessionService.GetJwtFromLocalStorage();
+            var authState = await authenticationStateTask;
+            var user = authState.User;
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userAccessToken = await _sessionService.GetJwtFromLocalStorage();
+            }
+            else
+            {
+                Snackbar.Add("Du må være logget inn for å bestille", MudBlazor.Severity.Warning, config =>
+                {
+                    config.Action = "Logg inn";
+                    config.ActionColor = Color.Primary;
+                    config.CloseAfterNavigation = true;
+                    config.Onclick = (Snackbar) => Task.Run(() => _navigationManager.NavigateTo("/logg-inn"));
+                });
+            }
             relevantStorageUnit = await _storageUnitService.GetStorageUnit(storageUnitId, userAccessToken);
             Console.WriteLine(relevantStorageUnit.Name);
-        } catch (KeyNotFoundException e)
+        }
+        catch (KeyNotFoundException e)
         {
             Console.WriteLine($"{e}");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Console.WriteLine($"{e}");
         }
