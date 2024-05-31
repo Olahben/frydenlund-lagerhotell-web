@@ -2,7 +2,7 @@
     <MudPaper Square="true" Style="width: 100%; padding: 16px;">
         <MudText Typo="Typo.h6">Forsikring</MudText>
         <MudText Typo="Typo.body1">Lever inn dokumentasjon til oss hvis du allerede har dekkende forsikring. Hvis dokumentasjonen er gyldig vil du bli refundert beløpet du har betalt for forsikringen.</MudText>
-        <MudForm Model="@relevantOrder">
+        <MudForm Model="@RelevantOrder">
             <MudSelect @bind-Value="insurancePicked">
                 <MudSelectItem Value="@("Opptil 50000Kr")" />
                 <MudSelectItem Value="@("Opptil 100000Kr")" />
@@ -30,15 +30,15 @@
     {
         if (value == "Opptil 50000Kr")
         {
-            relevantOrder.Insurance = OrderInsurance.FiftyThousand;
+            RelevantOrder.Insurance = OrderInsurance.FiftyThousand;
         }
         else if (value == "Opptil 100000Kr")
         {
-            relevantOrder.Insurance = OrderInsurance.OneHundredThousand;
+            RelevantOrder.Insurance = OrderInsurance.OneHundredThousand;
         }
         else if (value == "Opptil 200000Kr")
         {
-            relevantOrder.Insurance = OrderInsurance.TwoHundredThousand;
+            RelevantOrder.Insurance = OrderInsurance.TwoHundredThousand;
         }
     }
 }
