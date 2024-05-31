@@ -9,18 +9,18 @@
                     <MudGrid Justify="Justify.SpaceBetween">
                         <MudItem sm="6"><MudText>Grunnflate:</MudText></MudItem>
                         <MudItem sm="6">
-                            <MudText Typo="Typo.body1" Style="font-weight: 950">@(relevantStorageUnit.Dimensions != null ? relevantStorageUnit.Dimensions.Area : 0)M2</MudText>
+                            <MudText Typo="Typo.body1" Style="font-weight: 950">@(RelevantStorageUnit.Dimensions != null ? RelevantStorageUnit.Dimensions.Area : 0)M2</MudText>
                         </MudItem>
                     </MudGrid>
                     <MudDivider Style="margin-top: 8px; margin-bottom: 8px;" />
                     <MudGrid Justify="Justify.SpaceBetween">
                         <MudItem sm="6"><MudText>Volum:</MudText></MudItem>
-                        <MudItem sm="6"><MudText Style="font-weight: 950">@(relevantStorageUnit.Dimensions != null ? relevantStorageUnit.Dimensions.Volume : 0)M3</MudText></MudItem>
+                        <MudItem sm="6"><MudText Style="font-weight: 950">@(RelevantStorageUnit.Dimensions != null ? RelevantStorageUnit.Dimensions.Volume : 0)M3</MudText></MudItem>
                     </MudGrid>
                     <MudDivider Style="margin-top: 8px; margin-bottom: 8px;" />
                     <MudGrid Justify="Justify.SpaceBetween">
                         <MudItem sm="6"><MudText>Temperert:</MudText></MudItem>
-                        @if (relevantStorageUnit.Temperated)
+                        @if (RelevantStorageUnit.Temperated)
                         {
                             <MudItem sm="6"><MudText Style="font-weight: 950">Temperert</MudText></MudItem>
                         }
@@ -31,7 +31,7 @@
                     </MudGrid>
                 </span>
                 <MudSpacer />
-                <MudItem Style=""><MudText Color="Color.Primary" Style="font-weight:500; display: inline;" Typo="Typo.h4">@(relevantStorageUnit.PricePerMonth != null ? relevantStorageUnit.PricePerMonth.Amount : 0)<MudText Style="display: inline;" Typo="Typo.body1">kr/mnd</MudText></MudText></MudItem>
+                <MudItem Style=""><MudText Color="Color.Primary" Style="font-weight:500; display: inline;" Typo="Typo.h4">@(RelevantStorageUnit.PricePerMonth != null ? RelevantStorageUnit.PricePerMonth.Amount : 0)<MudText Style="display: inline;" Typo="Typo.body1">kr/mnd</MudText></MudText></MudItem>
             </MudItem>
         </MudGrid>
     </MudPaper>
