@@ -1,0 +1,44 @@
+﻿<MudItem xs="12">
+    <MudPaper Square="true" Style="width: 100%; padding: 16px;">
+        <MudText Typo="Typo.h6">Forsikring</MudText>
+        <MudText Typo="Typo.body1">Lever inn dokumentasjon til oss hvis du allerede har dekkende forsikring. Hvis dokumentasjonen er gyldig vil du bli refundert beløpet du har betalt for forsikringen.</MudText>
+        <MudForm Model="@relevantOrder">
+            <MudSelect @bind-Value="insurancePicked">
+                <MudSelectItem Value="@("Opptil 50000Kr")" />
+                <MudSelectItem Value="@("Opptil 100000Kr")" />
+                <MudSelectItem Value="@("Opptil 200000Kr")" />
+            </MudSelect>`
+        </MudForm>
+    </MudPaper>
+</MudItem>
+
+@code {
+    [Parameter]
+    public LagerhotellAPI.Models.DomainModels.Order relevantOrder { get; set; } = new();
+    private readonly OrderValidator _orderValidator = new OrderValidator();
+    public string InsurancePicked { get; set; }
+    private string insurancePicked
+    {
+        get { return InsurancePicked; } set
+        {
+            InsurancePicked = value;
+            UpdateInsurance(value);
+        }
+    }
+
+    private void UpdateInsurance(string value)
+    {
+        if (value == "Opptil 50000Kr")
+        {
+            relevantOrder.Insurance = OrderInsurance.FiftyThousand;
+        }
+        else if (value == "Opptil 100000Kr")
+        {
+            relevantOrder.Insurance = OrderInsurance.OneHundredThousand;
+        }
+        else if (value == "Opptil 200000Kr")
+        {
+            relevantOrder.Insurance = OrderInsurance.TwoHundredThousand;
+        }
+    }
+}
