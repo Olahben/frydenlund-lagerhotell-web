@@ -8,6 +8,7 @@
     <MudGrid Justify="Justify.Center" Style="">
         <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
         <Overview relevantStorageUnit=@relevantStorageUnit />
+        <MovingInDate relevantOrder=@currentOrder relevantStorageUnit=@relevantStorageUnit />
     </MudGrid>
 </MudContainer>
 
@@ -18,38 +19,46 @@
     public string storageUnitId { get; set; }
     string userAccessToken;
     StorageUnit relevantStorageUnit = new StorageUnit();
-    LagerhotellAPI.Models.DomainModels.Order currentOrder = new();
+    LagerhotellAPI.Models.DomainModels.Order currentOrder = new()
+    {
+        OrderPeriod = new OrderPeriod()
+        {
+            OrderDate = DateTime.Now
+        }
+
+    };
+    OrderValidator orderValidator = new();
 
     protected override async Task OnInitializedAsync()
     {
-        try
+    try
+    {
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+        if (authState.User.Identity.IsAuthenticated)
         {
-            var authState = await authenticationStateTask;
-            var user = authState.User;
-            if (authState.User.Identity.IsAuthenticated)
+            userAccessToken = await _sessionService.GetJwtFromLocalStorage();
+        }
+        else
+        {
+            Snackbar.Add("Du må være logget inn for å bestille", MudBlazor.Severity.Warning, config =>
             {
-                userAccessToken = await _sessionService.GetJwtFromLocalStorage();
-            }
-            else
-            {
-                Snackbar.Add("Du må være logget inn for å bestille", MudBlazor.Severity.Warning, config =>
-                {
-                    config.Action = "Logg inn";
-                    config.ActionColor = Color.Primary;
-                    config.CloseAfterNavigation = true;
-                    config.Onclick = (Snackbar) => Task.Run(() => _navigationManager.NavigateTo("/logg-inn"));
-                });
-            }
-            relevantStorageUnit = await _storageUnitService.GetStorageUnit(storageUnitId, userAccessToken);
-            Console.WriteLine(relevantStorageUnit.Name);
+                config.Action = "Logg inn";
+                config.ActionColor = Color.Primary;
+                config.CloseAfterNavigation = true;
+                config.Onclick = (Snackbar) => Task.Run(() => _navigationManager.NavigateTo("/logg-inn"));
+            });
         }
-        catch (KeyNotFoundException e)
-        {
-            Console.WriteLine($"{e}");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"{e}");
-        }
+        relevantStorageUnit = await _storageUnitService.GetStorageUnit(storageUnitId, userAccessToken);
+        Console.WriteLine(relevantStorageUnit.Name);
+    }
+    catch (KeyNotFoundException e)
+    {
+        Console.WriteLine($"{e}");
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"{e}");
+    }
     }
 }
