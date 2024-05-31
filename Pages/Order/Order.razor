@@ -7,9 +7,9 @@
 <MudContainer Style="max-width: 740px; padding: 16px;">
     <MudGrid Justify="Justify.Center" Style="">
         <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
-        <Overview relevantStorageUnit=@relevantStorageUnit />
-        <MovingInDate relevantOrder=@currentOrder />
-        <Insurance relevantOrder=@currentOrder />
+        <Overview RelevantStorageUnit=@relevantStorageUnit />
+        <MovingInDate RelevantOrder=@currentOrder />
+        <Insurance RelevantOrder=@currentOrder />
         <OrderConfirmation RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
     </MudGrid>
 </MudContainer>
@@ -18,7 +18,7 @@
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
     [Parameter]
-    public string storageUnitId { get; set; }
+    public string StorageUnitId { get; set; }
     string userAccessToken;
     StorageUnit relevantStorageUnit = new StorageUnit();
     LagerhotellAPI.Models.DomainModels.Order currentOrder = new()
