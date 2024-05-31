@@ -1,0 +1,43 @@
+﻿<MudItem xs="12">
+    <MudPaper Square="true" Style="width: 100%; padding: 16px;">
+        <MudGrid Justify="Justify.Center" Spacing="2">
+            <MudItem Style="padding-right: 0; padding-left: 0; width: 245px; display: flex; justify-content: center;">
+                <MudImage Height="310" Src="/Data/Bilder/image-placeholder.jpg"></MudImage>
+            </MudItem>
+            <MudItem Style="padding-left: 6px; padding-right: 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between">
+                <span>
+                    <MudGrid Justify="Justify.SpaceBetween">
+                        <MudItem sm="6"><MudText>Grunnflate:</MudText></MudItem>
+                        <MudItem sm="6">
+                            <MudText Typo="Typo.body1" Style="">@(relevantStorageUnit.Dimensions != null ? relevantStorageUnit.Dimensions.Area : 0)M2</MudText>
+                        </MudItem>
+                    </MudGrid>
+                    <MudDivider Style="margin-top: 8px; margin-bottom: 8px;" />
+                    <MudGrid Justify="Justify.SpaceBetween">
+                        <MudItem sm="6"><MudText>Volum</MudText></MudItem>
+                        <MudItem sm="6"><MudText>@(relevantStorageUnit.Dimensions != null ? relevantStorageUnit.Dimensions.Volume : 0)M3</MudText></MudItem>
+                    </MudGrid>
+                    <MudDivider Style="margin-top: 8px; margin-bottom: 8px;" />
+                    <MudGrid Justify="Justify.SpaceBetween">
+                        <MudItem sm="6"><MudText>Temperert</MudText></MudItem>
+                        @if (relevantStorageUnit.Temperated)
+                        {
+                            <MudItem sm="6"><MudText>Temperert</MudText></MudItem>
+                        }
+                        else
+                        {
+                            <MudItem sm="6"><MudText>Ikke temperert</MudText></MudItem>
+                        }
+                    </MudGrid>
+                </span>
+                <MudSpacer />
+                <MudItem Style=""><MudText Color="Color.Primary" Style="font-weight:500; display: inline;" Typo="Typo.h4">@(relevantStorageUnit.PricePerMonth != null ? relevantStorageUnit.PricePerMonth.Amount : 0)<MudText Style="display: inline;" Typo="Typo.body1">kr/mnd</MudText></MudText></MudItem>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudItem>
+
+@code {
+    [Parameter]
+    public StorageUnit relevantStorageUnit { get; set; } = new();
+}
