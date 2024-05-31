@@ -1,0 +1,14 @@
+﻿<MudItem xs="12">
+    <MudPaper Style="width: 100%; padding: 16px; display: flex; flex-direction: column;">
+        <MudText Typo="Typo.h6">Innflyttingsdato</MudText>
+        <MudForm Model="@relevantOrder" Validation="@(_orderValidator.ValidateValue)">
+            <MudDatePicker For="@(() => relevantOrder.OrderPeriod.OrderDate)" Label="Dato" @bind-Date="@relevantOrder.OrderPeriod.OrderDate" Required="true" />
+        </MudForm>
+    </MudPaper>
+</MudItem>
+
+@code {
+    [Parameter]
+    public LagerhotellAPI.Models.DomainModels.Order relevantOrder { get; set; } = new();
+    private readonly OrderValidator _orderValidator = new OrderValidator();
+}
