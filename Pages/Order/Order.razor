@@ -3,6 +3,7 @@
 @inject StorageUnitService _storageUnitService
 @inject NavigationManager _navigationManager
 @inject SessionService _sessionService
+@inject WarehouseHotelService _warehouseHotelService
 
 <MudContainer Style="max-width: 740px; padding: 16px;">
     <MudGrid Justify="Justify.Center" Style="">
@@ -10,7 +11,7 @@
         <Overview RelevantStorageUnit=@relevantStorageUnit />
         <MovingInDate RelevantOrder=@currentOrder />
         <Insurance RelevantOrder=@currentOrder />
-        <OrderConfirmation RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
+        <OrderConfirmation RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
     </MudGrid>
 </MudContainer>
 
@@ -22,45 +23,52 @@
     string userAccessToken;
     StorageUnit relevantStorageUnit = new StorageUnit();
     LagerhotellAPI.Models.DomainModels.Order currentOrder = new()
-    {
-        OrderPeriod = new OrderPeriod()
         {
-            OrderDate = DateTime.Now
-        }
+            OrderPeriod = new OrderPeriod()
+            {
+                OrderDate = DateTime.Now
+            }
 
-    };
+        };
     OrderValidator orderValidator = new();
+    private WarehouseHotel relevantWarehouseHotel = new()
+        {
+            Address = new Address(),
+            Coordinate = new Coordinate(),
+            StorageUnitsSizes = new StorageUnitSizes(),
+            OpeningHours = new OpeningHours()
+        };
 
     protected override async Task OnInitializedAsync()
     {
-    try
-    {
-        var authState = await authenticationStateTask;
-        var user = authState.User;
-        if (authState.User.Identity.IsAuthenticated)
+        try
         {
-            userAccessToken = await _sessionService.GetJwtFromLocalStorage();
-        }
-        else
-        {
-            Snackbar.Add("Du må være logget inn for å bestille", MudBlazor.Severity.Warning, config =>
+            var authState = await authenticationStateTask;
+            var user = authState.User;
+            if (authState.User.Identity.IsAuthenticated)
             {
-                config.Action = "Logg inn";
-                config.ActionColor = Color.Primary;
-                config.CloseAfterNavigation = true;
-                config.Onclick = (Snackbar) => Task.Run(() => _navigationManager.NavigateTo("/logg-inn"));
-            });
+                userAccessToken = await _sessionService.GetJwtFromLocalStorage();
+            }
+            else
+            {
+                Snackbar.Add("Du må være logget inn for å bestille", MudBlazor.Severity.Warning, config =>
+                {
+                    config.Action = "Logg inn";
+                    config.ActionColor = Color.Primary;
+                    config.CloseAfterNavigation = true;
+                    config.Onclick = (Snackbar) => Task.Run(() => _navigationManager.NavigateTo("/logg-inn"));
+                });
+            }
+            relevantStorageUnit = await _storageUnitService.GetStorageUnit(StorageUnitId, userAccessToken);
+            relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotel(relevantStorageUnit.WarehouseHotelId);
         }
-        relevantStorageUnit = await _storageUnitService.GetStorageUnit(StorageUnitId, userAccessToken);
-        Console.WriteLine(relevantStorageUnit.Name);
-    }
-    catch (KeyNotFoundException e)
-    {
-        Console.WriteLine($"{e}");
-    }
-    catch (Exception e)
-    {
-        Console.WriteLine($"{e}");
-    }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine($"{e}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"{e}");
+        }
     }
 }
