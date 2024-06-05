@@ -7,16 +7,16 @@
                 <tr>
                     <td><MudText Typo="Typo.body1">Avdeling</MudText></td>
                     <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantWarehouseHotel.Name</MudText></td>
+                    </tr>
+                    <tr>
+                        <td><MudText Typo="Typo.body1">Størrelse</MudText></td>
+                        <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.Dimensions.Area M2</MudText></td>
                 </tr>
-                 <tr>
-                    <td><MudText Typo="Typo.body1">Størrelse</MudText></td>
-                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.Dimensions.Area M2</MudText></td>
-                </tr>
-                 <tr>
+                <tr>
                     <td><MudText Typo="Typo.body1">Volum</MudText></td>
-                        <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.Dimensions.Volume M3</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.Dimensions.Volume M3</MudText></td>
                 </tr>
-                 <tr>
+                <tr>
                     <td><MudText Typo="Typo.body1">Temperert</MudText></td>
                     @if (RelevantStorageUnit.Temperated)
                     {
@@ -27,14 +27,18 @@
                         <td><MudText Style="font-weight: 450" Typo="Typo.body1">Nei</MudText></td>
                     }
                 </tr>
-                 <tr>
+                <tr>
                     <td><MudText Typo="Typo.body1">Innflyttingsdato</MudText></td>
-                        <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantOrder.OrderPeriod.OrderDate.Value.Date.Date.ToShortDateString()</MudText></td>
-                </tr>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantOrder.OrderPeriod.OrderDate.Value.Date.Date.ToShortDateString()</MudText></td>
+                    </tr>
                     <tr>
                         <td><MudText Typo="Typo.body1">Avtaletype</MudText></td>
                         <td><MudText Style="font-weight: 450" Typo="Typo.body1">Månedlig</MudText></td>
                     </tr>
+                    <tr>
+                        <td><MudText Typo="Typo.body1">Pris per måned</MudText></td>
+                        <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.PricePerMonth.Amount Kr</MudText></td>
+                </tr>
             </tbody>
         </MudSimpleTable>
     </MudPaper>
