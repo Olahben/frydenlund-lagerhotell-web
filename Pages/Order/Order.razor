@@ -11,7 +11,7 @@
         <Overview RelevantStorageUnit=@relevantStorageUnit />
         <MovingInDate RelevantOrder=@currentOrder />
         <Insurance RelevantOrder=@currentOrder />
-        <OrderConfirmation RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
+        <OrderConfirmation IsUserAuthenticated=@authorized RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
     </MudGrid>
 </MudContainer>
 
@@ -38,6 +38,7 @@
             StorageUnitsSizes = new StorageUnitSizes(),
             OpeningHours = new OpeningHours()
         };
+    private bool authorized = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,6 +46,7 @@
         {
             var authState = await authenticationStateTask;
             var user = authState.User;
+            authorized = user.Identity.IsAuthenticated;
             if (authState.User.Identity.IsAuthenticated)
             {
                 userAccessToken = await _sessionService.GetJwtFromLocalStorage();
