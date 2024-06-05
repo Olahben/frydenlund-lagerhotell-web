@@ -1,8 +1,8 @@
 ﻿<MudItem xs="12">
     <MudPaper Square="true" Style="width: 100%; padding: 16px; display: flex; flex-direction: column;">
         <MudText Typo="Typo.h6">Innflyttingsdato</MudText>
-        <MudForm Model="@relevantOrder" Validation="@(_orderValidator.ValidateValue)">
-            <MudDatePicker For="@(() => relevantOrder.OrderPeriod.OrderDate)" Label="Dato" @bind-Date="@relevantOrder.OrderPeriod.OrderDate" Required="true" />
+        <MudForm Model="@RelevantOrder" Validation="@(_orderValidator.ValidateValue)">
+            <MudDatePicker For="@(() => RelevantOrder.OrderPeriod.OrderDate)" Label="Dato" @bind-Date="@RelevantOrder.OrderPeriod.OrderDate" Required="true" />
         </MudForm>
     </MudPaper>
 </MudItem>

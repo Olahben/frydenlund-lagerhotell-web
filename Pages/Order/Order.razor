@@ -51,7 +51,7 @@
                 config.Onclick = (Snackbar) => Task.Run(() => _navigationManager.NavigateTo("/logg-inn"));
             });
         }
-        relevantStorageUnit = await _storageUnitService.GetStorageUnit(storageUnitId, userAccessToken);
+        relevantStorageUnit = await _storageUnitService.GetStorageUnit(StorageUnitId, userAccessToken);
         Console.WriteLine(relevantStorageUnit.Name);
     }
     catch (KeyNotFoundException e)
