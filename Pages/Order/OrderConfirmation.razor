@@ -41,6 +41,14 @@
                 </tr>
             </tbody>
         </MudSimpleTable>
+        @if (IsUserAuthenticated)
+        {
+            <MudButton Style="margin-top: 16px;" Variant="Variant.Filled">Bestill nå</MudButton>
+        }
+        else
+        {
+            <MudButton Disabled="true" Style="margin-top: 16px;" Variant="Variant.Filled">Logg inn for å bestille</MudButton>
+        }
     </MudPaper>
 </MudItem>
 
@@ -51,4 +59,6 @@
     public LagerhotellAPI.Models.DomainModels.Order RelevantOrder { get; set; } = new();
     [Parameter]
     public WarehouseHotel RelevantWarehouseHotel { get; set; } = new();
+    [Parameter]
+    public bool IsUserAuthenticated { get; set; } = false;
 }
