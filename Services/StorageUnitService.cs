@@ -72,4 +72,26 @@ public class StorageUnitService
             throw new Exception("Noe gikk galt");
         }
     }
+
+    public async Task<StorageUnit> GetStorageUnit(string id, string token)
+    {
+        string url = _baseUrl + $"/get-by-id/{id}";
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        HttpResponseMessage response = await client.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+            string deserializedResponseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var deserializedResponse = JsonSerializer.Deserialize<StorageUnit>(deserializedResponseString, options);
+            return deserializedResponse;
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Fant ingen lagerenhet med denne id'en");
+        }
+        else
+        {
+            throw new Exception("Noe gikk galt");
+        }
+    }
 }
