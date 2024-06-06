@@ -34,7 +34,7 @@
                         <MudText Typo="Typo.subtitle1">Velkommen, @_userValues.FirstName!</MudText>
                             <MudDivider Class="my-4" />
                             <div class="d-flex align-items-center">
-                                <MudAvatar Src="path_to_image.jpg" />
+                                <MudAvatar Color="Color.Primary" Src="path_to_image.jpg">@_userValues.FirstName.Substring(0, 1)</MudAvatar>
                                 <div class="ml-2">
                                     <MudText Typo="Typo.subtitle1"><MudText Style=" font-weight:780; display:inline">@_userValues.FirstName</MudText> @_userValues.LastName</MudText>
                                 </div>
