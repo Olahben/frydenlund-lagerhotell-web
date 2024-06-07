@@ -12,6 +12,7 @@
 @inject NavigationManager navigationManager
 @inject SessionService sessionService
 @inject ISnackbar snackbar
+@inject AppState _appState
 
 <MudPaper MaxWidth="640px" MaxHeight="360px" Style="margin-top: 32px;">
     <EditForm Model="logInValues" OnValidSubmit="LoginUser" class="login-form">
@@ -78,6 +79,7 @@
             await sessionService.AddJwtToLocalStorage(userJwt);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
+            _appState.UserLoggedIn();
             navigationManager.NavigateTo($"user/{userId}");
         }
         catch (Exception ex)
