@@ -25,5 +25,6 @@ builder.Services.AddScoped<StorageUnitValidator>();
 builder.Services.AddScoped<TextHandler>();
 builder.Services.AddScoped<AssetService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddSingleton<Lagerhotell.Services.State.AppState>();
 
 await builder.Build().RunAsync();
