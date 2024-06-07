@@ -1,6 +1,7 @@
 ﻿@inject NavigationManager _navigationManager
 @inject AuthStateProviderService _authStateProviderService
 @inject UserService _userService
+@inject AppState _appState
 
 <style>
     .clickable:hover {
@@ -8,37 +9,36 @@
     }
 </style>
 
-@if (isInitialized)
-{
     <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
-    <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
-        <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
-        <MudButton Color="Color.Inherit" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
-        @*Add link to settings/profile*@
-        <MudSpacer />
-        <AuthorizeView>
-            <NotAuthorized>
-                <MudButton Style="margin-left: 8px;" Href="/logg-inn" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
-                <MudButton Style="color: white;" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
-            </NotAuthorized>
-            <Authorized>
+        <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
+            <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
+            <MudButton Color="Color.Inherit" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
+            @*Add link to settings/profile*@
+            <MudSpacer />
+            <AuthorizeView>
+                <NotAuthorized>
+                    <MudButton Style="margin-left: 8px;" Href="/logg-inn" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
+                    <MudButton Style="color: white;" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
+                </NotAuthorized>
+                <Authorized>
                     @if (user != null)
                     {
                         <MudAvatar @onclick="NavigateToUserSettings" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Inherit">
                             @user.FirstName.Substring(0, 1)
                         </MudAvatar>
                     }
-            </Authorized>
-        </AuthorizeView>
-        <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
-            <Lagerhotell.Pages.SideBar.LocationsSideBar />
-        </MudDrawer>
-    </MudGrid>
-</MudContainer>
-}
+                </Authorized>
+            </AuthorizeView>
+            <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+                <Lagerhotell.Pages.SideBar.LocationsSideBar />
+            </MudDrawer>
+        </MudGrid>
+    </MudContainer>
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
+    [Parameter]
+    public EventCallback OnLogIn { get; set;}
     private bool isInitialized = false;
     bool rightSideBarOpen;
     Anchor anchor;
@@ -58,16 +58,21 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _appState.OnChange += UpdateUserAndState;
+        UpdateUserAndState();
+    }
+
+    private async void UpdateUserAndState()
+    {
         try
         {
-            var authenticatedUser = await authenticationStateTask;
-            if (authenticatedUser != null)
+            string? jwt = await SessionService.GetJwtFromLocalStorage();
+            if (jwt != null)
             {
-                Console.WriteLine("test");
                 string phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
                 user = await _userService.GetUserByPhoneNumber(phoneNumber);
             }
-            isInitialized = true;
+            StateHasChanged();
         }
         catch (KeyNotFoundException)
         {
@@ -82,9 +87,13 @@
         }
     }
 
-    private async Task NavigateToUserSettings()
+    public void Dispose()
     {
-            _navigationManager.NavigateTo($"/user/{user.Id}");
+        _appState.OnChange -= UpdateUserAndState;
     }
 
+    private async Task NavigateToUserSettings()
+    {
+        _navigationManager.NavigateTo($"/user/{user.Id}");
+    }
 }
