@@ -5,6 +5,7 @@
 @inject AppState _appState
 
 @inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider _authenticationStateProvider
 
 @page "/user/{userId}"
 
@@ -280,6 +281,8 @@
     private async void Logout()
     {
         await sessionService.LogUserOut();
+        await _authenticationStateProvider.GetAuthenticationStateAsync();
+        StateHasChanged();
         _navigationManager.NavigateTo("/");
     }
 }
