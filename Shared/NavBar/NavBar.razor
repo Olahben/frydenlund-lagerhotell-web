@@ -8,7 +8,9 @@
     }
 </style>
 
-<MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
+@if (isInitialized)
+{
+    <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
     <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
         <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
         <MudButton Color="Color.Inherit" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
@@ -20,9 +22,12 @@
                 <MudButton Style="color: white;" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
             </NotAuthorized>
             <Authorized>
-                <MudAvatar @onclick="NavigateToUserSettings" class="clickable" Style="background-color: transparent; border: transparent;" Variant="Variant.Outlined" Color="Color.Inherit">
-                    <MudIcon Style="color: white;" Icon="@Icons.Material.Filled.Person"></MudIcon>
-                </MudAvatar>
+                    @if (user != null)
+                    {
+                        <MudAvatar @onclick="NavigateToUserSettings" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Inherit">
+                            @user.FirstName.Substring(0, 1)
+                        </MudAvatar>
+                    }
             </Authorized>
         </AuthorizeView>
         <MudDrawer @bind-Open="@rightSideBarOpen" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
@@ -30,9 +35,14 @@
         </MudDrawer>
     </MudGrid>
 </MudContainer>
+}
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private bool isInitialized = false;
     bool rightSideBarOpen;
     Anchor anchor;
+    private User user;
 
     void RedirectToHome()
     {
@@ -46,23 +56,35 @@
         StateHasChanged();
     }
 
-    private async Task NavigateToUserSettings()
+    protected override async Task OnInitializedAsync()
     {
         try
         {
-            string phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
-            User user = await _userService.GetUserByPhoneNumber(phoneNumber);
-            _navigationManager.NavigateTo($"/user/{user.Id}");
+            var authenticatedUser = await authenticationStateTask;
+            if (authenticatedUser != null)
+            {
+                Console.WriteLine("test");
+                string phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
+                user = await _userService.GetUserByPhoneNumber(phoneNumber);
+            }
+            isInitialized = true;
         }
         catch (KeyNotFoundException)
         {
             Console.WriteLine("User phone number not found");
-            Snackbar.Add("En feil oppstod", MudBlazor.Severity.Error);
+            Snackbar.Add("Vær så snill og logg inn på nytt", MudBlazor.Severity.Error);
+            _navigationManager.NavigateTo("/logg-inn");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             Snackbar.Add("En feil oppstod", MudBlazor.Severity.Error);
         }
+    }
+
+    private async Task NavigateToUserSettings()
+    {
+            _navigationManager.NavigateTo($"/user/{user.Id}");
     }
 
 }
