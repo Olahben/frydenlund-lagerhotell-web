@@ -13,6 +13,7 @@
 @inject SessionService sessionService
 @inject ISnackbar snackbar
 @inject AppState _appState
+@inject UserServiceLogin _userServiceLogin
 
 <MudPaper MaxWidth="640px" MaxHeight="360px" Style="margin-top: 32px;">
     <EditForm Model="logInValues" OnValidSubmit="LoginUser" class="login-form">
@@ -50,7 +51,6 @@
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
     private CheckPhoneNumber checkPhoneNumber = new CheckPhoneNumber();
-    private readonly UserServiceLogin userServiceLogin = new();
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     public string ErrorMessage = "";
@@ -75,7 +75,7 @@
         string userId;
         try
         {
-            (userJwt, userId) = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
+            (userJwt, userId) = await _userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
             navigationManager.NavigateTo($"user/{userId}");
