@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Lagerhotell.Services;
+﻿namespace Lagerhotell.Services;
 
 public class UserServiceLogin
 {
     private readonly HttpClient client = new HttpClient();
     private readonly string _baseUrl = "https://localhost:7272/users";
-    [Inject]
     private AppState appState { get; set; }
-    [Inject]
     private SessionService sessionService { get; set; }
+
+    public UserServiceLogin(AppState appState, SessionService sessionService)
+    {
+        this.appState = appState;
+        this.sessionService = sessionService;
+    }
 
     public async Task<bool> CheckPhoneNumber(string phoneNumber)
     {

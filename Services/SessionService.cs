@@ -1,5 +1,4 @@
 ﻿global using Lagerhotell.Services.State;
-using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace Lagerhotell.Services;
@@ -7,11 +6,11 @@ namespace Lagerhotell.Services;
 public class SessionService
 {
     private readonly IJSRuntime _jsRuntime;
-    [Inject]
-    public AppState AppState { get; set; }
-    public SessionService(IJSRuntime jsRuntime)
+    private AppState appState { get; set; }
+    public SessionService(IJSRuntime jsRuntime, AppState _appState)
     {
         this._jsRuntime = jsRuntime;
+        appState = _appState;
     }
     public async Task? AddJwtToLocalStorage(string jwt)
     {
@@ -39,6 +38,6 @@ public class SessionService
     public async Task LogUserOut()
     {
         await RemoveItemAsync("jwtToken");
-        AppState.UserLoggedOut();
+        appState.UserLoggedOut();
     }
 }
