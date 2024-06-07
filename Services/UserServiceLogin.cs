@@ -55,7 +55,7 @@ public class UserServiceLogin
         {
             PropertyNameCaseInsensitive = true
         };
-        User userDeserialized = JsonSerializer.Deserialize<User>(responseContent, options);
+        User userDeserialized = JsonSerializer.Deserialize<GetUserByPhoneNumber.GetUserByPhoneNumberResponse>(responseContent, options).User;
         string userId = userDeserialized.Id;
         return userId;
     }
