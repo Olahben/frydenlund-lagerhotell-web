@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-
 
 namespace Lagerhotell.Services;
 
@@ -10,13 +11,15 @@ public class AuthStateProviderService : AuthenticationStateProvider
     private readonly SessionService _sessionService;
     private readonly HttpClient _tokenHttpClient;
     private readonly HttpClient _backofficeHttpClient;
+    private readonly NavigationManager _navigationManager;
 
 
-    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient)
+    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient, NavigationManager navigationManager)
     {
         _tokenHttpClient = tokenHttpClient;
         _backofficeHttpClient = backofficeHttpClient;
         _sessionService = sessionService;
+        _navigationManager = navigationManager;
     }
 
     private IEnumerable<Claim> Parse(string jwt)
@@ -60,6 +63,15 @@ public class AuthStateProviderService : AuthenticationStateProvider
         {
             try
             {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadJwtToken(accessToken);
+                if (jwtToken.ValidTo < DateTime.UtcNow)
+                {
+                    await _sessionService.RemoveItemAsync("jwtToken");
+                    identity = new ClaimsIdentity();
+                    _navigationManager.NavigateTo("/logg-inn");
+                    Console.WriteLine("Token expired");
+                }
                 identity = new ClaimsIdentity(Parse(accessToken), "jwt");
                 accessToken = accessToken.Replace("\"", "").Replace("\"", "");
 
