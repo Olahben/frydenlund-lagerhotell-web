@@ -280,7 +280,6 @@
     private async void Logout()
     {
         await sessionService.LogUserOut();
-        _appState.UserLoggedOut();
         _navigationManager.NavigateTo("/");
     }
 }

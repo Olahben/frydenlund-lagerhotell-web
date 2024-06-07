@@ -76,10 +76,8 @@
         try
         {
             (userJwt, userId) = await userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
-            await sessionService.AddJwtToLocalStorage(userJwt);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
-            _appState.UserLoggedIn();
             navigationManager.NavigateTo($"user/{userId}");
         }
         catch (Exception ex)

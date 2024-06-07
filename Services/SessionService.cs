@@ -1,10 +1,14 @@
-﻿using Microsoft.JSInterop;
+﻿global using Lagerhotell.Services.State;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace Lagerhotell.Services;
 
 public class SessionService
 {
     private readonly IJSRuntime _jsRuntime;
+    [Inject]
+    public AppState AppState { get; set; }
     public SessionService(IJSRuntime jsRuntime)
     {
         this._jsRuntime = jsRuntime;
@@ -35,5 +39,6 @@ public class SessionService
     public async Task LogUserOut()
     {
         await RemoveItemAsync("jwtToken");
+        AppState.UserLoggedOut();
     }
 }
