@@ -10,4 +10,10 @@ public class AppState
         IsUserLoggedIn = true;
         NotifyStateChanged();
     }
+
+    public void UserLoggedOut()
+    {
+        IsUserLoggedIn = false;
+        NotifyStateChanged();
+    }
 }
