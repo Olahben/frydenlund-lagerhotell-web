@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Shared\Lib\StorageUnitInfoTexts.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Content Remove="Pages\json.json" />
 	</ItemGroup>
 
@@ -17,6 +21,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Shared\Lib\StorageUnitInfoTexts.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	<PackageReference Include="FluentValidation" Version="11.9.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
@@ -24,11 +32,17 @@
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.1" />
 	<PackageReference Include="System.Drawing.Common" Version="8.0.4" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.0" />
 	</ItemGroup>	
 	
 
 	<ItemGroup>
 	  <ProjectReference Include="..\LagerhotellAPI\Lagerhotell.Shared\Lagerhotell.Shared.csproj" />
+	</ItemGroup>	
+	
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Lib\" />
 	</ItemGroup>
 	
 	
