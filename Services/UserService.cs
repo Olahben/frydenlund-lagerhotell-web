@@ -25,7 +25,7 @@ public class UserService
             {
                 PropertyNameCaseInsensitive = true
             };
-            User user = JsonSerializer.Deserialize<User>(responseContent, options);
+            User user = JsonSerializer.Deserialize<GetUserByPhoneNumber.GetUserByPhoneNumberResponse>(responseContent, options).User;
             return user;
         }
         else
