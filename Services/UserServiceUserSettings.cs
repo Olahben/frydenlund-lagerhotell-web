@@ -20,7 +20,7 @@ public class UserServiceUserSettings
                 PropertyNameCaseInsensitive = true
             };
             User deserializedUser = JsonSerializer.Deserialize<GetUser.GetUserResponse>(result, options).User;
-            UserValues userValues = new UserValues { Id = deserializedUser.Id, FirstName = deserializedUser.FirstName, LastName = deserializedUser.LastName, PhoneNumber = deserializedUser.PhoneNumber, BirthDate = deserializedUser.BirthDate, Password = deserializedUser.Password, StreetAddress = deserializedUser.Address.StreetAddress, PostalCode = deserializedUser.Address.PostalCode, City = deserializedUser.Address.City, IsAdministrator = deserializedUser.IsAdministrator };
+            UserValues userValues = new UserValues { Id = deserializedUser.Id, FirstName = deserializedUser.FirstName, LastName = deserializedUser.LastName, PhoneNumber = deserializedUser.PhoneNumber, BirthDate = deserializedUser.BirthDate, Password = deserializedUser.Password, StreetAddress = deserializedUser.Address.StreetAddress, PostalCode = deserializedUser.Address.PostalCode, City = deserializedUser.Address.City, IsAdministrator = deserializedUser.IsAdministrator, Email = deserializedUser.Email };
             return userValues;
         }
         else
