@@ -68,6 +68,9 @@
                                              <MudTextField Label="Mobilnummer" ReadOnly="true" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Variant="Variant.Outlined"
                                                                 FullWidth />
                                              <MudDivider Class="my-4" />
+                                             <MudTextField Label="E-post" ReadOnly="true" @bind-Value="_userValues.Email" For="@(() => _userValues.Email)" Variant="Variant.Outlined"
+                                                                FullWidth />
+                                             <MudDivider Class="my-4" />
                                              <MudTextField Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Variant="Variant.Outlined"
                                                                 FullWidth />
                                              <MudDivider Class="my-4" />
@@ -163,6 +166,10 @@
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
         [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
         public string PhoneNumber { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "An email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "En fødselsdato er obligatorisk")]
         [UserServiceSignup.IsOverLegalAge(ErrorMessage = "Du må være over 18 år")]

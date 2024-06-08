@@ -19,7 +19,7 @@ public class UserServiceUserSettings
             {
                 PropertyNameCaseInsensitive = true
             };
-            User deserializedUser = JsonSerializer.Deserialize<User>(result, options);
+            User deserializedUser = JsonSerializer.Deserialize<GetUser.GetUserResponse>(result, options).User;
             UserValues userValues = new UserValues { Id = deserializedUser.Id, FirstName = deserializedUser.FirstName, LastName = deserializedUser.LastName, PhoneNumber = deserializedUser.PhoneNumber, BirthDate = deserializedUser.BirthDate, Password = deserializedUser.Password, StreetAddress = deserializedUser.Address.StreetAddress, PostalCode = deserializedUser.Address.PostalCode, City = deserializedUser.Address.City, IsAdministrator = deserializedUser.IsAdministrator };
             return userValues;
         }
@@ -34,7 +34,7 @@ public class UserServiceUserSettings
     {
         string url = _baseUrl + "/update-user-values";
         Address addressRequest = new(userValues.StreetAddress, userValues.PostalCode, userValues.City);
-        UpdateUserValuesRequest request = new UpdateUserValuesRequest { FirstName = userValues.FirstName, LastName = userValues.LastName, PhoneNumber = userValues.PhoneNumber, BirthDate = userValues.BirthDate, Address = addressRequest, Password = userValues.Password, IsAdministrator = userValues.IsAdministrator };
+        UpdateUserValuesRequest request = new UpdateUserValuesRequest { FirstName = userValues.FirstName, LastName = userValues.LastName, PhoneNumber = userValues.PhoneNumber, BirthDate = userValues.BirthDate, Address = addressRequest, Password = userValues.Password, IsAdministrator = userValues.IsAdministrator, Email = userValues.Email };
         string jsonData = JsonSerializer.Serialize(request);
         StringContent stringContentRequest = new StringContent(jsonData, Encoding.UTF8, "application/json");
         httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);

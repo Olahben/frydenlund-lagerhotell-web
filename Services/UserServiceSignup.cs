@@ -10,9 +10,9 @@ public class UserServiceSignup
     private readonly string _baseUrl = "https://localhost:7272/users";
     protected string? CustomError;
     protected bool UserRegistered;
-    public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, bool IsAdministrator, HttpClient client)
+    public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, bool IsAdministrator, HttpClient client, string email)
     {
-        var request = new AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password, IsAdministrator = IsAdministrator };
+        var request = new AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password, IsAdministrator = IsAdministrator, Email = email };
         string url = _baseUrl + "/add-user";
         string jsonData = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -54,7 +54,7 @@ public class UserServiceSignup
         try
         {
             await PhoneNumberExistence(accountFormValues.PhoneNumber, client);
-            (userId, token) = await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, accountFormValues.IsAdministrator, client);
+            (userId, token) = await AddUser(accountFormValues.FirstName, accountFormValues.FirstName, accountFormValues.PhoneNumber, accountFormValues.BirthDate, accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City, accountFormValues.Password, accountFormValues.IsAdministrator, client, accountFormValues.Email);
             return (userId, token);
         }
         catch (Exception ex)
