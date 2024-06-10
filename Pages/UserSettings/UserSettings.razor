@@ -9,6 +9,14 @@
 
 @page "/user/{userId}"
 
+<style>
+    .active-tab {
+        font-weight: bold;
+        background-color: #f0f0f0;
+        border-left: 4px solid #6200ea;
+    }
+</style>
+
 @if (isInitialized)
 {
     <AuthorizeView>
@@ -21,14 +29,34 @@
                     <MudItem xs="12" md="3">
                         <MudPaper Elevation="1">
                             <MudList>
-                                <MudListItem>
-                                    <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
-                                    <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
-                                </MudListItem>
-                                <MudListItem>
-                                    <MudIcon Icon="@Icons.Material.Filled.Security" style="vertical-align: middle;" />
-                                    <span style="vertical-align: middle; margin-left: 8px;">Sikkerhet</span>
-                                </MudListItem>
+                                @if (activeTab == "profil")
+                                {
+                                    <MudListItem Class="active-tab">
+                                        <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
+                                        <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
+                                    </MudListItem>
+                                }
+                                else
+                                {
+                                    <MudListItem @onclick='() => SetActiveTab("profil")'>
+                                        <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
+                                        <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
+                                    </MudListItem>
+                                }
+                                @if (activeTab == "innstillinger")
+                                {
+                                    <MudListItem Class="active-tab">
+                                        <MudIcon Icon="@Icons.Material.Filled.Settings" style="vertical-align: middle;" />
+                                        <span style="vertical-align: middle; margin-left: 8px;">Innstillinger</span>
+                                    </MudListItem>
+                                }
+                                else
+                                {
+                                    <MudListItem @onclick='() => SetActiveTab("innstillinger")'>
+                                        <MudIcon Icon="@Icons.Material.Filled.Settings" style="vertical-align: middle;" />
+                                        <span style="vertical-align: middle; margin-left: 8px;">Innstillinger</span>
+                                    </MudListItem>
+                                }
                             </MudList>
                         </MudPaper>
                     </MudItem>
@@ -152,6 +180,7 @@
     private MudForm _form;
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    private string activeTab = "profil";
 
     public class UserValues
     {
@@ -295,5 +324,11 @@
         await _authenticationStateProvider.GetAuthenticationStateAsync();
         StateHasChanged();
         _navigationManager.NavigateTo("/");
+    }
+
+    private void SetActiveTab(string tab)
+    {
+        activeTab = tab;
+        StateHasChanged();
     }
 }
