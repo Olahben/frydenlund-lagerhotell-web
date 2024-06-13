@@ -50,6 +50,7 @@
             if (authState.User.Identity.IsAuthenticated)
             {
                 userAccessToken = await _sessionService.GetJwtFromLocalStorage();
+                currentOrder.UserId = userAccessToken;
             }
             else
             {
