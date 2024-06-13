@@ -51,6 +51,7 @@
             {
                 userAccessToken = await _sessionService.GetJwtFromLocalStorage();
                 currentOrder.UserId = userAccessToken;
+                currentOrder.StorageUnitId = StorageUnitId;
             }
             else
             {
