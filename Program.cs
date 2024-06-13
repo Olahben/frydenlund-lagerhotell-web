@@ -26,6 +26,7 @@ builder.Services.AddScoped<TextHandler>();
 builder.Services.AddScoped<AssetService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserServiceLogin>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddSingleton<Lagerhotell.Services.State.AppState>();
 
 await builder.Build().RunAsync();
