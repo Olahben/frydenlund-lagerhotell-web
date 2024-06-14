@@ -1,4 +1,7 @@
-﻿<MudItem xs="12">
+﻿@inject NavigationManager _navigationManager
+@inject OrderService _orderService
+
+<MudItem xs="12">
     <MudPaper Square="true" Style="width: 100%; padding: 16px;">
         <MudText Typo="Typo.h6">Ordrebekreftelse</MudText>
         <MudText Typo="Typo.body1">Her er en oversikt over din bestilling. Vennligst bekreft at alt stemmer før du fullfører bestillingen.</MudText>
@@ -43,7 +46,7 @@
         </MudSimpleTable>
         @if (IsUserAuthenticated)
         {
-            <MudButton Style="margin-top: 16px;" Variant="Variant.Filled">Bestill nå</MudButton>
+            <MudButton Style="margin-top: 16px;" @onclick="ConfirmOrder" Variant="Variant.Filled">Bestill nå</MudButton>
         }
         else
         {
@@ -61,4 +64,25 @@
     public WarehouseHotel RelevantWarehouseHotel { get; set; } = new();
     [Parameter]
     public bool IsUserAuthenticated { get; set; } = false;
+
+    public async Task ConfirmOrder()
+    {
+        bool validationResult = await _orderService.ValidateOrder(RelevantOrder);
+        if (validationResult)
+        {
+            try
+            {
+                await _orderService.CreateOrder(RelevantOrder);
+            } catch (InvalidOperationException e)
+            {
+                Snackbar.Add("Noe gikk galt da vi prøvde å registrere bestillingen din,vennligst prøv på nytt om fem minutter, kontakt eventuelt kundeservice.", MudBlazor.Severity.Error);
+                return;
+            }
+       Snackbar.Add("Bestillingen er registrert", MudBlazor.Severity.Success);
+       }
+       else
+       {
+           Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vennligst sjekk dem. Logg inn hvis du ikke har gjort det.", MudBlazor.Severity.Error);
+       }
+    }
 }
