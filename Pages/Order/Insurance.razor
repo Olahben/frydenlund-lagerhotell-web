@@ -16,10 +16,11 @@
     [Parameter]
     public LagerhotellAPI.Models.DomainModels.Order RelevantOrder { get; set; } = new();
     private readonly OrderValidator _orderValidator = new OrderValidator();
-    public string InsurancePicked { get; set; }
+    public string InsurancePicked { get; set; } = "Opptil 50000Kr";
     private string insurancePicked
     {
-        get { return InsurancePicked; } set
+        get { return InsurancePicked; }
+        set
         {
             InsurancePicked = value;
             UpdateInsurance(value);
