@@ -75,6 +75,7 @@
                 await _orderService.CreateOrder(RelevantOrder);
             } catch (InvalidOperationException e)
             {
+                Console.WriteLine(e);
                 Snackbar.Add("Noe gikk galt da vi prøvde å registrere bestillingen din,vennligst prøv på nytt om fem minutter, kontakt eventuelt kundeservice.", MudBlazor.Severity.Error);
                 return;
             }
