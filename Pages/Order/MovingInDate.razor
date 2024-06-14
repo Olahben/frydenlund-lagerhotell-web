@@ -2,7 +2,7 @@
     <MudPaper Square="true" Style="width: 100%; padding: 16px; display: flex; flex-direction: column;">
         <MudText Typo="Typo.h6">Innflyttingsdato</MudText>
         <MudForm Model="@RelevantOrder" Validation="@(_orderValidator.ValidateValue)">
-            <MudDatePicker For="@(() => RelevantOrder.OrderPeriod.OrderDate)" Label="Dato" @bind-Date="@RelevantOrder.OrderPeriod.OrderDate" Required="true" />
+            <MudDatePicker MaxDate="_maxDate" For="@(() => RelevantOrder.OrderPeriod.OrderDate)" Label="Dato" @bind-Date="@RelevantOrder.OrderPeriod.OrderDate" Required="true" />
         </MudForm>
     </MudPaper>
 </MudItem>
@@ -11,4 +11,5 @@
     [Parameter]
     public LagerhotellAPI.Models.DomainModels.Order RelevantOrder { get; set; } = new();
     private readonly OrderValidator _orderValidator = new OrderValidator();
+    private readonly DateTime _maxDate = DateTime.Now.AddMonths(1);
 }
