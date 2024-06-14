@@ -42,4 +42,9 @@
             RelevantOrder.Insurance = OrderInsurance.TwoHundredThousand;
         }
     }
+
+    protected override void OnInitialized()
+    {
+        UpdateInsurance(InsurancePicked);
+    }
 }
