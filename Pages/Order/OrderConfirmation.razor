@@ -72,7 +72,8 @@
         {
             try
             {
-                await _orderService.CreateOrder(RelevantOrder);
+                string orderId = await _orderService.CreateOrder(RelevantOrder);
+                _navigationManager.NavigateTo($"/order-sent/{orderId}");
             } catch (InvalidOperationException e)
             {
                 Console.WriteLine(e);
