@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace Lagerhotell.Services;
@@ -70,6 +69,7 @@ public class AuthStateProviderService : AuthenticationStateProvider
                     await _sessionService.RemoveItemAsync("jwtToken");
                     identity = new ClaimsIdentity();
                     _navigationManager.NavigateTo("/logg-inn");
+                    _navigationManager.NavigateTo(_navigationManager.Uri, true);
                     Console.WriteLine("Token expired");
                 }
                 identity = new ClaimsIdentity(Parse(accessToken), "jwt");
