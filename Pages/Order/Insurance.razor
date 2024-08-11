@@ -14,7 +14,7 @@
 
 @code {
     [Parameter]
-    public LagerhotellAPI.Models.DomainModels.Order RelevantOrder { get; set; } = new();
+    public LagerhotellAPI.Models.DomainModels.Order RelevantOrder { get; set; }
     private readonly OrderValidator _orderValidator = new OrderValidator();
     public string InsurancePicked { get; set; } = "Opptil 50000Kr";
     private string insurancePicked
@@ -31,15 +31,15 @@
     {
         if (value == "Opptil 50000Kr")
         {
-            RelevantOrder.Insurance = OrderInsurance.FiftyThousand;
+            RelevantOrder = RelevantOrder with { Insurance = OrderInsurance.FiftyThousand };
         }
         else if (value == "Opptil 100000Kr")
         {
-            RelevantOrder.Insurance = OrderInsurance.OneHundredThousand;
+            RelevantOrder = RelevantOrder with { Insurance = OrderInsurance.OneHundredThousand };
         }
         else if (value == "Opptil 200000Kr")
         {
-            RelevantOrder.Insurance = OrderInsurance.TwoHundredThousand;
+            RelevantOrder = RelevantOrder with { Insurance = OrderInsurance.TwoHundredThousand };
         }
     }
 
