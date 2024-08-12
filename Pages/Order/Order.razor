@@ -4,14 +4,22 @@
 @inject NavigationManager _navigationManager
 @inject SessionService _sessionService
 @inject WarehouseHotelService _warehouseHotelService
+@inject UserService _userService
+
+@using System.Security.Claims
 
 <MudContainer Style="max-width: 740px; padding: 16px;">
     <MudGrid Justify="Justify.Center" Style="">
         <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
         <Overview RelevantStorageUnit=@relevantStorageUnit />
-        <MovingInDate RelevantOrder=@currentOrder />
-        <Insurance RelevantOrder=@currentOrder />
-        <OrderConfirmation IsUserAuthenticated=@authorized RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
+        @if (currentOrder != null)
+        {
+            <MovingInDate RelevantOrder
+            =@currentOrder
+            />
+            <Insurance RelevantOrder=@currentOrder />
+            <OrderConfirmation IsUserAuthenticated=@authorized RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
+        }
     </MudGrid>
 </MudContainer>
 
@@ -22,14 +30,7 @@
     public string StorageUnitId { get; set; }
     string userAccessToken;
     StorageUnit relevantStorageUnit = new StorageUnit();
-    LagerhotellAPI.Models.DomainModels.Order currentOrder = new()
-        {
-            OrderPeriod = new OrderPeriod()
-            {
-                OrderDate = DateTime.Now
-            }
-
-        };
+    LagerhotellAPI.Models.DomainModels.Order currentOrder;
     OrderValidator orderValidator = new();
     private WarehouseHotel relevantWarehouseHotel = new()
         {
@@ -50,8 +51,8 @@
             if (authState.User.Identity.IsAuthenticated)
             {
                 userAccessToken = await _sessionService.GetJwtFromLocalStorage();
-                currentOrder.UserId = userAccessToken;
-                currentOrder.StorageUnitId = StorageUnitId;
+                var userId = user.FindFirst(c => c.Type == ClaimTypes.Sid).Value;
+                currentOrder = new LagerhotellAPI.Models.DomainModels.Order("", userId, StorageUnitId, new OrderPeriod() { OrderDate = DateTime.Now });
             }
             else
             {

@@ -9,7 +9,7 @@
 
 @code {
     [Parameter]
-    public LagerhotellAPI.Models.DomainModels.Order RelevantOrder { get; set; } = new();
+    public LagerhotellAPI.Models.DomainModels.Order RelevantOrder { get; set; }
     private readonly OrderValidator _orderValidator = new OrderValidator();
     private readonly DateTime _maxDate = DateTime.Now.AddMonths(1);
 }
