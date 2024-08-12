@@ -42,6 +42,7 @@
 	
 
 	<ItemGroup>
+	  <Folder Include="Shared\State\" />
 	  <Folder Include="wwwroot\Lib\" />
 	</ItemGroup>
 	
