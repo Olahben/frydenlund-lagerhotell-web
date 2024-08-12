@@ -27,8 +27,8 @@ public class OrderService
     {
         string endpointUrl = url + "/add";
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
-        order.Status = OrderStatus.Pending;
-        AddOrderRequest request = new AddOrderRequest { Order = order };
+        var newPendingOrder = order with { Status = OrderStatus.Pending };
+        AddOrderRequest request = new AddOrderRequest { Order = newPendingOrder };
         string jsonData = JsonSerializer.Serialize(request);
         StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
         HttpResponseMessage response = await _httpClient.PostAsync(endpointUrl, stringContent);
@@ -44,6 +44,30 @@ public class OrderService
         else
         {
             throw new InvalidOperationException($"Something went wrong when adding order, code: {response.StatusCode}");
+        }
+    }
+
+    public async Task<Order> GetOrderByIdAsync(string id)
+    {
+        string endpointUrl = url + $"/{id}";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            return JsonSerializer.Deserialize<Order>(responseContent, options);
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("The order was not found");
+        }
+        else
+        {
+            throw new InvalidOperationException($"Something went wrong when fetching order, code: {response.StatusCode}");
         }
     }
 }
