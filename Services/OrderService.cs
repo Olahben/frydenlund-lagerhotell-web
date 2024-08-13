@@ -70,4 +70,30 @@ public class OrderService
             throw new InvalidOperationException($"Something went wrong when fetching order, code: {response.StatusCode}");
         }
     }
+    public async Task<List<Order>> GetUserOrdersAsync(string userId)
+    {
+        string endpointUrl = url + $"?userId={userId}";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<Order> orders = JsonSerializer.Deserialize<List<Order>>(responseContent, options);
+            // Remove orders that has their status as deleted
+            // Sort based on status, order period, start date
+            return orders
+                .Where(o => o.Status != OrderStatus.Deleted)
+                .OrderByDescending(o => o.Status != OrderStatus.Cancelled)
+                .ThenByDescending(o => o.OrderPeriod.OrderDate)
+                .ToList();
+        }
+        else
+        {
+            throw new InvalidOperationException($"Something went wrong when fetching orders, code: {response.StatusCode}");
+        }
+    }
 }
