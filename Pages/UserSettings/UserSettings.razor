@@ -6,6 +6,7 @@
 
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider
+@inject OrderService _orderService
 
 @page "/user/{userId}"
 
@@ -43,18 +44,18 @@
                                         <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
                                     </MudListItem>
                                 }
-                                @if (activeTab == "innstillinger")
+                                @if (activeTab == "Bestillinger")
                                 {
                                     <MudListItem Class="active-tab">
-                                        <MudIcon Icon="@Icons.Material.Filled.Settings" style="vertical-align: middle;" />
-                                        <span style="vertical-align: middle; margin-left: 8px;">Innstillinger</span>
+                                        <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" style="vertical-align: middle;" />
+                                        <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
                                     </MudListItem>
                                 }
                                 else
                                 {
-                                    <MudListItem @onclick='() => SetActiveTab("innstillinger")'>
-                                        <MudIcon Icon="@Icons.Material.Filled.Settings" style="vertical-align: middle;" />
-                                        <span style="vertical-align: middle; margin-left: 8px;">Innstillinger</span>
+                                    <MudListItem @onclick='() => SetActiveTab("Bestillinger")'>
+                                        <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" style="vertical-align: middle;" />
+                                        <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
                                     </MudListItem>
                                 }
                             </MudList>
