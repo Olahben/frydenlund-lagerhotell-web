@@ -1,5 +1,106 @@
-﻿<h3>UserOrders</h3>
+﻿@inject OrderService _orderService
+@inject StorageUnitService _storageUnitService
+@inject SessionService _sessionService
+@inject WarehouseHotelService _warehouseHotelService
 
-@code {
+<MudText Typo="Typo.h6">Bestillinger</MudText>
+<MudText Style="margin-top: 4px;" Typo="Typo.body1">Her finner du dine aktive og tidligere bestillinger.</MudText>
+<MudDivider Class="my-4" />
+<MudTable Items="@_orderCustomerViewModels">
+    <HeaderContent>
+        <MudTh>Aktiv</MudTh>
+        <MudTh>Størrelse (M^2)</MudTh>
+        <MudTh>Lagerhotell</MudTh>
+        <MudTh>Startdato</MudTh>
+        <MudTh>Sluttdato</MudTh>
+        <MudTh>Gj.snitt pris i mnd</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        @if (context.Order.Status != OrderStatus.NotCreated && context.Order.Status != OrderStatus.Deleted && context.Order.Status != OrderStatus.Cancelled)
+        {
+            <MudTd DataLabel="Aktiv">Ja</MudTd>
+        }
+        else
+        {
+            <MudTd DataLabel="Aktiv">Nei</MudTd>
+        }
+        <MudTd DataLabel="Størrelse (M^2)">@context.StorageUnit.Dimensions.Area</MudTd>
+            <MudTd DataLabel="Lagerhotell">@context.WarehouseHotelName</MudTd>
+            <MudTd DataLabel="Startdato">@context.Order.OrderPeriod.OrderDate</MudTd>
+            @if (context.Order.OrderPeriod.EndDate != null)
+        {
+            <MudTd>
+                DataLabel="Sluttdato">@context.Order.OrderPeriod.EndDate
+            </MudTd>
+        }
+        else
+        {
+            <MudTd DataLabel="Sluttdato">Ukjent</MudTd>
+        }
+        <MudTd DataLabel="Gj.snitt pris i mnd">@context.StorageUnit.PricePerMonth.Amount</MudTd>
+        </RowTemplate>
+    </MudTable>
+    @code {
+    [Parameter]
+    public string UserId { get; set; }
+
+    private List<Order> _orders;
+    private List<StorageUnit> _storageUnits = new List<StorageUnit>();
+    private List<string> _warehouseHotelNames = new List<string>();
+    private List<WarehouseHotelNameMap_StorageUnitId> _warehouseHotelNameMap = new List<WarehouseHotelNameMap_StorageUnitId>();
+    private List<OrderCustomerViewModel> _orderCustomerViewModels = new List<OrderCustomerViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            string token = await _sessionService.GetJwtFromLocalStorage();
+            _orders = await _orderService.GetUserOrdersAsync(UserId);
+
+            foreach (var order in _orders)
+            {
+                var linkedStorageUnit = await _storageUnitService.GetStorageUnit(order.StorageUnitId, token);
+                linkedStorageUnit.LockCode = "0";
+                linkedStorageUnit.UserId = "0";
+                _storageUnits.Add(linkedStorageUnit);
+
+                var warehouseHotelName = await _warehouseHotelService.GetWarehouseHotelName(linkedStorageUnit.WarehouseHotelId);
+                _warehouseHotelNames.Add(warehouseHotelName);
+
+                _warehouseHotelNameMap.Add(new WarehouseHotelNameMap_StorageUnitId(linkedStorageUnit.StorageUnitId, warehouseHotelName));
+            }
+
+            foreach (var order in _orders)
+            {
+                var storageUnit = _storageUnits.Find(x => x.StorageUnitId == order.StorageUnitId);
+                var warehouseHotelName = _warehouseHotelNameMap.Find(x => x.StorageUnitId == storageUnit.StorageUnitId).WarehouseHotelName;
+                _orderCustomerViewModels.Add(new OrderCustomerViewModel(order, storageUnit, warehouseHotelName));
+            }
+            /*_orderCustomerViewModels = _orders.Join(
+                _storageUnits,
+                order => order.StorageUnitId,
+                storageUnit => storageUnit.StorageUnitId,
+                (order, storageUnit) => new OrderCustomerViewModel(
+                    order,
+                    storageUnit,
+                    _warehouseHotelNameMap.Find(x => x.StorageUnitId == storageUnit.StorageUnitId).WarehouseHotelName
+                )
+            ).ToList();*/
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            Console.WriteLine($"The user is not authorized to view these orders or storage units: {e.Message}");
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine($"Was not able to find any information, 404: {e.Message}");
+            Snackbar.Add("Fant ingen bestillinger, prøv på nytt senere", MudBlazor.Severity.Info);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred while fetching the orders: {e}");
+            Snackbar.Add("En feil oppstod under henting av bestillinger", MudBlazor.Severity.Error);
+        }
+    }
 
 }
