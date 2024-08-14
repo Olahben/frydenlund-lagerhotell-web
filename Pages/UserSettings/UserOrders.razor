@@ -39,6 +39,9 @@
         }
         <MudTd DataLabel="Gj.snitt pris i mnd">@context.StorageUnit.PricePerMonth.Amount</MudTd>
         </RowTemplate>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
+        </PagerContent>
     </MudTable>
     @code {
     [Parameter]
