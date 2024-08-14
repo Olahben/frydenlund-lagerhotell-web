@@ -26,11 +26,11 @@
         }
         <MudTd DataLabel="Størrelse (M^2)">@context.StorageUnit.Dimensions.Area</MudTd>
             <MudTd DataLabel="Lagerhotell">@context.WarehouseHotelName</MudTd>
-            <MudTd DataLabel="Startdato">@context.Order.OrderPeriod.OrderDate</MudTd>
+            <MudTd DataLabel="Startdato">@context.Order.OrderPeriod.OrderDate?.ToString("dd.MM.yyyy")</MudTd>
             @if (context.Order.OrderPeriod.EndDate != null)
         {
             <MudTd>
-                DataLabel="Sluttdato">@context.Order.OrderPeriod.EndDate
+                DataLabel="Sluttdato">@context.Order.OrderPeriod.EndDate?.ToString("dd.MM.yyyy")
             </MudTd>
         }
         else
@@ -60,8 +60,6 @@
             foreach (var order in _orders)
             {
                 var linkedStorageUnit = await _storageUnitService.GetStorageUnit(order.StorageUnitId, token);
-                linkedStorageUnit.LockCode = "0";
-                linkedStorageUnit.UserId = "0";
                 _storageUnits.Add(linkedStorageUnit);
 
                 var warehouseHotelName = await _warehouseHotelService.GetWarehouseHotelName(linkedStorageUnit.WarehouseHotelId);
@@ -76,16 +74,6 @@
                 var warehouseHotelName = _warehouseHotelNameMap.Find(x => x.StorageUnitId == storageUnit.StorageUnitId).WarehouseHotelName;
                 _orderCustomerViewModels.Add(new OrderCustomerViewModel(order, storageUnit, warehouseHotelName));
             }
-            /*_orderCustomerViewModels = _orders.Join(
-                _storageUnits,
-                order => order.StorageUnitId,
-                storageUnit => storageUnit.StorageUnitId,
-                (order, storageUnit) => new OrderCustomerViewModel(
-                    order,
-                    storageUnit,
-                    _warehouseHotelNameMap.Find(x => x.StorageUnitId == storageUnit.StorageUnitId).WarehouseHotelName
-                )
-            ).ToList();*/
         }
         catch (UnauthorizedAccessException e)
         {
