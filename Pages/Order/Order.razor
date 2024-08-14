@@ -52,7 +52,7 @@
             {
                 userAccessToken = await _sessionService.GetJwtFromLocalStorage();
                 var userId = user.FindFirst(c => c.Type == ClaimTypes.Sid).Value;
-                currentOrder = new LagerhotellAPI.Models.DomainModels.Order("", userId, StorageUnitId, new OrderPeriod() { OrderDate = DateTime.Now });
+                currentOrder = new LagerhotellAPI.Models.DomainModels.Order("", userId, StorageUnitId, new OrderPeriod() { OrderDate = DateTime.Now }, OrderStatus.NotCreated, OrderInsurance.FiftyThousand, "");
             }
             else
             {
