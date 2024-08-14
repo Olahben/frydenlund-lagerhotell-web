@@ -91,6 +91,10 @@ public class OrderService
                 .ThenByDescending(o => o.OrderPeriod.OrderDate)
                 .ToList();
         }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            throw new UnauthorizedAccessException("The user is not authorized to view these orders");
+        }
         else
         {
             throw new InvalidOperationException($"Something went wrong when fetching orders, code: {response.StatusCode}");
