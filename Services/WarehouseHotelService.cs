@@ -232,4 +232,28 @@ public class WarehouseHotelService
             throw new Exception("Noe gikk galt");
         }
     }
+
+    public async Task<string> GetWarehouseHotelName(string id)
+    {
+        string url = _baseUrl + $"/{id}";
+        HttpResponseMessage responseMessage = await client.GetAsync(url);
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            string responseContent = await responseMessage.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            GetWarehouseHotelByIdResponse warehouseHotel = JsonSerializer.Deserialize<GetWarehouseHotelByIdResponse>(responseContent, options);
+            return warehouseHotel.WarehouseHotel.Name;
+        }
+        else if (responseMessage.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Lagerhotellet eksisterer ikke");
+        }
+        else
+        {
+            throw new Exception("Noe gikk galt");
+        }
+    }
 }
