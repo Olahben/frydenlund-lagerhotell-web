@@ -58,6 +58,25 @@
                                         <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
                                     </MudListItem>
                                 }
+                                <AuthorizeView Roles="Administrator">
+                                    <Authorized Context="n">
+                                        @if (activeTab == "AdminBestillinger")
+                                        {
+                                            <MudListItem Class="active-tab">
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Bestillinger (Admin)</span>
+                                            </MudListItem>
+                                        }
+                                        else
+                                        {
+                                            <MudListItem @onclick='() => SetActiveTab("AdminBestillinger")'>
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Bestillinger (Admin)</span>
+                                            </MudListItem>
+                                        }
+                                    </Authorized>
+                                </AuthorizeView>
+
                             </MudList>
                         </MudPaper>
                     </MudItem>
@@ -162,6 +181,14 @@
                         <MudItem xs="12" md="9">
                             <MudPaper Elevation="1" Class="pa-4">
                                 <UserOrders />
+                            </MudPaper>
+                        </MudItem>
+                    }
+                    else if (activeTab == "AdminBestillinger")
+                    {
+                        <MudItem xs="12" md="9">
+                            <MudPaper Elevation="1" Class="pa-4">
+                                <UserOrdersAdminView />
                             </MudPaper>
                         </MudItem>
                     }
