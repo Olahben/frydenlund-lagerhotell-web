@@ -3,6 +3,7 @@
 @inject SessionService _sessionService
 @inject WarehouseHotelService _warehouseHotelService
 @inject UserService _userService
+@inject IDialogService _dialogService
 
 
 <MudTable Items="@_orderAdminViewModels" Filter="new Func<OrderAdminViewModel, bool>(FilterFunc1)">
@@ -22,6 +23,7 @@
         <MudTh>Dato bestilt</MudTh>
         <MudTh>Avslutningsdato</MudTh>
         <MudTh>Neste betalingsdato</MudTh>
+        <MudTh>Kanseller</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Order.Status</MudTd>
@@ -41,6 +43,7 @@
             <MudTd>Ikke satt</MudTd>
         }
         <MudTd>Rediger dette</MudTd>
+        <MudTd><MudIcon Icon="@Icons.Material.Filled.Cancel" @onclick="() => OpenCancelDialogAsync(context.Order, context.User, context.StorageUnit, context.WarehouseHotelName)"></MudIcon></MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
@@ -109,5 +112,19 @@
         if (element.StorageUnit.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
+    }
+
+    private Task OpenCancelDialogAsync(Order order, User user, StorageUnit storageUnit, string warehouseHotelName)
+    {
+        // var options = new DialogOptions { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters<CancelOrder>
+        {
+            { x => x.Order, order },
+            { x => x.User, user },
+            { x => x.StorageUnit, storageUnit },
+            { x => x.WarehouseHotelName, warehouseHotelName }
+        };
+
+        return DialogService.ShowAsync<CancelOrder>("Simple Dialog", parameters);
     }
 }
