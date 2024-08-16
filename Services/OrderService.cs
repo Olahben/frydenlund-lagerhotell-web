@@ -100,4 +100,25 @@ public class OrderService
             throw new InvalidOperationException($"Something went wrong when fetching orders, code: {response.StatusCode}");
         }
     }
+
+    public async Task<List<Order>> GetAllOrders(int? skip, int? take)
+    {
+        string endpointUrl = url + $"?skip={skip}&take={take}";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<Order> orders = JsonSerializer.Deserialize<List<Order>>(responseContent, options);
+            return orders;
+        }
+        else
+        {
+            throw new InvalidOperationException($"Something went wrong when fetching orders, code: {response.StatusCode}");
+        }
+    }
 }
