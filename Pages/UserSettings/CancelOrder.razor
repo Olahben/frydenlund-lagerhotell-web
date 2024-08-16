@@ -27,8 +27,22 @@
 
     private async Task Submit()
     {
+        try
+        {
+            await _orderService.CancelOrder(Order.OrderId);
+            Snackbar.Add("Bestilling kansellert", MudBlazor.Severity.Success);
+        } catch (InvalidOperationException e)
+        {
+            Snackbar.Add("Bestillingen er allerede kansellert", MudBlazor.Severity.Warning);
+        } catch (KeyNotFoundException e)
+        {
+            Snackbar.Add("Fant ikke bestillingen, prøv på nytt senere", MudBlazor.Severity.Error);
+        } catch (Exception e)
+        {
+            Snackbar.Add("En feil oppstod under kansellering av bestillingen", MudBlazor.Severity.Error);
+            Console.WriteLine($"An error occurred while canceling the order: {e}");
+        }
         Dialog.Close(DialogResult.Ok(true));
-        // await _orderService.CancelOrder(Order.Id);
     }
 
     private void Cancel() => Dialog.Cancel();
