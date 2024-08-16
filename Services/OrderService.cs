@@ -1,5 +1,6 @@
 ﻿global using System.Net.Http.Headers;
 using LagerhotellAPI.Models.DomainModels.Validators;
+using LagerhotellAPI.Models.ValueTypes;
 
 namespace Lagerhotell.Services;
 
@@ -119,6 +120,35 @@ public class OrderService
         else
         {
             throw new InvalidOperationException($"Something went wrong when fetching orders, code: {response.StatusCode}");
+        }
+    }
+
+    public async Task<OrderPeriod> CancelOrder(string id)
+    {
+        var request = new CancelOrderRequest(id);
+        string url = this.url + $"/cancel";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        string jsonData = JsonSerializer.Serialize(request);
+        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _httpClient.PutAsync(url, content);
+        if (response.IsSuccessStatusCode)
+        {
+            string deserializedResponseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var deserializedResponse = JsonSerializer.Deserialize<CancelOrderResponse>(deserializedResponseString, options);
+            return deserializedResponse.OrderPeriod;
+        }
+        else if (response.StatusCode == HttpStatusCode.Conflict)
+        {
+            throw new InvalidOperationException("The order is already cancelled");
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("The order was not found");
+        }
+        else
+        {
+            throw new Exception("Something went wrong");
         }
     }
 }
