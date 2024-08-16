@@ -1,0 +1,23 @@
+﻿<MudDialog>
+    <TitleContent>
+        <h3 class="m-0">Cancel Order</h3>
+    </TitleContent>
+    <DialogContent>
+        <p>Are you sure you want to cancel this order?</p>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@Submit">Yes</MudButton>
+        <MudButton OnClick="@Cancel">No</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance Dialog { get; set; }
+    [Parameter]
+    public Order Order { get; set; }
+
+    private void Submit() => Dialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => Dialog.Cancel();
+}
