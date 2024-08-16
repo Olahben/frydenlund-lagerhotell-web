@@ -1,13 +1,15 @@
-﻿<MudDialog>
+﻿@inject OrderService _orderService
+
+<MudDialog>
     <TitleContent>
-        <h3 class="m-0">Cancel Order</h3>
+        <h3 class="m-0">Kanseller bestilling</h3>
     </TitleContent>
     <DialogContent>
-        <p>Are you sure you want to cancel this order?</p>
+        <p>Er du sikker på at du vil kansellere bestillingen til @($"{User.FirstName} {User.LastName} på {StorageUnit.Name} i lagerhotell: {WarehouseHotelName}")</p>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="@Submit">Yes</MudButton>
-        <MudButton OnClick="@Cancel">No</MudButton>
+        <MudButton OnClick="@Submit">Ja</MudButton>
+        <MudButton OnClick="@Cancel">Nei</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -16,8 +18,18 @@
     MudDialogInstance Dialog { get; set; }
     [Parameter]
     public Order Order { get; set; }
+    [Parameter]
+    public User User { get; set; }
+    [Parameter]
+    public StorageUnit StorageUnit { get; set; }
+    [Parameter]
+    public string WarehouseHotelName { get; set; }
 
-    private void Submit() => Dialog.Close(DialogResult.Ok(true));
+    private async Task Submit()
+    {
+        Dialog.Close(DialogResult.Ok(true));
+        // await _orderService.CancelOrder(Order.Id);
+    }
 
     private void Cancel() => Dialog.Cancel();
 }
