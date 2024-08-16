@@ -4,8 +4,13 @@
 @inject WarehouseHotelService _warehouseHotelService
 @inject UserService _userService
 
-<h3>Brukerbestillinger</h3>
-<MudTable Items="@_orderAdminViewModels">
+
+<MudTable Items="@_orderAdminViewModels" Filter="new Func<OrderAdminViewModel, bool>(FilterFunc1)">
+    <ToolBarContent>
+        <MudText Style="margin-left: 6px;" Typo="Typo.h6">Brukerbestillinger</MudText>
+        <MudSpacer />
+        <MudTextField Style="margin-right: 6px;" @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
     <HeaderContent>
         <MudTh>Status</MudTh>
         <MudTh>Fornavn</MudTh>
@@ -48,6 +53,7 @@
     private List<StorageUnit> _storageUnits = new List<StorageUnit>();
     private List<User> _users = new List<User>();
     private List<string> _warehouseHotelNames = new List<string>();
+    private string searchString1 = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,5 +85,31 @@
             Console.WriteLine($"Something went wrong: {e}");
             Snackbar.Add("Kunne ikke hente inn data, se i konsollen for nærmere informasjon", MudBlazor.Severity.Error);
         }
+    }
+
+    private bool FilterFunc1(OrderAdminViewModel element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(OrderAdminViewModel element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.User.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.User.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.User.PhoneNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        /*
+         * Commented out because there are no users with email in the database
+         if (element.User.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+            */
+        if (element.WarehouseHotelName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.StorageUnit.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        //if ($"{element.Number} {element.Position} {element.Molar}".Contains(searchString))
+            //return true;
+        return false;
     }
 }
