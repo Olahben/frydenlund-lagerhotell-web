@@ -1,0 +1,80 @@
+﻿@inject OrderService _orderService
+@inject StorageUnitService _storageUnitService
+@inject SessionService _sessionService
+@inject WarehouseHotelService _warehouseHotelService
+@inject UserService _userService
+
+<h3>Brukerbestillinger</h3>
+<MudTable Items="@_orderAdminViewModels">
+    <HeaderContent>
+        <MudTh>Status</MudTh>
+        <MudTh>Fornavn</MudTh>
+        <MudTh>Etternavn</MudTh>
+        <MudTh>Tlfnr</MudTh>
+        <MudTh>E-post</MudTh>
+        <MudTh>Lagerhotell</MudTh>
+        <MudTh>Bod</MudTh>
+        <MudTh>Dato bestilt</MudTh>
+        <MudTh>Avslutningsdato</MudTh>
+        <MudTh>Neste betalingsdato</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Order.Status</MudTd>
+            <MudTd>@context.User.FirstName</MudTd>
+            <MudTd>@context.User.LastName</MudTd>
+            <MudTd>@context.User.PhoneNumber</MudTd>
+            <MudTd>@context.User.Email</MudTd>
+            <MudTd>@context.WarehouseHotelName</MudTd>
+            <MudTd>@context.StorageUnit.Name</MudTd>
+            <MudTd>@context.Order.OrderPeriod.OrderDate?.ToString("dd.MM.yyyy")</MudTd>
+            @if (context.Order.OrderPeriod.EndDate != null)
+        {
+            <MudTd>@context.Order.OrderPeriod.EndDate?.ToString("dd.MM.yyyy")</MudTd>
+        }
+        else
+        {
+            <MudTd>Ikke satt</MudTd>
+        }
+        <MudTd>Rediger dette</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    private List<OrderAdminViewModel> _orderAdminViewModels = new List<OrderAdminViewModel>();
+    private List<Order> _orders = new List<Order>();
+    private List<StorageUnit> _storageUnits = new List<StorageUnit>();
+    private List<User> _users = new List<User>();
+    private List<string> _warehouseHotelNames = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            string token = await _sessionService.GetJwtFromLocalStorage();
+            _orders = await _orderService.GetAllOrders(0, 0);
+
+            foreach (var order in _orders)
+            {
+                var _linkedUser = await _userService.GetUserById(order.UserId);
+                _users.Add(_linkedUser);
+                var _linkedStorageUnit = await _storageUnitService.GetStorageUnit(order.StorageUnitId, token);
+                _storageUnits.Add(_linkedStorageUnit);
+                string _linkedWarehouseHotelName = await _warehouseHotelService.GetWarehouseHotelName(_linkedStorageUnit.WarehouseHotelId);
+                _warehouseHotelNames.Add(_linkedWarehouseHotelName);
+
+                OrderAdminViewModel orderAdminViewModel = new OrderAdminViewModel(order, _linkedUser, _linkedWarehouseHotelName, _linkedStorageUnit);
+                _orderAdminViewModels.Add(orderAdminViewModel);
+            }
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine($"Data was not found: {e}");
+            Snackbar.Add("Fant ikke nødvendig data, se i konsollen for nærmere informasjon", MudBlazor.Severity.Error);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Something went wrong: {e}");
+            Snackbar.Add("Kunne ikke hente inn data, se i konsollen for nærmere informasjon", MudBlazor.Severity.Error);
+        }
+    }
+}
