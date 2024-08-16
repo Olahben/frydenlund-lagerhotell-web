@@ -34,4 +34,25 @@ public class UserService
         }
     }
 
+    public async Task<User> GetUserById(string id)
+    {
+        string endpointUrl = url + "/get-user/" + id;
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            User user = JsonSerializer.Deserialize<GetUser.GetUserResponse>(responseContent, options).User;
+            return user;
+        }
+        else
+        {
+            throw new KeyNotFoundException($"Something went wrong when fetching user with id: {id} ");
+        }
+    }
+
 }
