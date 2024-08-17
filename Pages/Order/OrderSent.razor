@@ -2,6 +2,7 @@
 
 @inject NavigationManager _navigationManager
 @inject OrderService _orderService
+@inject StorageUnitService _storageUnitService
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
@@ -29,7 +30,13 @@
         try
         {
             LagerhotellAPI.Models.DomainModels.Order relevantOrder = await _orderService.GetOrderByIdAsync(OrderId);
-            Console.WriteLine(relevantOrder.UserId);
+            await _storageUnitService.OccupyStorageUnit(relevantOrder.StorageUnitId, relevantOrder.UserId);
+        } catch (InvalidOperationException e)
+        {
+            Snackbar.Add("Bestillingen er allerede registrert, prøv igjen senere. Lagerboden kan ha blitt bestilt av noen andre.", MudBlazor.Severity.Warning);
+        } catch (KeyNotFoundException e)
+        {
+            Snackbar.Add("Noe gikk galt, prøv igjen senere.", MudBlazor.Severity.Error);
         }
         catch (Exception e)
         {
