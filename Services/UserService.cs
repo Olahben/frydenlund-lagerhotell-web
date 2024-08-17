@@ -54,5 +54,24 @@ public class UserService
             throw new KeyNotFoundException($"Something went wrong when fetching user with id: {id} ");
         }
     }
-
+    public async Task<List<User>> GetAllUsers(int? skip, int? take)
+    {
+        string endpointUrl = url + $"/get-all/{skip}/{take}";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<User> users = JsonSerializer.Deserialize<List<User>>(responseContent, options);
+            return users;
+        }
+        else
+        {
+            throw new InvalidOperationException($"Something went wrong when fetching users, code: {response.StatusCode}");
+        }
+    }
 }
