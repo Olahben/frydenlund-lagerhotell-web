@@ -94,4 +94,28 @@ public class StorageUnitService
             throw new Exception("Noe gikk galt");
         }
     }
+
+    public async Task OccupyStorageUnit(string id, string userId)
+    {
+        string url = _baseUrl + $"/occupy";
+        var request = new OccupyStorageUnitRequest(id, userId);
+        string jsonData = JsonSerializer.Serialize(request);
+        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PutAsync(url, content);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("Fant ingen lagerenhet med denne id'en");
+            }
+            else if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                throw new InvalidOperationException("Lagerenheten er allerede opptatt");
+            }
+            else
+            {
+                throw new Exception("Noe gikk galt");
+            }
+        }
+    }
 }
