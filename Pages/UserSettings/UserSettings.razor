@@ -16,6 +16,14 @@
         background-color: #f0f0f0;
         border-left: 4px solid #6200ea;
     }
+
+    .hover-effect {
+        transition: background-color 0.3s ease;
+    }
+
+        .hover-effect:hover {
+            background-color: #f0f0f0;
+        }
 </style>
 
 @if (isInitialized)
@@ -39,7 +47,7 @@
                                 }
                                 else
                                 {
-                                    <MudListItem @onclick='() => SetActiveTab("profil")'>
+                                    <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("profil")'>
                                         <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
                                         <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
                                     </MudListItem>
@@ -53,7 +61,7 @@
                                 }
                                 else
                                 {
-                                    <MudListItem @onclick='() => SetActiveTab("Bestillinger")'>
+                                    <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("Bestillinger")'>
                                         <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" style="vertical-align: middle;" />
                                         <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
                                     </MudListItem>
@@ -69,9 +77,23 @@
                                         }
                                         else
                                         {
-                                            <MudListItem @onclick='() => SetActiveTab("AdminBestillinger")'>
+                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBestillinger")'>
                                                 <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
                                                 <span style="vertical-align: middle; margin-left: 8px;">Bestillinger (Admin)</span>
+                                            </MudListItem>
+                                        }
+                                        @if (activeTab == "AdminBrukere")
+                                        {
+                                            <MudListItem Class="active-tab">
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
+                                            </MudListItem>
+                                        }
+                                        else
+                                        {
+                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBrukere")'>
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
                                             </MudListItem>
                                         }
                                     </Authorized>
@@ -188,7 +210,15 @@
                     {
                         <MudItem xs="12" md="9">
                             <MudPaper Elevation="1" Class="pa-4">
-                                <UserOrdersAdminView />
+                                <Lagerhotell.Pages.UserSettings.Admin.UserOrdersAdminView />
+                            </MudPaper>
+                        </MudItem>
+                    }
+                    else if (activeTab == "AdminBrukere")
+                    {
+                        <MudItem xs="12" md="9">
+                            <MudPaper Elevation="1" Class="pa-4">
+                                <Lagerhotell.Pages.UserSettings.Admin.UsersAdminView />
                             </MudPaper>
                         </MudItem>
                     }
