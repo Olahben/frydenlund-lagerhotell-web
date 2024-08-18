@@ -1,4 +1,5 @@
 ﻿@inject UserService _userService
+@inject IDialogService _dialogService
 
 <MudTable Items="@users" Filter="new Func<User, bool>(FilterFunc1)">
     <ToolBarContent>
@@ -12,18 +13,20 @@
         <MudTh>E-post</MudTh>
         <MudTh>Tlfnr</MudTh>
         <MudTh>Addresse</MudTh>
+        <MudTh>Slett</MudTh>
     </HeaderContent>
     <RowTemplate>
-<MudTd>@context.FirstName</MudTd>
-        <MudTd>@context.LastName</MudTd>
-        <MudTd>@context.Email</MudTd>
-        <MudTd>@context.PhoneNumber</MudTd>
-        <MudTd>@context.Address.StreetAddress</MudTd>
-    </RowTemplate>
+        <MudTd>@context.FirstName</MudTd>
+            <MudTd>@context.LastName</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>@context.PhoneNumber</MudTd>
+            <MudTd>@context.Address.StreetAddress</MudTd>
+            <MudTd><MudIcon Icon="@Icons.Material.Filled.Delete" Style="cursor:pointer" @onclick="() => OpenDeleteUserDialogAsync(context)"></MudIcon></MudTd>
+        </RowTemplate>
         <PagerContent>
             <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
         </PagerContent>
-</MudTable>
+    </MudTable>
 
     @code {
     private List<User> users = new List<User>();
@@ -34,7 +37,9 @@
         try
         {
             users = await _userService.GetAllUsers(0, 0);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Console.WriteLine($"An error occurred while fetching users: {e}");
             Snackbar.Add("En feil oppstod under henting av brukere, se i konsollen form nærmere informasjon", MudBlazor.Severity.Error);
         }
@@ -57,4 +62,13 @@
         return false;
     }
 
+    private async Task OpenDeleteUserDialogAsync(User user)
+    {
+        var parameters = new DialogParameters<Lagerhotell.Pages.UserSettings.Admin.DeleteUser>
+        {
+            { x => x.User, user }
+        };
+
+        var dialog = _dialogService.Show<Lagerhotell.Pages.UserSettings.Admin.DeleteUser>("Slett bruker", parameters);
+    }
 }
