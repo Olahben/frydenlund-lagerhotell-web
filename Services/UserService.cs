@@ -1,4 +1,5 @@
 ﻿namespace Lagerhotell.Services;
+
 using System.Net.Http.Headers;
 
 public class UserService
@@ -72,6 +73,24 @@ public class UserService
         else
         {
             throw new InvalidOperationException($"Something went wrong when fetching users, code: {response.StatusCode}");
+        }
+    }
+
+    public async Task DeleteUser(string id)
+    {
+        string endpointUrl = url + $"/delete-user/{id}";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await _httpClient.DeleteAsync(endpointUrl);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+            else
+            {
+                throw new InvalidOperationException("Something went wrong when deleting user");
+            }
         }
     }
 }
