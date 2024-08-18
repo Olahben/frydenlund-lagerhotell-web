@@ -43,14 +43,14 @@
             <MudTd>Ikke satt</MudTd>
         }
         <MudTd>@context.Order.OrderPeriod.NextPaymentDate.ToString("dd.MM.yyyy")</MudTd>
-        <MudTd><MudIcon Icon="@Icons.Material.Filled.Cancel" @onclick="() => OpenCancelDialogAsync(context.Order, context.User, context.StorageUnit, context.WarehouseHotelName)"></MudIcon></MudTd>
-    </RowTemplate>
-    <PagerContent>
-        <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
-    </PagerContent>
-</MudTable>
+            <MudTd><MudIcon Icon="@Icons.Material.Filled.Cancel" @onclick="() => OpenCancelDialogAsync(context.Order, context.User, context.StorageUnit, context.WarehouseHotelName)"></MudIcon></MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
+        </PagerContent>
+    </MudTable>
 
-@code {
+    @code {
     private List<OrderAdminViewModel> _orderAdminViewModels = new List<OrderAdminViewModel>();
     private List<Order> _orders = new List<Order>();
     private List<StorageUnit> _storageUnits = new List<StorageUnit>();
@@ -77,6 +77,9 @@
                 OrderAdminViewModel orderAdminViewModel = new OrderAdminViewModel(order, _linkedUser, _linkedWarehouseHotelName, _linkedStorageUnit);
                 _orderAdminViewModels.Add(orderAdminViewModel);
             }
+
+            // sort by order date
+            _orderAdminViewModels = _orderAdminViewModels.OrderBy(o => o.Order.OrderPeriod.OrderDate).ToList();
         }
         catch (KeyNotFoundException e)
         {
