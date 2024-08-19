@@ -32,7 +32,7 @@
             <MudTd>@context.StorageUnit.Coordinate.Latitude</MudTd>
             <MudTd>@context.StorageUnit.Coordinate.Longitude</MudTd>
             <MudTd>@context.StorageUnit.PricePerMonth.Amount</MudTd>
-            <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Edit"></MudIcon></MudTd>
+            <MudTd><MudIcon Style="cursor: pointer;" @onclick="() => OpenEditStorageUnitDialog(context)" Icon="@Icons.Material.Filled.Edit"></MudIcon></MudTd>
             <MudTd><MudIcon Style="cursor: pointer;" @onclick="() => OpenDeleteStorageUnitDialog(context)" Icon="@Icons.Material.Filled.Delete"></MudIcon></MudTd>
         </RowTemplate>
         <PagerContent>
@@ -78,6 +78,17 @@
         };
 
         var dialog = DialogService.Show<DeleteStorageUnit>("Slett lagerenhet", parameters);
+    }
+
+    private async Task OpenEditStorageUnitDialog(StorageUnitViewModel viewModel)
+    {
+        var parameters = new DialogParameters<EditStorageUnit>
+        {
+            { x => x.StorageUnit, viewModel.StorageUnit },
+            { x => x.WarehouseHotelName, viewModel.WarehouseHotelName }
+        };
+
+        var dialog = DialogService.Show<EditStorageUnit>("Rediger lagerenhet", parameters);
     }
 
     private bool FilterFunc1(StorageUnitViewModel element) => FilterFunc(element, searchString);
