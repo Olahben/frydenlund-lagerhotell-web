@@ -1,0 +1,41 @@
+﻿@inject StorageUnitService _storageUnitService
+
+<MudDialog>
+    <TitleContent>Slett lagerenhet</TitleContent>
+    <DialogContent>
+        <p>Er du sikker på at du vil slette lagerenheten?</p>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@DeleteStorageUnit1">Ja, slett</MudButton>
+        <MudButton OnClick="@Cancel">Avbryt</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public StorageUnit StorageUnit { get; set; }
+
+    private async Task DeleteStorageUnit1()
+    {
+        try
+        {
+            await _storageUnitService.DeleteStorageUnit(StorageUnit.StorageUnitId);
+            Snackbar.Add("Lagerenhet slettet", MudBlazor.Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine($"Data was not found: {e}");
+            Snackbar.Add("Fant ikke nødvendig data, se i konsollen for nærmere informasjon", MudBlazor.Severity.Error);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred while deleting storage unit: {e}");
+            Snackbar.Add("En feil oppstod under sletting av lagerenhet, se i konsollen for nærmere informasjon", MudBlazor.Severity.Error);
+        }
+    }
+
+    private async Task Cancel() => MudDialog.Cancel();
+}
