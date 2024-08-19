@@ -1,0 +1,65 @@
+﻿@inject StorageUnitService _storageUnitService
+@inject SessionService _sessionService
+@inject WarehouseHotelService _warehouseHotelService
+
+<MudDialog>
+    <TitleContent>Rediger @StorageUnit.Name</TitleContent>
+    <DialogContent>
+        <MudForm Model="StorageUnit" Validation="(storageUnitValidator.ValidateValue)">
+            <MudTextField Label="Lagerhotell" @bind-Value="WarehouseHotelName" Required="true"></MudTextField>
+            <MudTextField Label="Navn" @bind-Value="StorageUnit.Name" For="@(() => StorageUnit.Name)" Immediate="true"></MudTextField>
+            <MudTextField Label="Høyde" @bind-Value="StorageUnit.Dimensions.Height" For="@(() => StorageUnit.Dimensions.Height)" Immediate="true"></MudTextField>
+            <MudTextField Label="Bredde" @bind-Value="StorageUnit.Dimensions.Width" For="@(() => StorageUnit.Dimensions.Width)" Immediate="true"></MudTextField>
+            <MudTextField Label="Dybde" @bind-Value="StorageUnit.Dimensions.Length" For="@(() => StorageUnit.Dimensions.Length)" Immediate="true"></MudTextField>
+            <MudTextField Label="Breddegrad" @bind-Value="StorageUnit.Coordinate.Latitude" For="@(() => StorageUnit.Coordinate.Latitude)" Immediate="true"></MudTextField>
+            <MudTextField Label="Lengdegrad" @bind-Value="StorageUnit.Coordinate.Longitude" For="@(() => StorageUnit.Coordinate.Longitude)" Immediate="true"></MudTextField>
+            <MudTextField Label="Pris per mnd (kr)" @bind-Value="StorageUnit.PricePerMonth.Amount" For="@(() => StorageUnit.PricePerMonth.Amount)" Immediate="true"></MudTextField>
+            <MudSwitch Label="Temperert" @bind-Value="StorageUnit.Temperated" For="@(() => StorageUnit.Temperated)"></MudSwitch>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Avbryt</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Confirm">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public StorageUnit StorageUnit { get; set; }
+    [Parameter]
+    public string WarehouseHotelName { get; set; }
+    public StorageUnit UpdatedStorageUnit { get; set; }
+    private StorageUnitValidator storageUnitValidator = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UpdatedStorageUnit = StorageUnit;
+    }
+
+    private async Task Confirm()
+    {
+        try
+        {
+            await storageUnitValidator.ValidateAndThrowAsync(UpdatedStorageUnit);
+            string token = await _sessionService.GetJwtFromLocalStorage();
+            await _warehouseHotelService.GetWarehouseHotelByName(WarehouseHotelName, token);
+            await _storageUnitService.ModifyStorageUnit(UpdatedStorageUnit);
+            Snackbar.Add("Lagerenhet endret", MudBlazor.Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (KeyNotFoundException e)
+        {
+            Snackbar.Add("Data ble ikke funnet, sjekk om navnet på lagerhotellet er riktig", MudBlazor.Severity.Error);
+            Console.WriteLine($"Error: {e}");
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add($"En feil oppstod under endring av lagerenhet, {e.Message}", MudBlazor.Severity.Error);
+            Console.WriteLine($"An error occurred while editing storage unit: {e}");
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}
