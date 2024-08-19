@@ -7,6 +7,11 @@ public class WarehouseHotelService
     private readonly string _baseUrl = "https://localhost:7272/warehouse-hotels";
     private readonly HttpClient client = new();
     private FileHandler _fileHandler { get; set; } = new();
+    private SessionService _sessionService { get; set; }
+    public WarehouseHotelService(SessionService sessionService)
+    {
+        _sessionService = sessionService;
+    }
 
     /// <summary>
     /// Legger til et nytt lagerhotell i databasen
