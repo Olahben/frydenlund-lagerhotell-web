@@ -118,4 +118,21 @@ public class StorageUnitService
             }
         }
     }
+
+    public async Task<List<StorageUnit>> GetAllStorageUnits()
+    {
+        string url = _baseUrl;
+        HttpResponseMessage response = await client.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+            string deserializedResponseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var deserializedResponse = JsonSerializer.Deserialize<List<StorageUnit>>(deserializedResponseString, options);
+            return deserializedResponse;
+        }
+        else
+        {
+            throw new Exception("Noe gikk galt");
+        }
+    }
 }
