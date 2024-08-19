@@ -35,6 +35,9 @@
             <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Edit"></MudIcon></MudTd>
             <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Delete"></MudIcon></MudTd>
         </RowTemplate>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
+        </PagerContent>
     </MudTable>
 
     @code {
