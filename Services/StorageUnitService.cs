@@ -159,4 +159,25 @@ public class StorageUnitService
             }
         }
     }
+
+    public async Task ModifyStorageUnit(StorageUnit updatedStorageUnit)
+    {
+        string url = _baseUrl + $"/modify";
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        var request = new ModifyStorageUnitRequest(updatedStorageUnit);
+        string jsonData = JsonSerializer.Serialize(request);
+        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PutAsync(url, content);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("Fant ingen lagerenhet med denne id'en");
+            }
+            else
+            {
+                throw new Exception("Noe gikk galt");
+            }
+        }
+    }
 }
