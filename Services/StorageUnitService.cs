@@ -6,6 +6,12 @@ public class StorageUnitService
 {
     private readonly HttpClient client = new HttpClient();
     private readonly string _baseUrl = "https://localhost:7272/storage-units";
+    private readonly SessionService _sessionService;
+
+    public StorageUnitService(SessionService sessionService)
+    {
+        _sessionService = sessionService;
+    }
 
     /// <summary>
     /// Adds a storage unit to the database
@@ -133,6 +139,24 @@ public class StorageUnitService
         else
         {
             throw new Exception("Noe gikk galt");
+        }
+    }
+
+    public async Task DeleteStorageUnit(string id)
+    {
+        string url = _baseUrl + $"/{id}";
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await client.DeleteAsync(url);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("Fant ingen lagerenhet med denne id'en");
+            }
+            else
+            {
+                throw new Exception("Noe gikk galt");
+            }
         }
     }
 }
