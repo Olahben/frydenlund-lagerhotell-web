@@ -1,0 +1,74 @@
+﻿@inject StorageUnitService _storageUnitService
+@inject WarehouseHotelService _warehouseHotelService
+
+<MudTable Items="@_storageUnitViewModels" Filter="new Func<StorageUnitViewModel, bool>(FilterFunc1)">
+    <ToolBarContent>
+        <MudText Style="margin-left: 6px;" Typo="Typo.h6">Brukerbestillinger</MudText>
+        <MudSpacer />
+        <MudTextField Style="margin-right: 6px;" @bind-Value="searchString" Placeholder="Søk" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolbarContent>
+    <HeaderContent>
+        <MudTh>Lagerhotell</MudTh>
+        <MudTh>Navn</MudTh>
+        <MudTh>Høyde</MudTh>
+        <MudTh>Bredde</MudTh>
+        <MudTh>Dybde</MudTh>
+        <MudTh>I bruk</MudTh>
+        <MudTh>BrukerId</MudTh>
+        <MudTh>Breddegrad</MudTh>
+        <MudTh>Lengdegrad</MudTh>
+        <MudTh>Pris per mnd (kr)</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.WarehouseHotelName</MudTd>
+            <MudTd>@context.StorageUnit.Name</MudTd>
+            <MudTd>@context.StorageUnit.Dimensions.Height</MudTd>
+            <MudTd>@context.StorageUnit.Dimensions.Width</MudTd>
+            <MudTd>@context.StorageUnit.Dimensions.Length</MudTd>
+            <MudTd>@context.StorageUnit.Occupied</MudTd>
+            <MudTd>@context.StorageUnit.UserId</MudTd>
+            <MudTd>@context.StorageUnit.Coordinate.Latitude</MudTd>
+            <MudTd>@context.StorageUnit.Coordinate.Longitude</MudTd>
+            <MudTd>@context.StorageUnit.PricePerMonth.Amount</MudTd>
+        </RowTemplate>
+    </MudTable>
+
+    @code {
+    private List<StorageUnit> _storageUnits = new List<StorageUnit>();
+    private List<StorageUnitViewModel> _storageUnitViewModels = new List<StorageUnitViewModel>();
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _storageUnits = await _storageUnitService.GetAllStorageUnits();
+
+            foreach (var storageUnit in _storageUnits)
+            {
+                string warehouseHotelName = await _warehouseHotelService.GetWarehouseHotelName(storageUnit.WarehouseHotelId);
+                StorageUnitViewModel storageUnitViewModel = new StorageUnitViewModel(storageUnit, warehouseHotelName);
+                _storageUnitViewModels.Add(storageUnitViewModel);
+            }
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine($"Data was not found: {e}");
+            Snackbar.Add("Fant ikke nødvendig data, se i konsollen for nærmere informasjon", MudBlazor.Severity.Error);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred while fetching storage units: {e}");
+            Snackbar.Add("En feil oppstod under henting av lagerenheter, se i konsollen form nærmere informasjon", MudBlazor.Severity.Error);
+        }
+    }
+
+    private bool FilterFunc1(StorageUnitViewModel element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(StorageUnitViewModel element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        return false;
+    }
+}
