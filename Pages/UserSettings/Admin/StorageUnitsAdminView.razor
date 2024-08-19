@@ -18,6 +18,8 @@
         <MudTh>Breddegrad</MudTh>
         <MudTh>Lengdegrad</MudTh>
         <MudTh>Pris per mnd (kr)</MudTh>
+        <MudTh>Rediger</MudTh>
+        <MudTh>Slett</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.WarehouseHotelName</MudTd>
@@ -30,6 +32,8 @@
             <MudTd>@context.StorageUnit.Coordinate.Latitude</MudTd>
             <MudTd>@context.StorageUnit.Coordinate.Longitude</MudTd>
             <MudTd>@context.StorageUnit.PricePerMonth.Amount</MudTd>
+            <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Edit"></MudIcon></MudTd>
+            <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Delete"></MudIcon></MudTd>
         </RowTemplate>
     </MudTable>
 
@@ -68,6 +72,24 @@
     private bool FilterFunc(StorageUnitViewModel element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.WarehouseHotelName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.StorageUnit.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.StorageUnit.Dimensions.Height.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.StorageUnit.Dimensions.Width.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.StorageUnit.Dimensions.Length.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.StorageUnit.Occupied.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.StorageUnit.UserId != null) {
+        if (element.StorageUnit.UserId.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        }
+        if (element.StorageUnit.PricePerMonth.Amount.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }
