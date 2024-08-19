@@ -96,6 +96,20 @@
                                                 <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
                                             </MudListItem>
                                         }
+                                        @if (activeTab == "AdminBoder")
+                                        {
+                                            <MudListItem Class="active-tab">
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Boder (Admin)</span>
+                                            </MudListItem>
+                                        }
+                                        else
+                                        {
+                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBoder")'>
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Boder (Admin)</span>
+                                            </MudListItem>
+                                        }
                                     </Authorized>
                                 </AuthorizeView>
 
@@ -219,6 +233,14 @@
                         <MudItem xs="12" md="9">
                             <MudPaper Elevation="1" Class="pa-4">
                                 <Lagerhotell.Pages.UserSettings.Admin.UsersAdminView />
+                            </MudPaper>
+                        </MudItem>
+                    }
+                    else if (activeTab == "AdminBoder")
+                    {
+                        <MudItem xs="12" md="9">
+                            <MudPaper Elevation="1" Class="pa-4">
+                                <Lagerhotell.Pages.UserSettings.Admin.StorageUnitsAdminView />
                             </MudPaper>
                         </MudItem>
                     }
