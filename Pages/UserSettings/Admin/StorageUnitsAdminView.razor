@@ -33,7 +33,7 @@
             <MudTd>@context.StorageUnit.Coordinate.Longitude</MudTd>
             <MudTd>@context.StorageUnit.PricePerMonth.Amount</MudTd>
             <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Edit"></MudIcon></MudTd>
-            <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Delete"></MudIcon></MudTd>
+            <MudTd><MudIcon Style="cursor: pointer;" @onclick="() => OpenDeleteStorageUnitDialog(context)" Icon="@Icons.Material.Filled.Delete"></MudIcon></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
@@ -68,6 +68,16 @@
             Console.WriteLine($"An error occurred while fetching storage units: {e}");
             Snackbar.Add("En feil oppstod under henting av lagerenheter, se i konsollen form nærmere informasjon", MudBlazor.Severity.Error);
         }
+    }
+
+    private async Task OpenDeleteStorageUnitDialog(StorageUnitViewModel viewModel)
+    {
+        var parameters = new DialogParameters<DeleteStorageUnit>
+        {
+            { x => x.StorageUnit, viewModel.StorageUnit }
+        };
+
+        var dialog = DialogService.Show<DeleteStorageUnit>("Slett lagerenhet", parameters);
     }
 
     private bool FilterFunc1(StorageUnitViewModel element) => FilterFunc(element, searchString);
