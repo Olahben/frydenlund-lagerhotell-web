@@ -27,7 +27,7 @@
                         <MudTextField T="string" Class="form-text-field" Style="width: 100%;" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="logInValues.PhoneNumber" For="@(() => logInValues.PhoneNumber)" Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Style="padding-bottom: 0;" xs="12">
-                        <MudTextField T="string" Class="form-text-field" Style="width: 100%;" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@InputType.Password" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" Variant="Variant.Outlined" />
+                        <MudTextField Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" T="string" Class="form-text-field" Style="width: 100%;" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@PasswordInput" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" Variant="Variant.Outlined" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
                     </MudItem>
                     <MudItem Style="margin-bottom: 22px;">
                         @*Should link to forgot password site*@
@@ -42,25 +42,19 @@
         </MudItem>
     </MudGrid>
 
-    @*<MudContainer Style="width: 100%; height: 100%; display:flex; justify-content: center; flex-wrap: nowrap; margin-top: 46px;">
-    <MudPaper Elevation="2" Style="max-width: 640px;">
-    <MudGrid Justify="Justify.Center" Style="width: 100%; height: 100%; margin: 0;">
-        <MudItem xs="12"><MudText Style="font-weight:450;" Typo="Typo.h4">Logg inn</MudText></MudItem>
-        <DataAnnotationsValidator />
-        <MudForm>
-        </MudForm>
-    </MudGrid>
-    </MudPaper>
-</MudContainer>*@
 
-
-    @code {
+@code {
     private static readonly HttpClient client = new HttpClient();
     private LogInValues logInValues = new LogInValues();
     private CheckPhoneNumber checkPhoneNumber = new CheckPhoneNumber();
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     public string ErrorMessage = "";
+
+    // password
+    bool showPassword;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
 
     public class LogInValues
@@ -92,6 +86,22 @@
             Console.WriteLine("Login form" + ex);
             ErrorMessage = "Mobilnummer eller passord er feil";
             snackbar.Add(ErrorMessage, MudBlazor.Severity.Error);
+        }
+    }
+
+    void TogglePasswordVisibility()
+    {
+        @if (showPassword)
+        {
+            showPassword = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            showPassword = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
         }
     }
 }
