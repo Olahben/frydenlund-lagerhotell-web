@@ -24,7 +24,7 @@
                 <DataAnnotationsValidator />
                 <MudGrid Style="justify-content: start !important;">
                     <MudItem xs="12" Style="">
-                        <MudTextField T="string" Class="form-text-field" Style="width: 100%;" HelperText="Mobilnummeret du brukte da du registrerte deg" Required="true" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="logInValues.PhoneNumber" For="@(() => logInValues.PhoneNumber)" Variant="Variant.Outlined" />
+                        <MudTextField T="string" Class="form-text-field" Style="width: 100%;" HelperText="E-post adressen du brukte da du registrerte deg" Required="true" Label="E-post" InputType="@InputType.Email" @bind-Value="logInValues.Email" For="@(() => logInValues.Email)" Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Style="padding-bottom: 0;" xs="12">
                         <MudTextField Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" T="string" Class="form-text-field" Style="width: 100%;" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@PasswordInput" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" Variant="Variant.Outlined" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
@@ -51,7 +51,7 @@
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     public string ErrorMessage = "";
 
-    // password
+    // toggle password visibility
     bool showPassword;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -64,22 +64,25 @@
         [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
         public string? Password { get; set; }
 
-        [UserServiceSignup.ContainsOnlyNumbers(ErrorMessage = "Telefonnummeret ditt kan bare inneholde tall")]
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
-        [StringLength(8, ErrorMessage = "Nummeret må være norskt, åtte siffer", MinimumLength = 8)]
-        public string? PhoneNumber { get; set; }
+        [EmailAddress(ErrorMessage = "Ikke en gyldig e-post adresse")]
+        public string? Email { get; set; }
     }
 
-    public async void LoginUser()
+    public async Task LoginUser()
     {
-        string userJwt;
-        string userId;
         try
         {
-            (userJwt, userId) = await _userServiceLogin.LoginUser(logInValues.PhoneNumber, logInValues.Password);
+            string userId = await _userServiceLogin.LoginUserWithEmail(logInValues.Email, logInValues.Password);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
             navigationManager.NavigateTo($"user/{userId}");
+        } catch (KeyNotFoundException e)
+        {
+            snackbar.Add("E-post eller passord er feil", MudBlazor.Severity.Error);
+        } catch (InvalidOperationException e)
+        {
+            snackbar.Add("E-post eller passord er feil", MudBlazor.Severity.Error);
         }
         catch (Exception ex)
         {
