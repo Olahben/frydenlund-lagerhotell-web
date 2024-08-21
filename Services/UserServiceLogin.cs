@@ -25,6 +25,20 @@ public class UserServiceLogin
         CheckPhoneNumber.CheckPhoneNumberResponse deserializedResponse = JsonSerializer.Deserialize<CheckPhoneNumber.CheckPhoneNumberResponse>(await response.Content.ReadAsStringAsync(), options);
         return deserializedResponse.PhoneNumberExistence;
     }
+
+    public async Task<bool> CheckUserExistence(string email)
+    {
+        string url = _baseUrl + "/check-email/" + email;
+        var response = await client.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     public async Task<(string, bool)> CheckPassword(string password, string phoneNumber)
     {
         string url = _baseUrl + "/log-in";
@@ -68,6 +82,32 @@ public class UserServiceLogin
         return userId;
     }
 
+    public async Task<User> GetUserByEmail(string email, string jwtToken)
+    {
+        string url = _baseUrl + "/get-user-by-email/" + email;
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtToken);
+
+        HttpResponseMessage response = await client.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("Brukeren eksisterer ikke");
+            }
+            else
+            {
+                throw new Exception("En feil oppstod innen innhenting av brukeren");
+            }
+        }
+        string responseContent = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        User userDeserialized = JsonSerializer.Deserialize<GetByEmailResponse>(responseContent, options).User;
+        return userDeserialized;
+    }
+
     public async Task<(string Token, string UserId)> LoginUser(string phoneNumber, string password)
     {
         bool userExistence = await CheckPhoneNumber(phoneNumber);
@@ -81,8 +121,95 @@ public class UserServiceLogin
             throw new Exception("Feil passord");
         }
         string userId = await GetUserByPhoneNumber(phoneNumber, token);
-        sessionService.AddJwtToLocalStorage(token);
+        await sessionService.AddJwtToLocalStorage(token);
         appState.UserLoggedIn();
         return (token, userId);
     }
+
+    public async Task<string> IsLoginValid(string email, string password)
+    {
+        string url = _baseUrl + "/log-in-by-email";
+        var request = new LoginByEmailRequest(email, password);
+        string jsonData = JsonSerializer.Serialize(request);
+        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(url, stringContent);
+        if (response.IsSuccessStatusCode)
+        {
+            var responseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            Jwt jwt = JsonSerializer.Deserialize<Jwt>(responseString, options);
+            return (jwt.Token);
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Brukeren eksisterer ikke");
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            throw new InvalidOperationException("Feil passord eller email");
+        }
+        else
+        {
+            throw new Exception($"En feil oppstod under innlogging, status: {response.StatusCode}");
+        }
+    }
+
+    public async Task<string> LoginUserWithEmail(string email, string password)
+    {
+        string token;
+        User user;
+        try
+        {
+            bool userExistence = await CheckUserExistence(email);
+            if (!userExistence)
+            {
+                throw new KeyNotFoundException("Brukeren eksisterer ikke");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("En feil oppstod under innlogging: " + e);
+            throw new Exception("En feil oppstod under innlogging: " + e);
+        }
+        try
+        {
+            token = await IsLoginValid(email, password);
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine("Brukeren eksisterer ikke: " + e);
+            throw new KeyNotFoundException("Brukeren eksisterer ikke");
+        }
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine("Feil passord eller email: " + e);
+            throw new InvalidOperationException("Feil passord eller email");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("En feil oppstod under innlogging: " + e);
+            throw new Exception("Noe gikk galt under innlogging av bruker");
+        }
+        sessionService.AddJwtToLocalStorage(token);
+        appState.UserLoggedIn();
+        try
+        {
+            user = await GetUserByEmail(email, token);
+        }
+        catch (KeyNotFoundException e)
+        {
+            Console.WriteLine("Brukeren eksisterer ikke: " + e);
+            throw new KeyNotFoundException("Brukeren eksisterer ikke");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("En feil oppstod under innlogging: " + e);
+            throw new Exception("Noe gikk galt under innlogging av bruker");
+        }
+        return user.Id;
+    }
+
 }
