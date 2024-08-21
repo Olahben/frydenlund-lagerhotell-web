@@ -59,9 +59,7 @@
 
     public class LogInValues
     {
-        [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
         [Required(ErrorMessage = "Ett passord er obligatorisk")]
-        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
         public string? Password { get; set; }
 
         [Required(ErrorMessage = "Ett telefonnummer er obligatorisk")]
