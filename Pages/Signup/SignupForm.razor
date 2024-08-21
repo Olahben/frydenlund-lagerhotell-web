@@ -39,7 +39,7 @@
                 <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Label="E-post" InputType="InputType.Email" @bind-Value="accountFormValues.Email" For="@(() => accountFormValues.Email)"></MudTextField>
             </MudItem>
             <MudItem xs="6" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@InputType.Password" @bind-Value="accountFormValues.Password" For="@(() => accountFormValues.Password)" />
+                <MudTextField T="string" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@PasswordInput" @bind-Value="accountFormValues.Password" For="@(() => accountFormValues.Password)" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
             </MudItem>
             <MudItem xs="6" sm="6">
                 <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="accountFormValues.PasswordRepeat" For="@(() => accountFormValues.PasswordRepeat)" />
@@ -69,6 +69,10 @@
     public string ErrorMessage = "";
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    bool showPassword;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     public class AccountFormValues
     {
@@ -146,6 +150,22 @@
             ErrorMessage = "En bruker med dette telefonnummeret er allerede registrert";
             Snackbar.Add(ErrorMessage, MudBlazor.Severity.Error);
             StateHasChanged();
+        }
+    }
+
+    void TogglePasswordVisibility()
+    {
+        @if (showPassword)
+        {
+            showPassword = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            showPassword = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
         }
     }
 }
