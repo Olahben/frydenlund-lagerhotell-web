@@ -15,7 +15,7 @@
 @inject AppState _appState
 @inject UserServiceLogin _userServiceLogin
 
-<MudGrid Style="margin-top: 126px; height: fit-content;" Justify="Justify.Center">
+<MudGrid Style="margin-top: 46px; height: fit-content; margin-left: 6px; margin-right: 6px;" Justify="Justify.Center">
     <MudItem Style="display: flex; justify-content: center;" xs="12">
         <MudPaper MaxWidth="440px" Style="padding: 18px;">
             <MudText Style="font-weight:450;" Typo="Typo.h4">Logg inn</MudText>
@@ -32,15 +32,16 @@
                     <MudItem Style="margin-bottom: 22px;">
                         @*Should link to forgot password site*@
                         <MudText Style="text-decoration: underline;" Typo="Typo.body1">Glemt passord?</MudText>
-                        </MudItem>
-                        <MudItem xs="12" Style="text-align: center; padding-top: 0;">
-                            <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary" Style="width: 100%; max-width: 130px;">Logg inn</MudButton>
-                        </MudItem>
-                    </MudGrid>
-                </EditForm>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12" Style="text-align: center; padding-top: 0;">
+                        <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary" Style="width: 100%; max-width: 130px;">Logg inn</MudButton>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        </MudPaper>
+    </MudItem>
+    <MudItem><MudText Style="text-align: center;" Typo="Typo.body1">Har du ikke registrert deg? Registrer deg <MudLink Style="font-weight: 450;" Href="/registrer-deg">her</MudLink></MudText></MudItem>
+</MudGrid>
 
 
 @code {
@@ -75,10 +76,12 @@
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
             navigationManager.NavigateTo($"user/{userId}");
-        } catch (KeyNotFoundException e)
+        }
+        catch (KeyNotFoundException e)
         {
             snackbar.Add("E-post eller passord er feil", MudBlazor.Severity.Error);
-        } catch (InvalidOperationException e)
+        }
+        catch (InvalidOperationException e)
         {
             snackbar.Add("E-post eller passord er feil", MudBlazor.Severity.Error);
         }
