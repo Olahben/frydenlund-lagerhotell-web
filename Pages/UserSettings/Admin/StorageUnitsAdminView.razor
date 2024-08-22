@@ -3,7 +3,7 @@
 
 <MudTable Items="@_storageUnitViewModels" Filter="new Func<StorageUnitViewModel, bool>(FilterFunc1)">
     <ToolBarContent>
-        <MudText Style="margin-left: 6px;" Typo="Typo.h6">Brukerbestillinger</MudText>
+        <MudText Style="margin-left: 6px;" Typo="Typo.h6">Boder og tilhørende lagerhotell</MudText>
         <MudSpacer />
         <MudTextField Style="margin-right: 6px;" @bind-Value="searchString" Placeholder="Søk" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolbarContent>
