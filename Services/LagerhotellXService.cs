@@ -109,7 +109,7 @@ public class LagerhotellXService
             }
 
         }
-
+        storageUnitSizes = storageUnitSizes.OrderBy(storageUnitSizes => storageUnitSizes.Price.Amount).ToList();
         return storageUnitSizes;
     }
 }
