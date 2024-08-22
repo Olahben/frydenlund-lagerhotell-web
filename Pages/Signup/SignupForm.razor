@@ -6,7 +6,7 @@
 @using System.Text.Json.Serialization
 @using System.Collections.Generic
 
-<MudPaper MaxWidth="760px" Style="margin-top: 46px; padding: 12px; margin-left: 6px; margin-right: 6px;">
+<MudPaper MaxWidth="760px" Style="margin-top: 46px; padding: 12px; margin-left: 6px; margin-right: 6px; display: inline-block; height: fit-content;">
     <EditForm Model="@accountFormValues" OnValidSubmit="SignupUser">
         <DataAnnotationsValidator />
         <MudGrid>
