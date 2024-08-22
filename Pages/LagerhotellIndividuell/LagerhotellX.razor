@@ -42,7 +42,7 @@
         <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
             <MudBreadcrumbs Style="padding-left: 0;" Items="BreadcrumbItems"></MudBreadcrumbs>
             <MudGrid Justify="Justify.Center">
-                <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="7" xl="7" xxl="7"> 
+                <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="7" xl="7" xxl="7">
                     <MudPaper Square="true" Class="lagerhotell-card-header" Elevation="0" Height="400px" Color="Color.Primary">
                         <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
                             <MudText Style="font-weight: 500;" Typo="Typo.h4" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
@@ -110,7 +110,7 @@ else
     private List<string> detailedDescriptionImages { get; set; } = new List<string>();
     private string? googleMapsUrl { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private async Task LoadData()
     {
         try
         {
@@ -160,5 +160,10 @@ else
         var dialogOptions = new DialogOptions { ClassBackground = "custom-class" };
         DialogService.Show<AddStorageUnit>("Legg til en lokasjon", dialogParameterOptions, dialogOptions);
         StateHasChanged();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadData();
     }
 }
