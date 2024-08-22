@@ -12,6 +12,7 @@
         <MudTh>Aktiv</MudTh>
         <MudTh>Størrelse (M^2)</MudTh>
         <MudTh>Lagerhotell</MudTh>
+        <MudTh>Bod</MudTh>
         <MudTh>Startdato</MudTh>
         <MudTh>Sluttdato</MudTh>
         <MudTh>Gj.snitt pris i mnd</MudTh>
@@ -27,6 +28,7 @@
         }
         <MudTd DataLabel="Størrelse (M^2)">@context.StorageUnit.Dimensions.Area</MudTd>
             <MudTd DataLabel="Lagerhotell">@context.WarehouseHotelName</MudTd>
+            <MudTd DataLabel="Bod">@context.StorageUnit.Name</MudTd>
             <MudTd DataLabel="Startdato">@context.Order.OrderPeriod.OrderDate?.ToString("dd.MM.yyyy")</MudTd>
             @if (context.Order.OrderPeriod.EndDate != null)
         {
