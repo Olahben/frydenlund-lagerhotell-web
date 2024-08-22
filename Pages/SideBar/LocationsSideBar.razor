@@ -1,6 +1,7 @@
 ﻿@inject IDialogService DialogService
 @inject WarehouseHotelService _warehouseHotelService
 @inject LocationService _locationService
+@inject NavigationManager _navigationManager
 
 <style>
     .lagerhotell-link-change {
@@ -35,7 +36,7 @@
                     if (warehouseHotel.LocationName == location.Name)
                     {
                         string url = "/Lagerhotell/" + warehouseHotel.Name;
-                        <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" Href=@url><div class="lagerhotell-link-text">@warehouseHotel.Name </div></MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.LocationCity" Class="lagerhotell-link" OnClick="() => RedirectToWarehouseHotel(url)"><div class="lagerhotell-link-text">@warehouseHotel.Name </div></MudNavLink>
                     }
                     else
                     {
@@ -104,6 +105,12 @@
             Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
             Console.WriteLine(e);
         }
+    }
+
+    private async Task RedirectToWarehouseHotel(string url)
+    {
+        @*Fix this, loads slowly*@
+        _navigationManager.NavigateTo(url, true);
     }
 
     private async Task GetAllWarehouseHotels()
