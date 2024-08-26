@@ -32,7 +32,7 @@
             @if (images.Count > 0)
             {
                 <MudText Typo="Typo.body1">Du har valgt følgende bilder:</MudText>
-                <MudList Clickable="false">
+                <MudList T="string" Clickable="false">
                     @foreach (var image in images)
                     {
                         <MudListItem Icon="@Icons.Material.Filled.Image">

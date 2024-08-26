@@ -157,7 +157,7 @@ else
             { "LinkedWarehouseHotelName", warehouseHotelName }
         };
 
-        var dialogOptions = new DialogOptions { ClassBackground = "custom-class" };
+        var dialogOptions = new DialogOptions { BackgroundClass = "custom-class" };
         DialogService.Show<AddStorageUnit>("Legg til en lokasjon", dialogParameterOptions, dialogOptions);
         StateHasChanged();
     }
