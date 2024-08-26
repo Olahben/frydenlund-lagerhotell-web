@@ -8,54 +8,62 @@
 
 <MudGrid Justify="Justify.Center">
     <MudItem Style="height: fit-content;">
-<MudPaper MaxWidth="760px" Style="margin-top: 46px; padding: 12px; margin-left: 6px; margin-right: 6px; height: fit-content;">
-    <EditForm Model="@accountFormValues" OnValidSubmit="SignupUser">
-        <DataAnnotationsValidator />
-        <MudGrid>
-            <MudItem Style="padding-bottom: 0;" xs="12" sm="12">
-                <MudText Style="font-weight: 450;" Typo="Typo.h4">Registrer deg her</MudText>
-                <MudText Typo="Typo.body1">Ett steg nærmere bedre plass</MudText>
-            </MudItem>
-            <MudItem Style="" xs="12" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="accountFormValues.FirstName" For="@(() => accountFormValues.FirstName)" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="accountFormValues.LastName" For="@(() => accountFormValues.LastName)" />
-            </MudItem>
-            <MudItem xs="12" sm="12">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="accountFormValues.BirthDate" For="@(() => accountFormValues.BirthDate)" />
-            </MudItem>
-            <MudItem xs="12" sm="12">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" Label="Adresse" InputType="@InputType.Text" @bind-Value="accountFormValues.Address" For="@(() => accountFormValues.Address)" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" Label="Postnummer" InputType="@InputType.Text" @bind-Value="accountFormValues.PostalCode" For="@(() => accountFormValues.PostalCode)" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" Label="Poststed" InputType="@InputType.Text" @bind-Value="accountFormValues.City" For="@(() => accountFormValues.City)" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="accountFormValues.PhoneNumber" For="@(() => accountFormValues.PhoneNumber)" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Label="E-post" InputType="InputType.Email" @bind-Value="accountFormValues.Email" For="@(() => accountFormValues.Email)"></MudTextField>
-            </MudItem>
-            <MudItem xs="6" sm="6">
-                <MudTextField T="string" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@PasswordInput" @bind-Value="accountFormValues.Password" For="@(() => accountFormValues.Password)" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
-            </MudItem>
-            <MudItem xs="6" sm="6">
-                <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="accountFormValues.PasswordRepeat" For="@(() => accountFormValues.PasswordRepeat)" />
-            </MudItem>
-            <MudItem xs="12" sm="12">
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Registrer deg</MudButton>
-            </MudItem>
-            @*
-            <MudItem xs="6" sm="6">
-                <MudCheckBox T="bool" Required="true" Label="Er du en administrator?" @bind-Value="accountFormValues.IsAdministrator" For="@(() => accountFormValues.IsAdministrator)"></MudCheckBox>
-            </MudItem> *@
-        </MudGrid>
-    </EditForm>
-</MudPaper>
+        <MudPaper MaxWidth="760px" Style="margin-top: 46px; padding: 12px; margin-left: 6px; margin-right: 6px; height: fit-content;">
+            <EditForm Model="@accountFormValues" OnValidSubmit="SignupUser">
+                <DataAnnotationsValidator />
+                <MudGrid>
+                    <MudItem Style="padding-bottom: 0;" xs="12" sm="12">
+                        <MudText Style="font-weight: 450;" Typo="Typo.h4">Registrer deg her</MudText>
+                        <MudText Typo="Typo.body1">Ett steg nærmere bedre plass</MudText>
+                        <MudSwitch @bind-Value="CompanyUser" Label="Bedriftsregistering"></MudSwitch>
+                    </MudItem>
+                    @if (CompanyUser)
+                    {
+                        <SignUpCompanyUser />
+                    }
+                    else
+                    {
+                        <MudItem Style="" xs="12" sm="6">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett navn er obligatorisk" Label="Fornavn" InputType="@InputType.Text" @bind-Value="accountFormValues.FirstName" For="@(() => accountFormValues.FirstName)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett etternavn er obligatorisk" Label="Etternavn" InputType="@InputType.Text" @bind-Value="accountFormValues.LastName" For="@(() => accountFormValues.LastName)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="12">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="En fødselsdato er obligatorisk" Label="Fødslelsdato" InputType="@InputType.Date" @bind-Value="accountFormValues.BirthDate" For="@(() => accountFormValues.BirthDate)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="12">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" Label="Adresse" InputType="@InputType.Text" @bind-Value="accountFormValues.Address" For="@(() => accountFormValues.Address)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" Label="Postnummer" InputType="@InputType.Text" @bind-Value="accountFormValues.PostalCode" For="@(() => accountFormValues.PostalCode)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" Label="Poststed" InputType="@InputType.Text" @bind-Value="accountFormValues.City" For="@(() => accountFormValues.City)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett mobilnummer er obligatorisk" Label="Mobilnummer" InputType="@InputType.Telephone" @bind-Value="accountFormValues.PhoneNumber" For="@(() => accountFormValues.PhoneNumber)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Label="E-post" InputType="InputType.Email" @bind-Value="accountFormValues.Email" For="@(() => accountFormValues.Email)"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="6" sm="6">
+                            <MudTextField T="string" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@PasswordInput" @bind-Value="accountFormValues.Password" For="@(() => accountFormValues.Password)" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
+                        </MudItem>
+                        <MudItem xs="6" sm="6">
+                            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" @bind-Value="accountFormValues.PasswordRepeat" For="@(() => accountFormValues.PasswordRepeat)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="12">
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Registrer deg</MudButton>
+                        </MudItem>
+                    }
+                    @*
+                    <MudItem xs="6" sm="6">
+                    <MudCheckBox T="bool" Required="true" Label="Er du en administrator?" @bind-Value="accountFormValues.IsAdministrator" For="@(() => accountFormValues.IsAdministrator)"></MudCheckBox>
+                    </MudItem> *@
+                </MudGrid>
+            </EditForm>
+        </MudPaper>
         <MudText Style="text-align: center; margin-top: 6px;" Typo="Typo.body1">Har du registrert deg fra før av? Logg deg inn <MudLink Style="font-weight: 450;" Href="/logg-inn">her</MudLink></MudText>
     </MudItem>
 </MudGrid>
@@ -79,6 +87,8 @@
     bool showPassword;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    bool CompanyUser = false;
 
     public class AccountFormValues
     {
