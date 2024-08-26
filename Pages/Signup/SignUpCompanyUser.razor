@@ -1,0 +1,55 @@
+﻿@using System.Data.SqlTypes
+@inject CompanyUserService _companyUserService
+@inject NavigationManager _navigationManager
+
+<MudForm Model="@companyUser" @ref="form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
+    <MudGrid Style="padding: 24px;">
+        <MudItem Style="padding-bottom: 12px;" xs="12" sm="6"><MudTextField T="string" @bind-Value="companyUser.FirstName" Label="Fornavn" Variant="Variant.Outlined" Immediate="true" For="@(() => companyUser.FirstName)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.LastName" Label="Etternavn" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.LastName)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Name" Label="Firma navn" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Name)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Number" @bind-Value="companyUser.CompanyNumber" Label="Organisasjonsnummer" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.CompanyNumber)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="12" md="4"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Address.StreetAddress" Label="Adresse" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Address.StreetAddress)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6" md="4"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Address.PostalCode" Label="Postkode" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Address.PostalCode)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6" md="4"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Address.City" Label="Poststed" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Address.City)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Email" Label="E-post" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Email)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.PhoneNumber" Label="Mobilnummer" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.PhoneNumber)" /></MudItem>
+        <MudItem Style="padding-top: 12px;" xs="12" sm="12">
+            <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => ValidateForm())" Variant="Variant.Outlined" Color="Color.Primary">Registrer deg</MudButton>
+        </MudItem>
+    </MudGrid>
+</MudForm>
+
+@code {
+    private CompanyUser companyUser = new CompanyUser();
+    private CompanyUserValidator validator = new();
+    MudForm form = new MudForm();
+
+    public async Task SignUpUser()
+    {
+        try
+        {
+            string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
+            _navigationManager.NavigateTo($"/user/{id}");
+
+        }
+        catch (SqlAlreadyFilledException e)
+        {
+            Snackbar.Add("Det er allerede registrert en bruker med disse dataene", MudBlazor.Severity.Error);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add($"Noe gikk galt, prøv på nytt senere", MudBlazor.Severity.Error);
+        }
+    }
+
+    private async Task ValidateForm()
+    {
+        await form.Validate();
+        if (!form.IsValid)
+        {
+            Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vær så snill å sjekk tilhørende feilmelding", MudBlazor.Severity.Error);
+            return;
+        }
+        await SignUpUser();
+    }
+}
