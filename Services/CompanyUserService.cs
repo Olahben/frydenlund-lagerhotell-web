@@ -60,15 +60,20 @@ public class CompanyUserService
 
     public async Task<string> CreateCompanyUserAsync(CompanyUser companyUser)
     {
-        string url = _baseUrl;
+        string url = _baseUrl + "/create";
+        companyUser.CompanyUserId = "";
         string companyUserJson = JsonSerializer.Serialize(new CreateCompanyUserRequest(companyUser));
         StringContent content = new(companyUserJson, Encoding.UTF8, "application/json");
         HttpResponseMessage response = await client.PostAsync(url, content);
         if (response.IsSuccessStatusCode)
         {
             string responseString = await response.Content.ReadAsStringAsync();
-            await _sessionService.AddJwtToLocalStorage(JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString).UserAcessToken);
-            return JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString).CompanyUserId;
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            await _sessionService.AddJwtToLocalStorage(JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString, options).UserAcessToken);
+            return JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString, options).CompanyUserId;
         }
         else if (response.StatusCode == HttpStatusCode.Conflict)
         {
