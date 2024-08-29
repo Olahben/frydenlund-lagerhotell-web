@@ -1,6 +1,7 @@
 ﻿@using System.Data.SqlTypes
 @inject CompanyUserService _companyUserService
 @inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider _authenticationStateProvider
 
 <MudForm Model="companyUser" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
     <MudGrid Style="">
@@ -39,6 +40,8 @@
         try
         {
             string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
+            await _authenticationStateProvider.GetAuthenticationStateAsync();
+            StateHasChanged();
             _navigationManager.NavigateTo($"/user/{id}");
 
         }
