@@ -1,0 +1,34 @@
+﻿<style>
+
+    .image-container {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 aspect ratio */
+        background-image: url('Data/Bilder/oitangen_henrik-kyte-assmann-4-av-7.webp');
+        background-size: cover; /* ensures the image covers the container */
+        background-position: center; /* centers the image */
+        overflow: hidden;
+    }
+
+    .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.7);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 24px;
+        color: black;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+<div class="image-container">
+    <div class="overlay-text">Få bedre plass<br>i sommer!</div>
+</div>
+
+@code {
+
+}
