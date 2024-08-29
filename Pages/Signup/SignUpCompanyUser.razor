@@ -2,8 +2,8 @@
 @inject CompanyUserService _companyUserService
 @inject NavigationManager _navigationManager
 
-<MudForm Model="@companyUser" @ref="form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
-    <MudGrid Style="padding: 24px;">
+<MudForm Model="companyUser" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
+    <MudGrid Style="">
         <MudItem Style="padding-bottom: 12px;" xs="12" sm="6"><MudTextField T="string" @bind-Value="companyUser.FirstName" Label="Fornavn" Variant="Variant.Outlined" Immediate="true" For="@(() => companyUser.FirstName)" /></MudItem>
         <MudItem Style="padding-bottom: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.LastName" Label="Etternavn" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.LastName)" /></MudItem>
         <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Name" Label="Firma navn" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Name)" /></MudItem>
@@ -13,6 +13,12 @@
         <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6" md="4"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Address.City" Label="Poststed" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Address.City)" /></MudItem>
         <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.Email" Label="E-post" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.Email)" /></MudItem>
         <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="12" sm="6"><MudTextField InputType="@InputType.Text" @bind-Value="companyUser.PhoneNumber" Label="Mobilnummer" Variant="Variant.Outlined" Immediate="true" For="(() => companyUser.PhoneNumber)" /></MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="6" sm="6">
+            <MudTextField T="string" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@PasswordInput" @bind-Value="companyUser.Password" For="@(() => companyUser.Password)" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
+        </MudItem>
+        <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="6" sm="6">
+            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" />
+        </MudItem>
         <MudItem Style="padding-top: 12px;" xs="12" sm="12">
             <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => ValidateForm())" Variant="Variant.Outlined" Color="Color.Primary">Registrer deg</MudButton>
         </MudItem>
@@ -23,6 +29,10 @@
     private CompanyUser companyUser = new CompanyUser();
     private CompanyUserValidator validator = new();
     MudForm form = new MudForm();
+
+    bool showPassword;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     public async Task SignUpUser()
     {
@@ -44,6 +54,8 @@
 
     private async Task ValidateForm()
     {
+        Console.WriteLine(companyUser.FirstName);
+        Console.WriteLine(form.IsValid);
         await form.Validate();
         if (!form.IsValid)
         {
@@ -51,5 +63,12 @@
             return;
         }
         await SignUpUser();
+    }
+
+    private void TogglePasswordVisibility()
+    {
+        PasswordInput = showPassword ? InputType.Password : InputType.Text;
+        PasswordInputIcon = showPassword ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility;
+        showPassword = !showPassword;
     }
 }
