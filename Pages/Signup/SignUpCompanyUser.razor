@@ -18,7 +18,7 @@
             <MudTextField T="string" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Ett passord er obligatorisk" Label="Passord" InputType="@PasswordInput" @bind-Value="companyUser.Password" For="@(() => companyUser.Password)" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
         </MudItem>
         <MudItem Style="padding-bottom: 12px; padding-top: 12px;" xs="6" sm="6">
-            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" />
+            <MudTextField T="string" Variant="Variant.Outlined" Class="form-text-field" Required="true" @bind-Value="repeatPassword" RequiredError="Du må skrive inn passordet ditt på nytt" Label="Repeter passord" InputType="@InputType.Password" />
         </MudItem>
         <MudItem Style="padding-top: 12px;" xs="12" sm="12">
             <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => ValidateForm())" Variant="Variant.Outlined" Color="Color.Primary">Registrer deg</MudButton>
@@ -28,6 +28,7 @@
 
 @code {
     private CompanyUser companyUser = new CompanyUser();
+    private string repeatPassword;
     private CompanyUserValidator validator = new();
     MudForm form = new MudForm();
 
@@ -37,6 +38,11 @@
 
     public async Task SignUpUser()
     {
+        if (companyUser.Password != repeatPassword)
+        {
+            Snackbar.Add("Passordene er ikke like", MudBlazor.Severity.Error);
+            return;
+        }
         try
         {
             string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
