@@ -7,6 +7,7 @@
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject OrderService _orderService
+@inject CompanyUserService _companyUserService
 
 @page "/user/{userId}"
 
@@ -273,6 +274,7 @@
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     private string activeTab = "profil";
 
+    private CompanyUser companyUser;
     public class UserValues
     {
         public string Id { get; set; } = string.Empty;
@@ -330,7 +332,6 @@
         {
             string token = await sessionService.GetJwtFromLocalStorage();
             var user = await _userServiceUserSettings.LoadUser(client, _userValues, UserId, token);
-            // Console.WriteLine(user.LastName);
             if (user != null)
             {
                 _userValues.FirstName = user.FirstName;
@@ -351,10 +352,26 @@
                 snackBar.Add("Kunne ikke laste inn brukeren", MudBlazor.Severity.Error);
             }
         }
+        catch (KeyNotFoundException e)
+        {
+            try
+            {
+                var user = await _companyUserService.GetCompanyUserAsync(UserId);
+                companyUser = user;
+            }
+            catch (KeyNotFoundException)
+            {
+                Snackbar.Add("Fant ikke brukeren", MudBlazor.Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            // snackBar.Add("Kunne ikke laste inn brukeren" + ex, MudBlazor.Severity.Error);
+            snackBar.Add("Kunne ikke laste inn brukeren", MudBlazor.Severity.Error);
         }
         StateHasChanged();
     }
