@@ -58,6 +58,30 @@ public class CompanyUserService
         }
     }
 
+    public async Task<CompanyUser> GetCompanyUserByPhoneNumber(string phoneNumber)
+    {
+        string url = _baseUrl + $"/get-by-phone-number/{phoneNumber}";
+        HttpResponseMessage response = await client.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            CompanyUser companyUser = JsonSerializer.Deserialize<GetCompanyUserResponse>(responseString, options).CompanyUser;
+            return companyUser;
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Company user not found");
+        }
+        else
+        {
+            throw new Exception("Failed to get company user");
+        }
+    }
+
     public async Task<string> CreateCompanyUserAsync(CompanyUser companyUser)
     {
         string url = _baseUrl + "/create";
