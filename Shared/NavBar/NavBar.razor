@@ -2,6 +2,7 @@
 @inject AuthStateProviderService _authStateProviderService
 @inject UserService _userService
 @inject AppState _appState
+@inject CompanyUserService _companyUserService
 
 <style>
     .clickable:hover {
@@ -9,6 +10,8 @@
     }
 </style>
 
+@if (isInitialized)
+{
     <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
         <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
             <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
@@ -23,8 +26,14 @@
                 <Authorized>
                     @if (user != null)
                     {
-                        <MudAvatar @onclick="NavigateToUserSettings" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Inherit">
+                        <MudAvatar @onclick="(() => NavigateToUserSettings(user))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Inherit">
                             @user.FirstName.Substring(0, 1)
+                        </MudAvatar>
+                    }
+                    @if (companyUser != null)
+                    {
+                        <MudAvatar @onclick="(() => NavigateToUserSettings(companyUser))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Inherit">
+                            @companyUser.FirstName.Substring(0, 1)
                         </MudAvatar>
                     }
                 </Authorized>
@@ -34,15 +43,17 @@
             </MudDrawer>
         </MudGrid>
     </MudContainer>
+}
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
     [Parameter]
-    public EventCallback OnLogIn { get; set;}
+    public EventCallback OnLogIn { get; set; }
     private bool isInitialized = false;
     bool rightSideBarOpen;
     Anchor anchor;
     private User user;
+    private CompanyUser companyUser;
 
     void RedirectToHome()
     {
@@ -60,25 +71,33 @@
     {
         _appState.OnChange += UpdateUserAndState;
         UpdateUserAndState();
+        isInitialized = true;
     }
 
     private async void UpdateUserAndState()
     {
+        string phoneNumber = "";
         try
         {
             string? jwt = await SessionService.GetJwtFromLocalStorage();
             if (jwt != null)
             {
-                string phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
+                phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
                 user = await _userService.GetUserByPhoneNumber(phoneNumber);
             }
             StateHasChanged();
         }
         catch (KeyNotFoundException)
         {
-            Console.WriteLine("User phone number not found");
-            Snackbar.Add("Vær så snill og logg inn på nytt", MudBlazor.Severity.Error);
-            _navigationManager.NavigateTo("/logg-inn");
+            try
+            {
+                companyUser = await _companyUserService.GetCompanyUserByPhoneNumber(phoneNumber);
+                StateHasChanged();
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add("En feil oppstod, vær så snill og logg inn på nytt", MudBlazor.Severity.Error);
+            }
         }
         catch (Exception e)
         {
@@ -92,8 +111,15 @@
         _appState.OnChange -= UpdateUserAndState;
     }
 
-    private async Task NavigateToUserSettings()
+    private async Task NavigateToUserSettings(object userLoggedIn)
     {
-        _navigationManager.NavigateTo($"/user/{user.Id}");
+        if (user is User)
+        {
+            _navigationManager.NavigateTo($"/user/{user.Id}");
+        }
+        else
+        {
+            _navigationManager.NavigateTo($"/user/{companyUser.CompanyUserId}");
+        }
     }
 }
