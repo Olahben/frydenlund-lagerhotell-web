@@ -23,10 +23,13 @@ public class UserServiceUserSettings
             UserValues userValues = new UserValues { Id = deserializedUser.Id, FirstName = deserializedUser.FirstName, LastName = deserializedUser.LastName, PhoneNumber = deserializedUser.PhoneNumber, BirthDate = deserializedUser.BirthDate, Password = deserializedUser.Password, StreetAddress = deserializedUser.Address.StreetAddress, PostalCode = deserializedUser.Address.PostalCode, City = deserializedUser.Address.City, IsAdministrator = deserializedUser.IsAdministrator, Email = deserializedUser.Email };
             return userValues;
         }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("User not found");
+        }
         else
         {
-            Console.WriteLine($"Error: {response.StatusCode}");
-            return user;
+            throw new Exception("Failed to get user");
         }
     }
 
