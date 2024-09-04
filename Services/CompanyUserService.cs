@@ -112,6 +112,7 @@ public class CompanyUserService
     public async Task UpdateCompanyUserAsync(CompanyUser companyUser)
     {
         string url = _baseUrl + "/modify";
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
         string companyUserJson = JsonSerializer.Serialize(new UpdateCompanyUserRequest(companyUser));
         StringContent content = new(companyUserJson, Encoding.UTF8, "application/json");
         HttpResponseMessage response = await client.PutAsync(url, content);
