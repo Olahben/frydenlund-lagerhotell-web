@@ -15,7 +15,7 @@
                 <MudPaper MaxWidth="440px" Style="padding: 18px;">
                     <MudText Style="font-weight:450;" Typo="Typo.h4">Logg inn</MudText>
                     <MudText Style="font-weight:450; margin-bottom: 6px;" Typo="Typo.body1">Bedre plass er ett steg nærmere</MudText>
-                    <MudSwitch @bind-Value="companyUserLogIn" Color="Color.Info" Label="Bedriftsregistering"></MudSwitch>
+                    <MudSwitch @bind-Value="companyUserLogIn" Color="Color.Info" Label="Bedriftsinnlogging"></MudSwitch>
                     @if (!companyUserLogIn)
                     {
                         <LoginForm />
