@@ -142,23 +142,32 @@
                                     else
                                     {
                                         <MudButton Style="margin-top: 16px; margin-bottom: 22px;" Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
+                                        <MudButton Style="margin-top: 16px; margin-bottom: 22px;" @onclick="ShowResetPasswordComponents" Variant="Variant.Filled">Endre Passord</MudButton>
                                     }
                                     @if (_editMode)
                                     {
-                                        <MudForm @ref="companyUserForm" Model="updatedCompanyUser" Validation="@(companyUserValidator.ValidateValue)">
-                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="updatedCompanyUser.Name" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Name)" Immediate="true"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="updatedCompanyUser.FirstName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.FirstName)" Immediate="true"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="updatedCompanyUser.LastName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.LastName)" Immediate="true"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Organisasjonsnummer" @bind-Value="updatedCompanyUser.CompanyNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.CompanyNumber)" Immediate="true"></MudTextField>
-                                            @*Disabled temporarily*@
-                                            <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="E-post" @bind-Value="updatedCompanyUser.Email" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Email)" Immediate="true"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="Telefonnummer" @bind-Value="updatedCompanyUser.PhoneNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.PhoneNumber)" Immediate="true"></MudTextField>
-                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="updatedCompanyUser.Address.StreetAddress" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.StreetAddress)" Immediate="true"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="updatedCompanyUser.Address.PostalCode" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.PostalCode)" Immediate="true"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="updatedCompanyUser.Address.City" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.City)" Immediate="true"></MudTextField>
-                                        </MudForm>
+                                        @if (_editPasswordMode)
+                                        {
+                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
+                                        <ResetPasswordFormCompanyUser UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
+                                        }
+                                        else
+                                        {
+                                            <MudForm @ref="companyUserForm" Model="updatedCompanyUser" Validation="@(companyUserValidator.ValidateValue)">
+                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="updatedCompanyUser.Name" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Name)" Immediate="true"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="updatedCompanyUser.FirstName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.FirstName)" Immediate="true"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="updatedCompanyUser.LastName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.LastName)" Immediate="true"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Organisasjonsnummer" @bind-Value="updatedCompanyUser.CompanyNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.CompanyNumber)" Immediate="true"></MudTextField>
+                                                @*Disabled temporarily*@
+                                                <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="E-post" @bind-Value="updatedCompanyUser.Email" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Email)" Immediate="true"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="Telefonnummer" @bind-Value="updatedCompanyUser.PhoneNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.PhoneNumber)" Immediate="true"></MudTextField>
+                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="updatedCompanyUser.Address.StreetAddress" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.StreetAddress)" Immediate="true"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="updatedCompanyUser.Address.PostalCode" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.PostalCode)" Immediate="true"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="updatedCompanyUser.Address.City" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.City)" Immediate="true"></MudTextField>
+                                            </MudForm>
+                                        }
                                     }
                                     else
                                     {
@@ -330,7 +339,6 @@
     [Parameter] public string UserId { get; set; }
     private UserServiceUserSettings _userServiceUserSettings = new();
     private UserValues _userValues = new();
-    private bool _editMode = false;
     private bool _showPassword = false;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -339,6 +347,9 @@
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     private string activeTab = "profil";
+
+    private bool _editMode = false;
+    private bool _editPasswordMode = false;
 
     private CompanyUser updatedCompanyUser = new();
     private bool isCompanyUser = false;
@@ -478,7 +489,18 @@
 
     public void ToggleEditMode()
     {
+        if (_editPasswordMode)
+        {
+            _editPasswordMode = false;
+        }
         _editMode = !_editMode;
+        StateHasChanged();
+    }
+
+    private void ShowResetPasswordComponents()
+    {
+        ToggleEditMode();
+        TogglePasswordEditMode();
         StateHasChanged();
     }
 
@@ -538,5 +560,16 @@
     {
         activeTab = tab;
         StateHasChanged();
+    }
+
+    private void TogglePasswordEditMode()
+    {
+        _editPasswordMode = !_editPasswordMode;
+        StateHasChanged();
+    }
+
+    private void OnPasswordResetDone()
+    {
+        ToggleEditMode();
     }
 }

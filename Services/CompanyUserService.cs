@@ -176,4 +176,44 @@ public class CompanyUserService
             throw new Exception("Failed to login company user");
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="newPassword"></param>
+    /// <param name="oldPassword"></param>
+    /// <returns></returns>
+    /// <exception cref="KeyNotFoundException"></exception>
+    /// <exception cref="SqlAlreadyFilledException"></exception>
+    /// <exception cref="SqlTypeException"></exception>
+    /// <exception cref="Exception"></exception>
+    public async Task ResetPassword(string id, string newPassword, string oldPassword)
+    {
+        var request = new ResetPasswordRequest(id, newPassword, oldPassword);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        string url = _baseUrl + "/reset-password";
+        string requestJson = JsonSerializer.Serialize(request);
+        StringContent content = new(requestJson, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PutAsync(url, content);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("Company user not found");
+            }
+            else if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
+            {
+                throw new SqlAlreadyFilledException("Password already used");
+            }
+            else if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                throw new SqlTypeException("Wrong password");
+            }
+            else
+            {
+                throw new Exception($"Failed to reset password, code: {response.StatusCode}");
+            }
+        }
+    }
 }
