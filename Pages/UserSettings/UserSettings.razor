@@ -183,10 +183,16 @@
                                         <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="companyUser.Address.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                         <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="companyUser.Address.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                     }
-                                    <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                    @if (!_editPasswordMode)
+                                    {
+                                        <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                    }
                                     @if (_editMode)
                                     {
-                                        <MudButton ButtonType="ButtonType.Button" Style="margin-left: 12px;" OnClick="@((e) => UpdateCompanyUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+                                        @if (!_editPasswordMode)
+                                        {
+                                            <MudButton ButtonType="ButtonType.Button" Style="margin-left: 12px;" OnClick="@((e) => UpdateCompanyUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+                                        }
                                     }
                                 </MudPaper>
                             </MudItem>
