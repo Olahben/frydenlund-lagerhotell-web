@@ -1,0 +1,14 @@
+Non-Commercial License
+Version 1.0
+
+1. Permission Grant
+You are free to:
+
+Use the software for personal, educational, or research purposes.
+Copy and distribute copies of the software.
+Modify the software and distribute the modified version.
+2. Restrictions
+No Commercial Use: You may not use, distribute, or modify the software for any commercial purposes. This includes, but is not limited to, selling the software, using it in a commercial product or service, or generating income from the software in any form.
+Attribution: If you distribute copies or modifications of the software, you must give appropriate credit to the original author, provide a link to the license, and indicate if changes were made.
+3. Disclaimer of Warranty
+The software is provided "as-is," without any warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the authors be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
