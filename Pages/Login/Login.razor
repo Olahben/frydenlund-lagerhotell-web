@@ -7,11 +7,31 @@
 
 @page "/logg-inn";
 
+
 <AuthorizeView>
     <NotAuthorized>
-    <LoginForm />
+        <MudGrid Style="margin-top: 46px; height: fit-content; margin-left: 6px; margin-right: 6px;" Justify="Justify.Center">
+            <MudItem Style="display: flex; justify-content: center;" xs="12">
+                <MudPaper MaxWidth="440px" Style="padding: 18px;">
+                    <MudText Style="font-weight:450;" Typo="Typo.h4">Logg inn</MudText>
+                    <MudText Style="font-weight:450; margin-bottom: 6px;" Typo="Typo.body1">Bedre plass er ett steg nærmere</MudText>
+                    <MudSwitch @bind-Value="companyUserLogIn" Color="Color.Info" Label="Bedriftsregistering"></MudSwitch>
+                    @if (!companyUserLogIn)
+                    {
+                        <LoginForm />
+                    } else {
+                    <Lagerhotell.Pages.Login.CompanyUser.LoginCompanyUserForm />
+                    }
+                </MudPaper>
+            </MudItem>
+            <MudItem><MudText Style="text-align: center;" Typo="Typo.body1">Har du ikke registrert deg? Registrer deg <MudLink Style="font-weight: 450;" Href="/registrer-deg">her</MudLink></MudText></MudItem>
+        </MudGrid>
     </NotAuthorized>
     <Authorized>
         <LoggedIn />
-    </Authorized>          
+    </Authorized>
 </AuthorizeView>
+
+@code {
+    private bool companyUserLogIn = false;
+}

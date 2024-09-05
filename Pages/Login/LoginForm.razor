@@ -15,34 +15,25 @@
 @inject AppState _appState
 @inject UserServiceLogin _userServiceLogin
 
-<MudGrid Style="margin-top: 46px; height: fit-content; margin-left: 6px; margin-right: 6px;" Justify="Justify.Center">
-    <MudItem Style="display: flex; justify-content: center;" xs="12">
-        <MudPaper MaxWidth="440px" Style="padding: 18px;">
-            <MudText Style="font-weight:450;" Typo="Typo.h4">Logg inn</MudText>
-            <MudText Style="font-weight:450; margin-bottom: 18px;" Typo="Typo.body1">Bedre plass er ett steg nærmere</MudText>
-            <EditForm Model="logInValues" OnValidSubmit="LoginUser" class="login-form">
-                <DataAnnotationsValidator />
-                <MudGrid Style="justify-content: start !important;">
-                    <MudItem xs="12" Style="">
-                        <MudTextField T="string" Class="form-text-field" Style="width: 100%;" HelperText="E-post adressen du brukte da du registrerte deg" Required="true" Label="E-post" InputType="@InputType.Email" @bind-Value="logInValues.Email" For="@(() => logInValues.Email)" Variant="Variant.Outlined" />
-                    </MudItem>
-                    <MudItem Style="padding-bottom: 0;" xs="12">
-                        <MudTextField Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" T="string" Class="form-text-field" Style="width: 100%;" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@PasswordInput" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" Variant="Variant.Outlined" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
-                    </MudItem>
-                    <MudItem Style="margin-bottom: 22px;">
-                        @*Should link to forgot password site*@
-                        <MudText Style="text-decoration: underline;" Typo="Typo.body1">Glemt passord?</MudText>
-                    </MudItem>
-                    <MudItem xs="12" Style="text-align: center; padding-top: 0;">
-                        <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary" Style="width: 100%; max-width: 130px;">Logg inn</MudButton>
-                    </MudItem>
-                </MudGrid>
-            </EditForm>
-        </MudPaper>
-    </MudItem>
-    <MudItem><MudText Style="text-align: center;" Typo="Typo.body1">Har du ikke registrert deg? Registrer deg <MudLink Style="font-weight: 450;" Href="/registrer-deg">her</MudLink></MudText></MudItem>
-</MudGrid>
 
+<EditForm Model="logInValues" OnValidSubmit="LoginUser" class="login-form">
+    <DataAnnotationsValidator />
+    <MudGrid Style="justify-content: start !important;">
+        <MudItem xs="12" Style="">
+            <MudTextField T="string" Class="form-text-field" Style="width: 100%;" HelperText="E-post adressen du brukte da du registrerte deg" Required="true" Label="E-post" InputType="@InputType.Email" @bind-Value="logInValues.Email" For="@(() => logInValues.Email)" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem Style="padding-bottom: 0;" xs="12">
+            <MudTextField Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" T="string" Class="form-text-field" Style="width: 100%;" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@PasswordInput" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" Variant="Variant.Outlined" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
+        </MudItem>
+        <MudItem Style="margin-bottom: 22px;">
+            @*Should link to forgot password site*@
+            <MudText Style="text-decoration: underline;" Typo="Typo.body1">Glemt passord?</MudText>
+        </MudItem>
+        <MudItem xs="12" Style="text-align: center; padding-top: 0;">
+            <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary" Style="width: 100%; max-width: 130px;">Logg inn</MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>
 
 @code {
     private static readonly HttpClient client = new HttpClient();

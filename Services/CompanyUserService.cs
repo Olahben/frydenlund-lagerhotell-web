@@ -145,4 +145,35 @@ public class CompanyUserService
             }
         }
     }
+
+    public async Task<string> LoginByEmail(CompanyUser companyUser)
+    {
+        LoginCompanyUserByEmailRequest request = new(companyUser.Email, companyUser.Password);
+        string url = _baseUrl + "/login";
+        string requestJson = JsonSerializer.Serialize(request);
+        StringContent content = new(requestJson, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PostAsync(url, content);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            await _sessionService.AddJwtToLocalStorage(JsonSerializer.Deserialize<LoginCompanyUserByEmailResponse>(responseString, options).AccessToken);
+            return JsonSerializer.Deserialize<LoginCompanyUserByEmailResponse>(responseString, options).UserId;
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Company user not found");
+        }
+        else if (response.StatusCode == HttpStatusCode.Conflict)
+        {
+            throw new SqlTypeException("Wrong password1");
+        }
+        else
+        {
+            throw new Exception("Failed to login company user");
+        }
+    }
 }
