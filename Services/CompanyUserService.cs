@@ -216,4 +216,25 @@ public class CompanyUserService
             }
         }
     }
+
+    public async Task<List<CompanyUser>> GetAll(int? skip, int? take) 
+    {
+        string url = _baseUrl + $"/all";
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await client.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+            string responseString = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<CompanyUser> companyUsers = JsonSerializer.Deserialize<GetCompanyUsersResponse>(responseString, options).CompanyUsers;
+            return companyUsers;
+        }
+        else
+        {
+            throw new Exception("Failed to get company users");
+        }
+    }
 }
