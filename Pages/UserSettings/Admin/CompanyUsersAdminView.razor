@@ -1,0 +1,82 @@
+﻿@inject CompanyUserService _companyUserService
+@inject IDialogService _dialogService
+
+<MudTable Items="@users" Filter="new Func<CompanyUser, bool>(FilterFunc1)">
+    <ToolBarContent>
+        <MudText Style="margin-left: 6px;" Typo="Typo.h6">Brukere</MudText>
+        <MudSpacer />
+        <MudTextField Style="margin-right: 6px;" @bind-Value="searchString" Placeholder="Søk" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Fornavn</MudTh>
+        <MudTh>Etternavn</MudTh>
+        <MudTh>E-post</MudTh>
+        <MudTh>Tlfnr</MudTh>
+        <MudTh>Organisasjonsnummer</MudTh>
+        <MudTh>Gate</MudTh>
+        <MudTh>Postkode</MudTh>
+        <MudTh>By</MudTh>
+        <MudTh>Slett</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.FirstName</MudTd>
+        <MudTd>@context.LastName</MudTd>
+        <MudTd>@context.Email</MudTd>
+        <MudTd>@context.PhoneNumber</MudTd>
+        <MudTd>@context.CompanyNumber</MudTd>
+        <MudTd>@context.Address.StreetAddress</MudTd>
+        <MudTd>@context.Address.PostalCode</MudTd>
+        <MudTd>@context.Address.City</MudTd>
+        <MudTd><MudIcon Icon="@Icons.Material.Filled.Delete" Style="cursor:pointer" @onclick="() => OpenDeleteUserDialogAsync(context)"></MudIcon></MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private List<CompanyUser> users = new List<CompanyUser>();
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            users = await _companyUserService.GetAll(0, 0);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred while fetching users: {e}");
+            Snackbar.Add("En feil oppstod under henting av brukere, se i konsollen form nærmere informasjon", MudBlazor.Severity.Error);
+        }
+    }
+
+    private bool FilterFunc1(CompanyUser element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(CompanyUser element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.PhoneNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.CompanyNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private async Task OpenDeleteUserDialogAsync(CompanyUser user)
+    {
+        var parameters = new DialogParameters<Lagerhotell.Pages.UserSettings.Admin.DeleteCompanyUser>
+        {
+            { x => x.User, user }
+        };
+
+        var dialog = _dialogService.Show<Lagerhotell.Pages.UserSettings.Admin.DeleteCompanyUser>("Slett bruker", parameters);
+    }
+}

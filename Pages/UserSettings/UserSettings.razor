@@ -97,6 +97,20 @@
                                                 <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
                                             </MudListItem>
                                         }
+                                        @if (activeTab == "AdminFirmabrukere")
+                                        {
+                                            <MudListItem Class="active-tab">
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Firmabrukere (Admin)</span>
+                                            </MudListItem>
+                                        }
+                                        else
+                                        {
+                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminFirmabrukere")'>
+                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                <span style="vertical-align: middle; margin-left: 8px;">Firmabrukere (Admin)</span>
+                                            </MudListItem>
+                                        }
                                         @if (activeTab == "AdminBoder")
                                         {
                                             <MudListItem Class="active-tab">
@@ -278,6 +292,13 @@
                         <MudItem xs="12" md="9">
                             <MudPaper Elevation="1" Class="pa-4">
                                 <Lagerhotell.Pages.UserSettings.Admin.UsersAdminView />
+                            </MudPaper>
+                        </MudItem>
+                    }
+                    else if (activeTab == "AdminFirmabrukere") {
+                        <MudItem xs="12" md="9">
+                            <MudPaper Elevation="1" Class="pa-4">
+                                <Lagerhotell.Pages.UserSettings.Admin.CompanyUsersAdminView />
                             </MudPaper>
                         </MudItem>
                     }
