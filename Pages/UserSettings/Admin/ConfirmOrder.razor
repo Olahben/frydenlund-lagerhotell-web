@@ -1,0 +1,47 @@
+﻿@inject OrderService _orderService
+
+<MudDialog>
+    <TitleContent>
+        <h3 class="m-0">Godkjenn bestilling</h3>
+    </TitleContent>
+    <DialogContent>
+        <p>@($"Er du sikker på at du vil godkjenne bestillingen på {StorageUnit.Name} i lagerhotell: {WarehouseHotelName}")</p>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@Submit">Ja</MudButton>
+        <MudButton OnClick="@Cancel">Nei</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance Dialog { get; set; }
+    [Parameter]
+    public Order Order { get; set; }
+    [Parameter]
+    public StorageUnit StorageUnit { get; set; }
+    [Parameter]
+    public string WarehouseHotelName { get; set; }
+
+    private async Task Submit()
+    {
+        try
+        {
+            await _orderService.ConfirmOrder(Order);
+            Snackbar.Add("Bestilling godkjent", MudBlazor.Severity.Success);
+        } catch (InvalidOperationException e)
+        {
+            Snackbar.Add("Bestillingen er allerede godkjent", MudBlazor.Severity.Warning);
+        } catch (KeyNotFoundException e)
+        {
+            Snackbar.Add("Fant ikke bestillingen, prøv på nytt senere", MudBlazor.Severity.Error);
+        } catch (Exception e)
+        {
+            Snackbar.Add("En feil oppstod under kansellering av bestillingen", MudBlazor.Severity.Error);
+            Console.WriteLine($"An error occurred while canceling the order: {e}");
+        }
+        Dialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel() => Dialog.Cancel();
+}

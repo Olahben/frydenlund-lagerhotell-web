@@ -24,6 +24,7 @@
         <MudTh>Avslutningsdato</MudTh>
         <MudTh>Neste betalingsdato</MudTh>
         <MudTh>Kanseller</MudTh>
+        <MudTh>Godkjenn</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Order.Status</MudTd>
@@ -44,13 +45,14 @@
         }
         <MudTd>@context.Order.OrderPeriod.NextPaymentDate.ToString("dd.MM.yyyy")</MudTd>
             <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Cancel" @onclick="() => OpenCancelDialogAsync(context.Order, context.User, context.StorageUnit, context.WarehouseHotelName)"></MudIcon></MudTd>
+        <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Send" @onclick="() => OpenConfirmOrderDialogAsync(context.Order, context.StorageUnit, context.WarehouseHotelName)"></MudIcon></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
         </PagerContent>
     </MudTable>
 
-    @code {
+@code {
     private List<OrderAdminViewModel> _orderAdminViewModels = new List<OrderAdminViewModel>();
     private List<Order> _orders = new List<Order>();
     private List<StorageUnit> _storageUnits = new List<StorageUnit>();
@@ -105,11 +107,11 @@
             return true;
         if (element.User.PhoneNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        /*
+         /*
          * Commented out because there are no users with email in the database
          if (element.User.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-            */
+        */
         if (element.WarehouseHotelName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.StorageUnit.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
@@ -123,11 +125,22 @@
         var parameters = new DialogParameters<CancelOrder>
         {
             { x => x.Order, order },
-            { x => x.User, user },
             { x => x.StorageUnit, storageUnit },
             { x => x.WarehouseHotelName, warehouseHotelName }
         };
 
         return DialogService.ShowAsync<CancelOrder>("Simple Dialog", parameters);
+    }
+
+    private Task OpenConfirmOrderDialogAsync(Order order, StorageUnit storageUnit, string warehouseHotelName)
+    {
+        var parameters = new DialogParameters<ConfirmOrder>
+        {
+            { x => x.Order, order },
+            { x => x.StorageUnit, storageUnit },
+            { x => x.WarehouseHotelName, warehouseHotelName }
+        };
+
+        return DialogService.ShowAsync<ConfirmOrder>("Simple Dialog", parameters);
     }
 }
