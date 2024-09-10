@@ -43,7 +43,7 @@
             <MudTd>Ikke satt</MudTd>
         }
         <MudTd>@context.Order.OrderPeriod.NextPaymentDate.ToString("dd.MM.yyyy")</MudTd>
-            <MudTd><MudIcon Icon="@Icons.Material.Filled.Cancel" @onclick="() => OpenCancelDialogAsync(context.Order, context.User, context.StorageUnit, context.WarehouseHotelName)"></MudIcon></MudTd>
+            <MudTd><MudIcon Style="cursor: pointer;" Icon="@Icons.Material.Filled.Cancel" @onclick="() => OpenCancelDialogAsync(context.Order, context.User, context.StorageUnit, context.WarehouseHotelName)"></MudIcon></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager RowsPerPageString="Antall rader:" InfoFormat="{first_item}-{last_item} av {all_items}" />
