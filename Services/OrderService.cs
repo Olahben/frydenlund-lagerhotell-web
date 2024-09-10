@@ -151,4 +151,26 @@ public class OrderService
             throw new Exception("Something went wrong");
         }
     }
+
+    public async Task ConfirmOrder(Order order)
+    {
+        Order newOrder = order with { Status = OrderStatus.Confirmed };
+        var request = new ConfirmOrderRequest(newOrder);
+        string url = this.url + $"/update";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        string jsonData = JsonSerializer.Serialize(request);
+        StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _httpClient.PutAsync(url, content);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("The order was not found");
+            }
+            else
+            {
+                throw new Exception($"Something went wrong when updating order, code: {response.StatusCode}");
+            }
+        }
+    }
 }
