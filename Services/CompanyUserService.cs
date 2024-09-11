@@ -98,6 +98,9 @@ public class CompanyUserService
             };
             await _sessionService.AddJwtToLocalStorage(JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString, options).UserAcessToken);
             return JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString, options).CompanyUserId;
+        } else if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new KeyNotFoundException("Company not found");
         }
         else if (response.StatusCode == HttpStatusCode.Conflict)
         {

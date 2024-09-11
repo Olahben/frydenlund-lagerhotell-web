@@ -50,6 +50,9 @@
             StateHasChanged();
             _navigationManager.NavigateTo($"/user/{id}");
 
+        } catch (KeyNotFoundException e)
+        {
+            Snackbar.Add("Det er ingen norske registrerte firmaer med denne informasjonen", MudBlazor.Severity.Error);
         }
         catch (SqlAlreadyFilledException e)
         {
