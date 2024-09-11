@@ -8,6 +8,7 @@
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject OrderService _orderService
 @inject CompanyUserService _companyUserService
+@inject SessionService _sessionService
 
 @page "/user/{userId}"
 
@@ -400,9 +401,20 @@
 
     protected override async Task OnInitializedAsync()
     {
+        string token = await sessionService.GetJwtFromLocalStorage();
+        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        string userIdViaAcessToken = _sessionService.GetUserId(state);
+        if (userIdViaAcessToken == null)
+        {
+            _navigationManager.NavigateTo("/");
+        }
+        if (string.IsNullOrEmpty(UserId) || UserId != userIdViaAcessToken)
+        {
+            UserId = userIdViaAcessToken;
+            _navigationManager.NavigateTo($"/user/{UserId}");
+        }
         try
         {
-            string token = await sessionService.GetJwtFromLocalStorage();
             var user = await _userServiceUserSettings.LoadUser(client, _userValues, UserId, token);
             if (user != null)
             {
