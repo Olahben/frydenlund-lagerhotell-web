@@ -1,5 +1,7 @@
 ﻿global using Lagerhotell.Services.State;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
+using System.Security.Claims;
 
 namespace Lagerhotell.Services;
 
@@ -39,5 +41,10 @@ public class SessionService
     {
         await RemoveItemAsync("jwtToken");
         appState.UserLoggedOut();
+    }
+
+    public string GetUserId(AuthenticationState state)
+    {
+        return state.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
     }
 }
