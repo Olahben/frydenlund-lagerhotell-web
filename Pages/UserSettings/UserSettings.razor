@@ -403,14 +403,14 @@
     {
         string token = await sessionService.GetJwtFromLocalStorage();
         var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-        string userIdViaAcessToken = _sessionService.GetUserId(state);
-        if (userIdViaAcessToken == null)
+        string userIdViaAccessToken = _sessionService.GetUserId(state);
+        if (userIdViaAccessToken == null)
         {
             _navigationManager.NavigateTo("/");
         }
-        if (string.IsNullOrEmpty(UserId) || UserId != userIdViaAcessToken)
+        if (string.IsNullOrEmpty(UserId) || UserId != userIdViaAccessToken)
         {
-            UserId = userIdViaAcessToken;
+            UserId = userIdViaAccessToken;
             _navigationManager.NavigateTo($"/user/{UserId}");
         }
         try
