@@ -83,6 +83,7 @@
             if (jwt != null)
             {
                 phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
+                companyUser = null;
                 user = await _userService.GetUserByPhoneNumber(phoneNumber);
             }
             StateHasChanged();
@@ -91,6 +92,7 @@
         {
             try
             {
+                user = null;
                 companyUser = await _companyUserService.GetCompanyUserByPhoneNumber(phoneNumber);
                 StateHasChanged();
             }
