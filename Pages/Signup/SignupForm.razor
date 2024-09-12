@@ -78,6 +78,8 @@
 @inject SessionService sessionService
 
 @code {
+    [Parameter]
+    public User RedirectedUser { get; set; } = new();
     private AccountFormValues accountFormValues = new AccountFormValues();
     private static readonly HttpClient client = new HttpClient();
     private UserServiceSignup userServiceSignup = new UserServiceSignup();
@@ -90,6 +92,23 @@
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     bool CompanyUser = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RedirectedUser.FirstName != null) {
+            accountFormValues.FirstName = RedirectedUser.FirstName;
+            accountFormValues.LastName = RedirectedUser.LastName;
+            accountFormValues.PhoneNumber = RedirectedUser.PhoneNumber;
+            accountFormValues.Email = RedirectedUser.Email;
+            accountFormValues.BirthDate = RedirectedUser.BirthDate;
+            accountFormValues.Address = RedirectedUser.Address.StreetAddress;
+            accountFormValues.PostalCode = RedirectedUser.Address.PostalCode;
+            accountFormValues.City = RedirectedUser.Address.City;
+            accountFormValues.Password = RedirectedUser.Password;
+            accountFormValues.PasswordRepeat = RedirectedUser.Password;
+            accountFormValues.IsAdministrator = RedirectedUser.IsAdministrator;
+        }
+    }
 
     public class AccountFormValues
     {

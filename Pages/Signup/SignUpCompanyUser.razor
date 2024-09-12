@@ -28,6 +28,8 @@
 </MudForm>
 
 @code {
+    [Parameter]
+    public CompanyUser RedirectedCompanyUser { get; set; } = new();
     private CompanyUser companyUser = new CompanyUser();
     private string repeatPassword;
     private CompanyUserValidator validator = new();
@@ -36,6 +38,13 @@
     bool showPassword;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RedirectedCompanyUser.FirstName != null) {
+            companyUser = RedirectedCompanyUser;
+        }
+    }
 
     public async Task SignUpUser()
     {
