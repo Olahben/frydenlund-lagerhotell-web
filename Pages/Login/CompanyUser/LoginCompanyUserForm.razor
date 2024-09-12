@@ -1,4 +1,5 @@
 ﻿@inject CompanyUserService _companyUserService
+@inject AppState _appState
 @using System.Data.SqlTypes
 
 <MudForm>
@@ -33,6 +34,7 @@
             string userId = await _companyUserService.LoginByEmail(companyUser);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
+            _appState.NotifyStateChanged();
             NavigationManager.NavigateTo($"user/{userId}");
         }
         catch (KeyNotFoundException e)

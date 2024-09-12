@@ -66,6 +66,7 @@
             string userId = await _userServiceLogin.LoginUserWithEmail(logInValues.Email, logInValues.Password);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
+            _appState.NotifyStateChanged();
             navigationManager.NavigateTo($"user/{userId}");
         }
         catch (KeyNotFoundException e)

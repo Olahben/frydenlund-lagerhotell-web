@@ -2,6 +2,7 @@
 @inject CompanyUserService _companyUserService
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider
+@inject AppState _appState
 
 <MudForm Model="companyUser" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
     <MudGrid Style="">
@@ -48,6 +49,7 @@
             string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
             await _authenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
+            _appState.NotifyStateChanged();
             _navigationManager.NavigateTo($"/user/{id}");
 
         } catch (KeyNotFoundException e)
