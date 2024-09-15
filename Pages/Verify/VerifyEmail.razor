@@ -1,0 +1,80 @@
+﻿@page "/verifiser-epost"
+@inject NavigationManager _navigationManager
+@inject AppState _appState
+
+
+@if (isInitialized)
+{
+    <MudContainer Style="justify-content: start; display: flex; flex-direction: column; margin-top: 126px; max-width: 716px;">
+        <MudText Style="text-align: center;"><MudIcon Icon="@Icons.Material.Filled.ArrowBack"></MudIcon> Gå tilbake</MudText>
+        <MudPaper Elevation="2" Style="padding: 12px;">
+            <MudForm @ref="form">
+                <MudText Typo="Typo.h4" Style="font-weight: 480; margin-bottom: 18px;">Verifiser e-post</MudText>
+                @if (companyUser != null)
+                {
+                    @*
+            <MudBlazor.MudTextField @bind-Value="companyUser.Email" Variant="Variant.Outlined"></MudBlazor.MudTextField>
+            *@
+                    <MudTextField @bind-Value="email" T="string" Label="E-post" Variant="Variant.Outlined">Example@example.com</MudTextField>
+                }
+                else
+                {
+                    @*
+            <MudBlazor.MudTextField @bind-Value="user.Email" Variant="Variant.Outlined"></MudBlazor.MudTextField>
+            *@
+                    <MudTextField @bind-Value="email" T="string" Label="E-post" Variant="Variant.Outlined"></MudTextField>
+                }
+                <MudTextField Style="" @bind-Value="userCode" Validation="@codeValidator.Validation" Variant="Variant.Outlined" Label="Koden som er sendt til deg via e-post"></MudTextField>
+                <MudButton Style="margin-top: 16px;" Color="Color.Primary" Variant="Variant.Outlined">@sendCodeButtonText</MudButton>
+                <MudButton Style="margin-top: 16px;" Color="Color.Primary" Variant="Variant.Outlined">Verifiser</MudButton>
+            </MudForm>
+        </MudPaper>
+    </MudContainer>
+}
+
+
+@code {
+    CompanyUser companyUser;
+    User user;
+    private bool isInitialized = false;
+    [Required(ErrorMessage = "Kodefeltet er påkrevd")]
+    [Length(4, 4, ErrorMessage = "Koden må være 4 siffer")]
+    private int? userCode;
+    private string email = "example@example.com";
+    MudForm form;
+    private string sendCodeButtonText = "60";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_appState.CompanyUserBeforeVerified != null)
+        {
+            companyUser = _appState.CompanyUserBeforeVerified;
+            isInitialized = true;
+        }
+        else
+        {
+            user = _appState.UserBeforeEmailVerified;
+            isInitialized = true;
+        }
+        await CountDown();
+    }
+
+    FluentValueValidator<int?> codeValidator = new FluentValueValidator<int?>(x => x
+    .InclusiveBetween(1000, 9999));
+    FluentValueValidator<string> emailValidator = new FluentValueValidator<string>(x => x
+    .EmailAddress());
+
+    public async Task? CountDown()
+    {
+        int time = 60;
+        while (time > 0)
+        {
+            sendCodeButtonText = time.ToString();
+            time--;
+            await Task.Delay(1000);
+            StateHasChanged();
+        }
+        sendCodeButtonText = "Send kode på nytt";
+        StateHasChanged();
+    }
+}
