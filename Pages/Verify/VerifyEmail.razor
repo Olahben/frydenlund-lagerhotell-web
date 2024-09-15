@@ -6,7 +6,7 @@
 @if (isInitialized)
 {
     <MudContainer Style="justify-content: start; display: flex; flex-direction: column; margin-top: 126px; max-width: 716px;">
-        <MudText Style="text-align: center;"><MudIcon Icon="@Icons.Material.Filled.ArrowBack"></MudIcon> Gå tilbake</MudText>
+        <MudText Style="text-align: start; text-decoration: underline;"><span @onclick="() => RedirectToRegister()" style="cursor: pointer; display: flex; align-content: center; gap: 6px; width: fit-content;"><MudIcon Icon="@Icons.Material.Filled.ArrowBack"></MudIcon> Gå tilbake</span></MudText>
         <MudPaper Elevation="2" Style="padding: 12px; padding-bottom: 46px;">
             <MudForm @ref="form">
                 <MudText Typo="Typo.h4" Style="font-weight: 480; margin-bottom: 24px;">Verifiser e-post</MudText>
@@ -77,5 +77,10 @@
         }
         sendCodeButtonText = "Send kode på nytt";
         StateHasChanged();
+    }
+
+    private void RedirectToRegister()
+    {
+        _navigationManager.NavigateTo("/registrer-deg");
     }
 }
