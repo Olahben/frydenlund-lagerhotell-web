@@ -6,6 +6,7 @@
 @using System.Text.Json.Serialization
 @using System.Collections.Generic
 @inject AppState _appState
+@inject NavigationManager _navigationManager
 
 <MudGrid Justify="Justify.Center">
     <MudItem Style="height: fit-content;">
@@ -78,8 +79,6 @@
 @inject SessionService sessionService
 
 @code {
-    [Parameter]
-    public User RedirectedUser { get; set; } = new();
     private AccountFormValues accountFormValues = new AccountFormValues();
     private static readonly HttpClient client = new HttpClient();
     private UserServiceSignup userServiceSignup = new UserServiceSignup();
@@ -95,18 +94,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (RedirectedUser.FirstName != null) {
-            accountFormValues.FirstName = RedirectedUser.FirstName;
-            accountFormValues.LastName = RedirectedUser.LastName;
-            accountFormValues.PhoneNumber = RedirectedUser.PhoneNumber;
-            accountFormValues.Email = RedirectedUser.Email;
-            accountFormValues.BirthDate = RedirectedUser.BirthDate;
-            accountFormValues.Address = RedirectedUser.Address.StreetAddress;
-            accountFormValues.PostalCode = RedirectedUser.Address.PostalCode;
-            accountFormValues.City = RedirectedUser.Address.City;
-            accountFormValues.Password = RedirectedUser.Password;
-            accountFormValues.PasswordRepeat = RedirectedUser.Password;
-            accountFormValues.IsAdministrator = RedirectedUser.IsAdministrator;
+        if (_appState.UserBeforeEmailVerified != null) {
+            accountFormValues.FirstName = _appState.UserBeforeEmailVerified.FirstName;
+            accountFormValues.LastName = _appState.UserBeforeEmailVerified.LastName;
+            accountFormValues.PhoneNumber = _appState.UserBeforeEmailVerified.PhoneNumber;
+            accountFormValues.Email = _appState.UserBeforeEmailVerified.Email;
+            accountFormValues.BirthDate = _appState.UserBeforeEmailVerified.BirthDate;
+            accountFormValues.Address = _appState.UserBeforeEmailVerified.Address.StreetAddress;
+            accountFormValues.PostalCode = _appState.UserBeforeEmailVerified.Address.PostalCode;
+            accountFormValues.City = _appState.UserBeforeEmailVerified.Address.City;
+            accountFormValues.Password = _appState.UserBeforeEmailVerified.Password;
+            accountFormValues.PasswordRepeat = _appState.UserBeforeEmailVerified.Password;
+            accountFormValues.IsAdministrator = _appState.UserBeforeEmailVerified.IsAdministrator;
         }
     }
 
@@ -171,7 +170,11 @@
         } */
         try
         {
-            // Should be returned the user and call navigate with user id
+            Address userAddress = new Address(accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City);
+            User user = new User(accountFormValues.FirstName, accountFormValues.LastName, accountFormValues.PhoneNumber, accountFormValues.Email, accountFormValues.BirthDate, userAddress, accountFormValues.Password, accountFormValues.IsAdministrator);
+            _appState.SetUserBeforeEmailVerified(user);
+            _navigationManager.NavigateTo("/verifiser-epost");
+            /*
             string? userId;
             string? token;
             (userId, token) = await userServiceSignup.SignupUser(accountFormValues, client);
@@ -179,7 +182,7 @@
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             _appState.NotifyStateChanged();
             NavigationManager.NavigateTo($"/user/{userId}");
-            StateHasChanged();
+            StateHasChanged();*/
         }
         catch (Exception ex)
         {

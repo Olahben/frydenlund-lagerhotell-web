@@ -28,8 +28,6 @@
 </MudForm>
 
 @code {
-    [Parameter]
-    public CompanyUser RedirectedCompanyUser { get; set; } = new();
     private CompanyUser companyUser = new CompanyUser();
     private string repeatPassword;
     private CompanyUserValidator validator = new();
@@ -41,8 +39,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (RedirectedCompanyUser.FirstName != null) {
-            companyUser = RedirectedCompanyUser;
+        if (_appState.CompanyUserBeforeVerified != null) {
+            companyUser = _appState.CompanyUserBeforeVerified;
         }
     }
 
@@ -55,11 +53,13 @@
         }
         try
         {
-            string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
+            _appState.SetCompanyUserBeforeEmailVerified(companyUser);
+            _navigationManager.NavigateTo("/verifiser-epost");
+            /*string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
             await _authenticationStateProvider.GetAuthenticationStateAsync();
             StateHasChanged();
             _appState.NotifyStateChanged();
-            _navigationManager.NavigateTo($"/user/{id}");
+            _navigationManager.NavigateTo($"/user/{id}"); */
 
         } catch (KeyNotFoundException e)
         {
