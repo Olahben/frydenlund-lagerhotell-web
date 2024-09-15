@@ -7,6 +7,12 @@ public class AuthenticationService
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl = "https://localhost:7272/auth";
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task StartEmailVerification(string email)
     {
         var request = new StartEmailVerificationRequest(email);
@@ -19,6 +25,16 @@ public class AuthenticationService
         }
     }
 
+    /// <summary>
+    /// Checks if the email verification code the user provided is valid
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="code"></param>
+    /// <returns></returns>
+    /// <exception cref="BadRequestException"></exception>
+    /// <exception cref="KeyNotFoundException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="Exception"></exception>
     public async Task VerifyEmailVerificationCode(string email, int code)
     {
         VerifyEmailVerificationCodeRequest request = new(code, email);
