@@ -3,6 +3,7 @@
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject AppState _appState
+@inject AuthenticationService _authenticationService
 
 <MudForm Model="companyUser" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
     <MudGrid Style="">
@@ -54,6 +55,7 @@
         try
         {
             _appState.SetCompanyUserBeforeEmailVerified(companyUser);
+            await _authenticationService.StartEmailVerification(companyUser.Email);
             _navigationManager.NavigateTo("/verifiser-epost");
             /*string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
             await _authenticationStateProvider.GetAuthenticationStateAsync();
@@ -71,6 +73,7 @@
         }
         catch (Exception e)
         {
+            Console.WriteLine(e);
             Snackbar.Add($"Noe gikk galt, prøv på nytt senere", MudBlazor.Severity.Error);
         }
     }
