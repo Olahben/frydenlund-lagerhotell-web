@@ -10,6 +10,7 @@ public class UserServiceSignup
     private readonly string _baseUrl = "https://localhost:7272/users";
     protected string? CustomError;
     protected bool UserRegistered;
+    private readonly HttpClient _httpClient = new();
     public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, bool IsAdministrator, HttpClient client, string email)
     {
         var request = new AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password, IsAdministrator = IsAdministrator, Email = email };
@@ -55,7 +56,7 @@ public class UserServiceSignup
     /// <param name="client"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
+    public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues)
     {
         string userId;
         string token;
@@ -80,14 +81,14 @@ public class UserServiceSignup
     /// <param name="client"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public async Task<(string userId, string token)> SignupUserWithUserModel(User user, HttpClient client)
+    public async Task<(string userId, string token)> SignupUserWithUserModel(User user)
     {
         string userId;
         string token;
         try
         {
             await PhoneNumberExistence(user.PhoneNumber, client);
-            (userId, token) = await AddUser(user.FirstName, user.FirstName, user.PhoneNumber, user.BirthDate, user.Address.StreetAddress, user.Address.PostalCode, user.Address.City, user.Password, user.IsAdministrator, client, user.Email);
+            (userId, token) = await AddUser(user.FirstName, user.FirstName, user.PhoneNumber, user.BirthDate, user.Address.StreetAddress, user.Address.PostalCode, user.Address.City, user.Password, user.IsAdministrator, _httpClient, user.Email);
             return (userId, token);
         }
         catch (Exception)
