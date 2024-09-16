@@ -56,7 +56,7 @@ public class UserServiceSignup
     /// <param name="client"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues)
+    public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
     {
         string userId;
         string token;
@@ -87,7 +87,7 @@ public class UserServiceSignup
         string token;
         try
         {
-            await PhoneNumberExistence(user.PhoneNumber, client);
+            await PhoneNumberExistence(user.PhoneNumber, _httpClient);
             (userId, token) = await AddUser(user.FirstName, user.FirstName, user.PhoneNumber, user.BirthDate, user.Address.StreetAddress, user.Address.PostalCode, user.Address.City, user.Password, user.IsAdministrator, _httpClient, user.Email);
             return (userId, token);
         }
