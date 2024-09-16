@@ -47,6 +47,14 @@ public class UserServiceSignup
         CustomError = "";
         UserRegistered = false;
     }
+
+    /// <summary>
+    /// Method that signs up the user and takes a SignupForm.AccountFormValues as parameter
+    /// </summary>
+    /// <param name="accountFormValues"></param>
+    /// <param name="client"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
     {
         string userId;
@@ -60,6 +68,30 @@ public class UserServiceSignup
         catch (Exception ex)
         {
             Console.WriteLine("In SignupUser in SignupService" + ex);
+            throw new Exception("Brukeren er allerede registrert");
+        }
+
+    }
+
+    /// <summary>
+    /// Method that signs up the user and takes a User model as parameter
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="client"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<(string userId, string token)> SignupUserWithUserModel(User user, HttpClient client)
+    {
+        string userId;
+        string token;
+        try
+        {
+            await PhoneNumberExistence(user.PhoneNumber, client);
+            (userId, token) = await AddUser(user.FirstName, user.FirstName, user.PhoneNumber, user.BirthDate, user.Address.StreetAddress, user.Address.PostalCode, user.Address.City, user.Password, user.IsAdministrator, client, user.Email);
+            return (userId, token);
+        }
+        catch (Exception)
+        {
             throw new Exception("Brukeren er allerede registrert");
         }
 
