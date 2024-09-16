@@ -4,7 +4,7 @@ namespace Lagerhotell.Services;
 
 public class AuthenticationService
 {
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = new();
     private readonly string _baseUrl = "https://localhost:7272/auth";
 
     /// <summary>
