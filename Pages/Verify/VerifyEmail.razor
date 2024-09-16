@@ -1,6 +1,7 @@
 ﻿@page "/verifiser-epost"
 @inject NavigationManager _navigationManager
 @inject AppState _appState
+@inject AuthenticationService _authenticationService
 
 
 @if (isInitialized)
@@ -26,7 +27,7 @@
                 }
                 <MudTextField Style="" @bind-Value="userCode" Validation="@codeValidator.Validation" Variant="Variant.Outlined" Label="Koden som er sendt til deg via e-post"></MudTextField>
                 <MudButton Style="margin-top: 24px;" Color="Color.Primary" Variant="Variant.Outlined">@sendCodeButtonText</MudButton>
-                <MudButton Style="margin-top: 24px;" Color="Color.Primary" Variant="Variant.Outlined">Verifiser</MudButton>
+                <MudButton Style="margin-top: 24px;" OnClick="VerifyUserEmailCode" Color="Color.Primary" Variant="Variant.Outlined">Verifiser</MudButton>
             </MudForm>
         </MudPaper>
     </MudContainer>
@@ -64,6 +65,39 @@
      x.InclusiveBetween(1000, 9999).WithMessage("Koden må være 4 siffer"));
     FluentValueValidator<string> emailValidator = new FluentValueValidator<string>(x => x
     .EmailAddress());
+
+    private async Task VerifyUserEmailCode()
+    {
+        if (userCode.ToString().Length == 4) {
+            if (companyUser != null)
+            {
+                try
+                {
+                    await _authenticationService.VerifyEmailVerificationCode(companyUser.Email, userCode);
+                } catch (BadRequestException)
+                {
+                    Snackbar.Add("Koden du har skrevet inn er feil", MudBlazor.Severity.Error);
+                } catch (KeyNotFoundException)
+                {
+                    // No codes with the following email were found
+                    Snackbar.Add("Noe gikk galt, vennligst send en ny kode", MudBlazor.Severity.Error);
+                } catch (InvalidOperationException)
+                {
+                    Snackbar.Add("Koden har utløpt, vennligst send en ny en", MudBlazor.Severity.Error);
+                } catch (Exception e)
+                {
+                    Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
+                }
+            }
+            else
+            {
+                await _authenticationService.VerifyEmailVerificationCode(user.Email, userCode);
+            }
+        } else
+        {
+            Snackbar.Add("Koden du har skrevet inn er ugyldig", MudBlazor.Severity.Error);
+        }
+    }
 
     public async Task? CountDown()
     {
