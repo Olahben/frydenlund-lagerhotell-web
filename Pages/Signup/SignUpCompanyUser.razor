@@ -58,7 +58,7 @@
                 await _companyUserService.DoesSimilarUserExist(companyUser.CompanyNumber, companyUser.PhoneNumber, companyUser.Email);
             } catch (SqlAlreadyFilledException e)
             {
-                Snackbar.Add("Det er allerede registrert en bruker med disse dataene", MudBlazor.Severity.Error);
+                Snackbar.Add("Det er allerede registrert en bruker med dette telefonnummeret eller e-posten", MudBlazor.Severity.Error);
                 return;
             } catch (KeyNotFoundException)
             {

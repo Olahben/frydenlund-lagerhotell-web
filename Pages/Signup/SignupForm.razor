@@ -171,7 +171,7 @@
                 bool exists = await _userService.DoesSimilarUserExist(user.PhoneNumber, user.Email);
                 if (exists)
                 {
-                    Snackbar.Add("En bruker med dette telefonnummeret eller denne e-posten er allerede registrert", MudBlazor.Severity.Error);
+                    Snackbar.Add("En bruker med dette telefonnummeret eller e-posten er allerede registrert", MudBlazor.Severity.Error);
                     return;
                 }
             } catch (Exception e)
