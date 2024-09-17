@@ -98,7 +98,8 @@ public class CompanyUserService
             };
             await _sessionService.AddJwtToLocalStorage(JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString, options).UserAcessToken);
             return JsonSerializer.Deserialize<CreateCompanyUserResponse>(responseString, options).CompanyUserId;
-        } else if (response.StatusCode == HttpStatusCode.NotFound)
+        }
+        else if (response.StatusCode == HttpStatusCode.NotFound)
         {
             throw new KeyNotFoundException("Company not found");
         }
@@ -220,7 +221,7 @@ public class CompanyUserService
         }
     }
 
-    public async Task<List<CompanyUser>> GetAll(int? skip, int? take) 
+    public async Task<List<CompanyUser>> GetAll(int? skip, int? take)
     {
         string url = _baseUrl + $"/all";
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
@@ -239,5 +240,27 @@ public class CompanyUserService
         {
             throw new Exception("Failed to get company users");
         }
+    }
+
+    public async Task<bool> DoesSimilarUserExist(string companyNumber, string phoneNumber, string email)
+    {
+        string url = _baseUrl + $"/does-similar-user-exist/{companyNumber}/{phoneNumber}/{email}";
+        HttpResponseMessage response = await client.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException("Company not found in Norway");
+            }
+            else if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                throw new SqlAlreadyFilledException("User already exists");
+            }
+            else
+            {
+                throw new Exception($"Failed to check if similar user exists, status code: {response.StatusCode}");
+            }
+        }
+        return false;
     }
 }

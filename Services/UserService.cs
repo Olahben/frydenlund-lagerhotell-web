@@ -93,4 +93,22 @@ public class UserService
             }
         }
     }
+
+    public async Task<bool> DoesSimilarUserExist(string phoneNumber, string email)
+    {
+        string endpointUrl = url + $"/does-similar-user-exist/{phoneNumber}/{email}";
+        var response = await _httpClient.GetAsync(endpointUrl);
+        if (!response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                return true;
+            }
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException();
+            }
+        }
+        return false;
+    }
 }
