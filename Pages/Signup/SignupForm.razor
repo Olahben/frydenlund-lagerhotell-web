@@ -7,6 +7,7 @@
 @using System.Collections.Generic
 @inject AppState _appState
 @inject NavigationManager _navigationManager
+@inject UserService _userService
 
 <MudGrid Justify="Justify.Center">
     <MudItem Style="height: fit-content;">
@@ -161,28 +162,25 @@
 
     public async Task? SignupUser()
     {
-        /* await PhoneNumberExistence(accountFormValues.PhoneNumber);
-        StateHasChanged();
-        if (phoneNumberRegistered == "")
-            {
-            RedirectToLogin();
-            AddUser();
-        } */
         try
         {
             Address userAddress = new Address(accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City);
             User user = new User(accountFormValues.FirstName, accountFormValues.LastName, accountFormValues.PhoneNumber, accountFormValues.Email, accountFormValues.BirthDate, userAddress, accountFormValues.Password, accountFormValues.IsAdministrator);
+            try
+            {
+                bool exists = await _userService.DoesSimilarUserExist(user.PhoneNumber, user.Email);
+                if (exists)
+                {
+                    Snackbar.Add("En bruker med dette telefonnummeret eller denne e-posten er allerede registrert", MudBlazor.Severity.Error);
+                    return;
+                }
+            } catch (Exception e)
+            {
+                Snackbar.Add("Noe gikk galt, prøv på nytt senere", MudBlazor.Severity.Error);
+                return;
+            }
             _appState.SetUserBeforeEmailVerified(user);
             _navigationManager.NavigateTo("/verifiser-epost");
-            /*
-            string? userId;
-            string? token;
-            (userId, token) = await userServiceSignup.SignupUser(accountFormValues, client);
-            await sessionService.AddJwtToLocalStorage(token);
-            await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            _appState.NotifyStateChanged();
-            NavigationManager.NavigateTo($"/user/{userId}");
-            StateHasChanged();*/
         }
         catch (Exception ex)
         {

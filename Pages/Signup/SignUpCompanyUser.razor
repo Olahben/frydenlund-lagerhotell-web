@@ -53,13 +53,24 @@
         }
         try
         {
+            try
+            {
+                await _companyUserService.DoesSimilarUserExist(companyUser.CompanyNumber, companyUser.PhoneNumber, companyUser.Email);
+            } catch (SqlAlreadyFilledException e)
+            {
+                Snackbar.Add("Det er allerede registrert en bruker med disse dataene", MudBlazor.Severity.Error);
+                return;
+            } catch (KeyNotFoundException)
+            {
+                Snackbar.Add("Det er ingen norske registrerte firmaer med dette nummeret", MudBlazor.Severity.Error);
+                return;
+            } catch (Exception)
+            {
+                Snackbar.Add("Noe gikk galt, prøv på nytt senere", MudBlazor.Severity.Error);
+                return;
+            }
             _appState.SetCompanyUserBeforeEmailVerified(companyUser);
             _navigationManager.NavigateTo("/verifiser-epost");
-            /*string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
-            await _authenticationStateProvider.GetAuthenticationStateAsync();
-            StateHasChanged();
-            _appState.NotifyStateChanged();
-            _navigationManager.NavigateTo($"/user/{id}"); */
 
         } catch (KeyNotFoundException e)
         {
