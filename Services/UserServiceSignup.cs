@@ -10,6 +10,7 @@ public class UserServiceSignup
     private readonly string _baseUrl = "https://localhost:7272/users";
     protected string? CustomError;
     protected bool UserRegistered;
+    private readonly HttpClient _httpClient = new();
     public async Task<(string userId, string token)> AddUser(string firstName, string lastName, string phoneNumber, string birthDate, string address, string postalCode, string city, string password, bool IsAdministrator, HttpClient client, string email)
     {
         var request = new AddUserRequest { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber, BirthDate = birthDate, Address = address, PostalCode = postalCode, City = city, Password = password, IsAdministrator = IsAdministrator, Email = email };
@@ -47,6 +48,14 @@ public class UserServiceSignup
         CustomError = "";
         UserRegistered = false;
     }
+
+    /// <summary>
+    /// Method that signs up the user and takes a SignupForm.AccountFormValues as parameter
+    /// </summary>
+    /// <param name="accountFormValues"></param>
+    /// <param name="client"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<(string userId, string token)> SignupUser(SignupForm.AccountFormValues accountFormValues, HttpClient client)
     {
         string userId;
@@ -60,6 +69,30 @@ public class UserServiceSignup
         catch (Exception ex)
         {
             Console.WriteLine("In SignupUser in SignupService" + ex);
+            throw new Exception("Brukeren er allerede registrert");
+        }
+
+    }
+
+    /// <summary>
+    /// Method that signs up the user and takes a User model as parameter
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="client"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<(string userId, string token)> SignupUserWithUserModel(User user)
+    {
+        string userId;
+        string token;
+        try
+        {
+            await PhoneNumberExistence(user.PhoneNumber, _httpClient);
+            (userId, token) = await AddUser(user.FirstName, user.FirstName, user.PhoneNumber, user.BirthDate, user.Address.StreetAddress, user.Address.PostalCode, user.Address.City, user.Password, user.IsAdministrator, _httpClient, user.Email);
+            return (userId, token);
+        }
+        catch (Exception)
+        {
             throw new Exception("Brukeren er allerede registrert");
         }
 

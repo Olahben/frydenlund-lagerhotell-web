@@ -8,6 +8,7 @@
 @inject AppState _appState
 @inject NavigationManager _navigationManager
 @inject UserService _userService
+@inject AuthenticationService _authenticationService
 
 <MudGrid Justify="Justify.Center">
     <MudItem Style="height: fit-content;">
@@ -180,6 +181,7 @@
                 return;
             }
             _appState.SetUserBeforeEmailVerified(user);
+            await _authenticationService.StartEmailVerification(user.Email);
             _navigationManager.NavigateTo("/verifiser-epost");
         }
         catch (Exception ex)
