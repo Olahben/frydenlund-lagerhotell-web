@@ -25,12 +25,12 @@
         <MudItem Style="padding-bottom: 0;" xs="12">
             <MudTextField Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" T="string" Class="form-text-field" Style="width: 100%;" HelperText="Passordet du brukte da du registrerte deg" Required="true" Label="Passord" InputType="@PasswordInput" @bind-Value="logInValues.Password" For="@(() => logInValues.Password)" Variant="Variant.Outlined" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Vis passord" />
         </MudItem>
-        <MudItem Style="margin-bottom: 22px;">
+        <MudItem Style="margin-bottom: 32px; padding-top: 2px;">
             @*Should link to forgot password site*@
-            <MudText Style="text-decoration: underline;" Typo="Typo.body1">Glemt passord?</MudText>
+            <MudLink Style="cursor: pointer;">Glemt passord?</MudLink>
         </MudItem>
         <MudItem xs="12" Style="text-align: center; padding-top: 0;">
-            <MudButton ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary" Style="width: 100%; max-width: 130px;">Logg inn</MudButton>
+            <MudButton FullWidth="true" ButtonType="@ButtonType.Submit" Variant="@Variant.Filled" Color="Color.Primary" Style="width: 100%; max-width: 130px;">Logg inn</MudButton>
         </MudItem>
     </MudGrid>
 </EditForm>

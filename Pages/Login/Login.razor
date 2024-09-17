@@ -12,9 +12,9 @@
     <NotAuthorized>
         <MudGrid Style="margin-top: 46px; height: fit-content; margin-left: 6px; margin-right: 6px;" Justify="Justify.Center">
             <MudItem Style="display: flex; justify-content: center;" xs="12">
-                <MudPaper MaxWidth="440px" Style="padding: 18px;">
+                <MudPaper Square="false" Elevation="2" MaxWidth="380px" Style="padding: 18px; padding-bottom: 28px; padding-top: 28px;">
                     <MudText Style="font-weight:450;" Typo="Typo.h4">Logg inn</MudText>
-                    <MudText Style="font-weight:450; margin-bottom: 6px;" Typo="Typo.body1">Bedre plass er ett steg nærmere</MudText>
+                    <MudText Style="font-weight:450; margin-bottom: 18px;" Typo="Typo.body1">Bedre plass er ett steg nærmere</MudText>
                     <MudSwitch @bind-Value="companyUserLogIn" Color="Color.Info" Label="Bedriftsinnlogging"></MudSwitch>
                     @if (!companyUserLogIn)
                     {
@@ -24,7 +24,7 @@
                     }
                 </MudPaper>
             </MudItem>
-            <MudItem><MudText Style="text-align: center;" Typo="Typo.body1">Har du ikke registrert deg? Registrer deg <MudLink Style="font-weight: 450;" Href="/registrer-deg">her</MudLink></MudText></MudItem>
+            <MudItem><MudText Style="text-align: center; margin-bottom: 72px;" Typo="Typo.body1">Har du ikke registrert deg? Registrer deg <MudLink Style="font-weight: 450;" Href="/registrer-deg">her</MudLink></MudText></MudItem>
         </MudGrid>
     </NotAuthorized>
     <Authorized>
