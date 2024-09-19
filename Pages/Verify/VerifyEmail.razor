@@ -4,7 +4,6 @@
 @inject AuthenticationService _authenticationService
 @inject CompanyUserService _companyUserService
 @inject AuthenticationStateProvider _authenticationStateProvider
-@inject UserServiceSignup _userServiceSignup
 @inject SessionService _sessionService
 @using System.Data.SqlTypes
 
@@ -49,6 +48,8 @@
     private string email = "example@example.com";
     MudForm form;
     private string sendCodeButtonText = "60";
+
+    private readonly UserServiceSignup _userServiceSignup = new UserServiceSignup();
 
     protected override async Task OnInitializedAsync()
     {
