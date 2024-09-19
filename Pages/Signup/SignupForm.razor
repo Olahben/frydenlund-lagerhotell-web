@@ -149,7 +149,7 @@
         public string City { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Dette feltet er obligatorisk")]
-        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum seks", MinimumLength = 8)]
+        [StringLength(48, ErrorMessage = "Maks 48 tall eller bokstaver, minimum åtte", MinimumLength = 8)]
         [UserServiceSignup.ContainsNumber(ErrorMessage = "Passordet ditt må ha minst ett tall")]
         public string Password { get; set; } = string.Empty;
 
