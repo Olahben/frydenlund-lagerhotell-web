@@ -166,7 +166,7 @@
         try
         {
             Address userAddress = new Address(accountFormValues.Address, accountFormValues.PostalCode, accountFormValues.City);
-            User user = new User(accountFormValues.FirstName, accountFormValues.LastName, accountFormValues.PhoneNumber, accountFormValues.Email, accountFormValues.BirthDate, userAddress, accountFormValues.Password, accountFormValues.IsAdministrator);
+            User user = new User(accountFormValues.FirstName, accountFormValues.LastName, accountFormValues.PhoneNumber, accountFormValues.Email, accountFormValues.BirthDate, userAddress, accountFormValues.Password, accountFormValues.IsAdministrator, false);
             try
             {
                 bool exists = await _userService.DoesSimilarUserExist(user.PhoneNumber, user.Email);
