@@ -1,6 +1,6 @@
 ﻿global using Lagerhotell.Services.State;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
 namespace Lagerhotell.Services;
@@ -17,6 +17,11 @@ public class SessionService
     public async Task? AddJwtToLocalStorage(string jwt)
     {
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "jwtToken", jwt);
+    }
+
+    public async Task AddLoginStateToLocalStorage(string state)
+    {
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "loginState", state);
     }
 
     public async Task<string> GetJwtFromLocalStorage()
