@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 /wwwroot/Data/users.json
 /appsettings.json
+/wwwroot/appsettings.json
