@@ -20,7 +20,7 @@
             NavigationManager.NavigateTo("/");
             return;
         }
-        string localStorageState = await _sessionService.GetLoginStateFromLocalStorage();
+        string localStorageState = await _sessionService.GetItemAsync("loginState");
         if (localStorageState != state)
         {
             Snackbar.Add("Noe gikk galt");
