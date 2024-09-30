@@ -3,6 +3,7 @@
 @inject UserService _userService
 @inject AppState _appState
 @inject CompanyUserService _companyUserService
+@inject Auth0Service _auth0Service
 
 <style>
     .clickable:hover {
@@ -20,7 +21,7 @@
             <MudSpacer />
             <AuthorizeView>
                 <NotAuthorized>
-                    <MudButton Style="margin-left: 8px;" Href="/logg-inn" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
+                    <MudButton Style="margin-left: 8px;" @onclick="RedirectToAuth0Login" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
                     <MudButton Style="color: white;" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
                 </NotAuthorized>
                 <Authorized>
@@ -123,5 +124,10 @@
         {
             _navigationManager.NavigateTo($"/user/{companyUser.CompanyUserId}");
         }
+    }
+
+    private async Task RedirectToAuth0Login()
+    {
+        await _auth0Service.RedirectToLoginPage();
     }
 }
