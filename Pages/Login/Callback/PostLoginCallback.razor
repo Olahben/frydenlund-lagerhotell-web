@@ -1,0 +1,22 @@
+﻿@page "/authentication/login-callback/"
+
+<h1>Test</h1>
+
+@code {
+    private string code { get; set; }
+    private string state { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        code = queryParams["code"];
+        state = queryParams["state"];
+        if (code == null || state == null)
+        {
+            Snackbar.Add("Noe gikk galt");
+            NavigationManager.NavigateTo("/");
+
+        }
+    }
+}
