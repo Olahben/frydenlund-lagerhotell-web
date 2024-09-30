@@ -1,4 +1,5 @@
 ﻿@page "/authentication/login-callback/"
+@inject SessionService _sessionService
 
 <h1>Test</h1>
 
@@ -15,8 +16,18 @@
         if (code == null || state == null)
         {
             Snackbar.Add("Noe gikk galt");
+            await _sessionService.RemoveItemAsync("loginState");
             NavigationManager.NavigateTo("/");
-
+            return;
         }
+        string localStorageState = await _sessionService.GetLoginStateFromLocalStorage();
+        if (localStorageState != state)
+        {
+            Snackbar.Add("Noe gikk galt");
+            await _sessionService.RemoveItemAsync("loginState");
+            NavigationManager.NavigateTo("/");
+            return;
+        }
+
     }
 }
