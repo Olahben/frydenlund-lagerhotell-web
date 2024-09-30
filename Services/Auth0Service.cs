@@ -25,7 +25,7 @@ public class Auth0Service
         _navigationManager = navigationManager;
     }
 
-    public string GenerateState()
+    public static string GenerateState()
     {
         var randomBytes = new byte[32];
         using (var rng = RandomNumberGenerator.Create())
@@ -39,7 +39,7 @@ public class Auth0Service
     public async Task RedirectToLoginPage()
     {
         string state = GenerateState();
-        _sessionService.AddLoginStateToLocalStorage(state);
+        await _sessionService.AddLoginStateToLocalStorage(state);
         string redirectUrl = $"https://{_auth0Domain}/authorize?response_type=code&client_id={_clientId}&redirect_uri={_loginCallBackUrl}&state={state}";
         _navigationManager.NavigateTo(redirectUrl);
     }
