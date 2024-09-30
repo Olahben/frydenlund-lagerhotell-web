@@ -24,6 +24,11 @@ public class SessionService
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "loginState", state);
     }
 
+   public async Task<string> GetItemAsync(string key)
+    {
+        return await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+    }
+
     public async Task RemoveLoginStateFromLocalStorage()
     {
         await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "loginState");
