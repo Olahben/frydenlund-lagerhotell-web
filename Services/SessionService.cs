@@ -14,7 +14,7 @@ public class SessionService
         this._jsRuntime = jsRuntime;
         appState = _appState;
     }
-    public async Task? AddJwtToLocalStorage(string jwt)
+    public async Task AddJwtToLocalStorage(string jwt)
     {
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "jwtToken", jwt);
     }
