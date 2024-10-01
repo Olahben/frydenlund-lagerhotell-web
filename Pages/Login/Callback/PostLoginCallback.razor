@@ -1,5 +1,6 @@
 ﻿@page "/authentication/login-callback/"
 @inject SessionService _sessionService
+@inject Auth0Service _auth0Service
 
 <h1>Test</h1>
 
@@ -12,7 +13,7 @@
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
         code = queryParams["code"];
-        state = queryParams["state"];
+        state = queryParams["state"]?.Replace(" ", "+");
         if (code == null || state == null)
         {
             Snackbar.Add("Noe gikk galt");
@@ -28,6 +29,15 @@
             NavigationManager.NavigateTo("/");
             return;
         }
-
+        try {
+            await _auth0Service.ExchangeCodeForTokens(code);
+            // TODO: fetch user info
+            // TODO: redirect to user settings/id
+        } catch (Exception e) {
+            Snackbar.Add("Noe gikk galt");
+            await _sessionService.RemoveItemAsync("loginState");
+            NavigationManager.NavigateTo("/");
+            return;
+        }
     }
 }
