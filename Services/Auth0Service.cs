@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using LagerhotellAPI.Models.CustomExceptionModels;
+using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 using System.Security.Cryptography;
 
 namespace Lagerhotell.Services;
@@ -11,8 +13,10 @@ public class Auth0Service
     private readonly string _clientId;
     private readonly string _clientSecret;
     private readonly string _loginCallBackUrl;
+    private readonly string _apiClientId;
     private readonly SessionService _sessionService;
     private readonly NavigationManager _navigationManager;
+    private readonly string _baseUrl = "https://localhost:7272/auth0-users";
 
     public Auth0Service(IConfiguration configuration, SessionService sessionService, NavigationManager navigationManager)
     {
@@ -21,6 +25,7 @@ public class Auth0Service
         _clientId = configuration["Auth0:ClientId"];
         _clientSecret = configuration["Auth0:ClientSecret"];
         _loginCallBackUrl = $"https://localhost:5001{configuration["Auth0:LoginCallback"]}";
+        _apiClientId = configuration["Auth0:ApiClientId"];
         _sessionService = sessionService;
         _navigationManager = navigationManager;
     }
@@ -40,7 +45,20 @@ public class Auth0Service
     {
         string state = GenerateState();
         await _sessionService.AddLoginStateToLocalStorage(state);
-        string redirectUrl = $"https://{_auth0Domain}/authorize?response_type=code&client_id={_clientId}&redirect_uri={_loginCallBackUrl}&state={state}";
+        string redirectUrl = $"https://{_auth0Domain}/authorize?response_type=code&client_id={_apiClientId}&redirect_uri={_loginCallBackUrl}&state={state}&scope=openid profile email offline_access";
         _navigationManager.NavigateTo(redirectUrl);
+    }
+
+    public async Task ExchangeCodeForTokens(string code)
+    {
+        string endpoint = _baseUrl + "/exchange-code-for-tokens";
+        ExchangeCodeForTokensRequest request = new(code);
+        var json = JsonSerializer.Serialize(request);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(endpoint, data);
+        response.EnsureSuccessStatusCode();
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var token = JsonSerializer.Deserialize<ExchangeCodeForTokensResponse>(responseContent);
+        await _sessionService.AddJwtToLocalStorage(token.AccessToken);
     }
 }
