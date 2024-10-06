@@ -49,7 +49,7 @@ public class Auth0Service
         _navigationManager.NavigateTo(redirectUrl);
     }
 
-    public async Task ExchangeCodeForTokens(string code)
+    public async Task ExchangeCodeForTokenAndLogin(string code)
     {
         string endpoint = _baseUrl + "/exchange-code-for-tokens";
         ExchangeCodeForTokensRequest request = new(code);
@@ -58,7 +58,8 @@ public class Auth0Service
         var response = await client.PostAsync(endpoint, data);
         response.EnsureSuccessStatusCode();
         var responseContent = await response.Content.ReadAsStringAsync();
-        var token = JsonSerializer.Deserialize<ExchangeCodeForTokensResponse>(responseContent);
-        await _sessionService.AddJwtToLocalStorage(token.AccessToken);
+        var deserializedResponse = JsonSerializer.Deserialize<ExchangeCodeForTokensResponse>(responseContent);
+        await _sessionService.AddJwtToLocalStorage(deserializedResponse.AccessToken);
+        _navigationManager.NavigateTo($"user/{deserializedResponse.UserId}");
     }
 }

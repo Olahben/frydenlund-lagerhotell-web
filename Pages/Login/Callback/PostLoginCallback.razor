@@ -30,7 +30,7 @@
             return;
         }
         try {
-            await _auth0Service.ExchangeCodeForTokens(code);
+            await _auth0Service.ExchangeCodeForTokenAndLogin(code);
             // TODO: fetch user info
             // TODO: redirect to user settings/id
         } catch (Exception e) {
