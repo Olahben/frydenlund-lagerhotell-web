@@ -7,6 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="wwwroot\Lib\**" />
+	  <Content Remove="wwwroot\Lib\**" />
+	  <EmbeddedResource Remove="wwwroot\Lib\**" />
+	  <None Remove="wwwroot\Lib\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Shared\Lib\StorageUnitInfoTexts.cs" />
 	</ItemGroup>
 
@@ -29,6 +36,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.8" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.10" />
+		<PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="8.0.8" />
 		<PackageReference Include="MudBlazor" Version="7.6.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.8" />
@@ -45,7 +54,6 @@
 	<ItemGroup>
 	  <Folder Include="Pages\NewFolder\" />
 	  <Folder Include="Shared\State\" />
-	  <Folder Include="wwwroot\Lib\" />
 	</ItemGroup>
 	
 	
