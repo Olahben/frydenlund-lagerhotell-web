@@ -1,9 +1,10 @@
 ﻿@inject NavigationManager _navigationManager
-@inject AuthStateProviderService _authStateProviderService
+@inject AuthStateProviderService _customAuthStateProviderService
 @inject UserService _userService
 @inject AppState _appState
 @inject CompanyUserService _companyUserService
 @inject Auth0Service _auth0Service
+@*@inject AuthenticationStateProvider _authenticationStateProvider*@
 
 <style>
     .clickable:hover {
@@ -81,13 +82,13 @@
         try
         {
             string? jwt = await SessionService.GetJwtFromLocalStorage();
-            if (jwt != null)
+            /*if (jwt != null)
             {
                 phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
                 companyUser = null;
                 user = await _userService.GetUserByPhoneNumber(phoneNumber);
             }
-            StateHasChanged();
+            StateHasChanged();*/
         }
         catch (KeyNotFoundException)
         {
