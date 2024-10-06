@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace Lagerhotell.Services;
 
-public class AuthStateProviderService : AuthenticationStateProvider
+public class AuthStateProviderService
 {
     private readonly SessionService _sessionService;
     private readonly HttpClient _tokenHttpClient;
@@ -33,12 +33,12 @@ public class AuthStateProviderService : AuthenticationStateProvider
         return claims;
     }
 
-    private async Task<string> ExtractUserPhoneNumber(string jwt)
+    /*private async Task<string> ExtractUserPhoneNumber(string jwt)
     {
         var claims = Parse(jwt);
         var phoneNumber = claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value;
         return phoneNumber;
-    }
+    }*/
 
     private byte[] ParseBase64WithoutPadding(string base64)
     {
@@ -50,7 +50,7 @@ public class AuthStateProviderService : AuthenticationStateProvider
         return Convert.FromBase64String(base64);
     }
 
-    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+    /*public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         string? accessToken = await _sessionService.GetJwtFromLocalStorage();
 
@@ -96,9 +96,9 @@ public class AuthStateProviderService : AuthenticationStateProvider
         NotifyAuthenticationStateChanged(Task.FromResult(state));
 
         return state;
-    }
+    }*/
 
-    public async Task<string> GetCurrentUserPhoneNumber()
+    /*public async Task<string> GetCurrentUserPhoneNumber()
     {
         string token = await _sessionService.GetJwtFromLocalStorage();
         string? phoneNumber = await ExtractUserPhoneNumber(token);
@@ -107,5 +107,5 @@ public class AuthStateProviderService : AuthenticationStateProvider
             throw new KeyNotFoundException("Could not extract phone number from token");
         }
         return phoneNumber;
-    }
+    }*/
 }

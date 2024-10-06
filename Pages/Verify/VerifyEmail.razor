@@ -1,7 +1,7 @@
 ﻿@page "/verifiser-epost"
 @inject NavigationManager _navigationManager
 @inject AppState _appState
-@inject AuthenticationService _authenticationService
+@inject AuthenticateUserService _authenticationService
 @inject CompanyUserService _companyUserService
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject SessionService _sessionService
@@ -152,7 +152,7 @@
 
                     (userId, token) = await _userServiceSignup.SignupUserWithUserModel(user);
                     await _sessionService.AddJwtToLocalStorage(token);
-                    await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                    // await AuthenticationStateProvider.GetAuthenticationStateAsync();
                     _appState.NotifyStateChanged();
                     NavigationManager.NavigateTo($"/user/{userId}");
                     StateHasChanged();

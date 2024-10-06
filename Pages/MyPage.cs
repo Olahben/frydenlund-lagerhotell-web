@@ -15,12 +15,12 @@ namespace Lagerhotell.Pages
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
         public SessionService SessionService { get; set; }
-        [Inject]
-        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        //[Inject]
+        // public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         protected override async Task OnInitializedAsync()
         {
             var userJwt = await SessionService.GetJwtFromLocalStorage();
-            if (userJwt != null)
+            /*if (userJwt != null)
             {
                 var authState = await AuthenticationStateProvider
             .GetAuthenticationStateAsync();
@@ -30,7 +30,7 @@ namespace Lagerhotell.Pages
 
                 }
                 // AuthStateProvider handles the case where the JWT is present but the user is not authenticated
-            }
+            }*/
         }
     }
 }

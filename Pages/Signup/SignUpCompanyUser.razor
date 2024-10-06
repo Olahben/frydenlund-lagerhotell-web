@@ -3,7 +3,7 @@
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject AppState _appState
-@inject AuthenticationService _authenticationService
+@inject AuthenticateUserService _authenticationService
 
 <MudForm Model="companyUser" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
     <MudGrid Style="">

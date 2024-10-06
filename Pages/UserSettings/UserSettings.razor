@@ -402,7 +402,8 @@
     protected override async Task OnInitializedAsync()
     {
         string token = await sessionService.GetJwtFromLocalStorage();
-        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        // Checks if UserId in the URL is the same as the UserId in the accesstoken
+        /*var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
         string userIdViaAccessToken = _sessionService.GetUserId(state);
         if (userIdViaAccessToken == null)
         {
@@ -412,7 +413,7 @@
         {
             UserId = userIdViaAccessToken;
             _navigationManager.NavigateTo($"/user/{UserId}");
-        }
+        }*/
         try
         {
             var user = await _userServiceUserSettings.LoadUser(client, _userValues, UserId, token);
