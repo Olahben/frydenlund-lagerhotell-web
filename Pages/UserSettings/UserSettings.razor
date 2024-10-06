@@ -30,11 +30,11 @@
 
 @if (isInitialized)
 {
-    <AuthorizeView>
+    @*<AuthorizeView>
         <NotAuthorized>
             Unauthorized
         </NotAuthorized>
-        <Authorized>
+        <Authorized>*@
             <MudContainer Style="width: 100%; margin-top: 26px;">
                 <MudGrid Style="justify-content: center; max-width: 1100px;">
                     <MudItem xs="12" md="3">
@@ -313,8 +313,8 @@
                     }
                 </MudGrid>
             </MudContainer>
-        </Authorized>
-    </AuthorizeView>
+        @*</Authorized>
+    </AuthorizeView>*@
 }
 
 
