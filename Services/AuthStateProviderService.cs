@@ -11,14 +11,16 @@ public class AuthStateProviderService : AuthenticationStateProvider
     private readonly HttpClient _tokenHttpClient;
     private readonly HttpClient _backofficeHttpClient;
     private readonly NavigationManager _navigationManager;
+    private readonly UserService _userService;
 
 
-    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient, NavigationManager navigationManager)
+    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient, NavigationManager navigationManager, UserService userService)
     {
         _tokenHttpClient = tokenHttpClient;
         _backofficeHttpClient = backofficeHttpClient;
         _sessionService = sessionService;
         _navigationManager = navigationManager;
+        _userService = userService;
     }
 
     private IEnumerable<Claim> Parse(string jwt)
@@ -96,6 +98,17 @@ public class AuthStateProviderService : AuthenticationStateProvider
         NotifyAuthenticationStateChanged(Task.FromResult(state));
 
         return state;
+    }
+
+    public async Task<User> GetUser()
+    {
+        var token = await _sessionService.GetJwtFromLocalStorage();
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(token);
+        var userId = jwtToken.Claims.First(claim => claim.Type == "sub").Value;
+        var user = await _userService.GetUserByAuth0Id(userId);
+
+        return user;
     }
 
     /*public async Task<string> GetCurrentUserPhoneNumber()
