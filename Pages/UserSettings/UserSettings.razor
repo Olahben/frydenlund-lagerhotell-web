@@ -30,291 +30,294 @@
 
 @if (isInitialized)
 {
-    @*<AuthorizeView>
-        <NotAuthorized>
-            Unauthorized
-        </NotAuthorized>
-        <Authorized>*@
-            <MudContainer Style="width: 100%; margin-top: 26px;">
-                <MudGrid Style="justify-content: center; max-width: 1100px;">
-                    <MudItem xs="12" md="3">
-                        <MudPaper Elevation="1">
-                            <MudList T="string">
-                                @if (activeTab == "profil")
-                                {
-                                    <MudListItem Class="active-tab">
-                                        <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
-                                        <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
-                                    </MudListItem>
-                                }
-                                else
-                                {
-                                    <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("profil")'>
-                                        <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
-                                        <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
-                                    </MudListItem>
-                                }
-                                @if (activeTab == "Bestillinger")
-                                {
-                                    <MudListItem Class="active-tab">
-                                        <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" style="vertical-align: middle;" />
-                                        <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
-                                    </MudListItem>
-                                }
-                                else
-                                {
-                                    <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("Bestillinger")'>
-                                        <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" style="vertical-align: middle;" />
-                                        <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
-                                    </MudListItem>
-                                }
-                                <AuthorizeView Roles="Administrator">
-                                    <Authorized Context="n">
-                                        @if (activeTab == "AdminBestillinger")
-                                        {
-                                            <MudListItem Class="active-tab">
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Bestillinger (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                        else
-                                        {
-                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBestillinger")'>
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Bestillinger (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                        @if (activeTab == "AdminBrukere")
-                                        {
-                                            <MudListItem Class="active-tab">
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                        else
-                                        {
-                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBrukere")'>
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                        @if (activeTab == "AdminFirmabrukere")
-                                        {
-                                            <MudListItem Class="active-tab">
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Firmabrukere (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                        else
-                                        {
-                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminFirmabrukere")'>
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Firmabrukere (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                        @if (activeTab == "AdminBoder")
-                                        {
-                                            <MudListItem Class="active-tab">
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Boder (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                        else
-                                        {
-                                            <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBoder")'>
-                                                <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
-                                                <span style="vertical-align: middle; margin-left: 8px;">Boder (Admin)</span>
-                                            </MudListItem>
-                                        }
-                                    </Authorized>
-                                </AuthorizeView>
+    <CascadingAuthenticationState>
+        <AuthorizeView>
+            <NotAuthorized>
+                Unauthorized
+            </NotAuthorized>
+            <Authorized>
+                <MudContainer Style="width: 100%; margin-top: 26px;">
+                    <MudGrid Style="justify-content: center; max-width: 1100px;">
+                        <MudItem xs="12" md="3">
+                            <MudPaper Elevation="1">
+                                <MudList T="string">
+                                    @if (activeTab == "profil")
+                                    {
+                                        <MudListItem Class="active-tab">
+                                            <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
+                                            <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
+                                        </MudListItem>
+                                    }
+                                    else
+                                    {
+                                        <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("profil")'>
+                                            <MudIcon Icon="@Icons.Material.Filled.AccountCircle" style="vertical-align: middle;" />
+                                            <span style="vertical-align: middle; margin-left: 8px;">Profil</span>
+                                        </MudListItem>
+                                    }
+                                    @if (activeTab == "Bestillinger")
+                                    {
+                                        <MudListItem Class="active-tab">
+                                            <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" style="vertical-align: middle;" />
+                                            <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
+                                        </MudListItem>
+                                    }
+                                    else
+                                    {
+                                        <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("Bestillinger")'>
+                                            <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" style="vertical-align: middle;" />
+                                            <span style="vertical-align: middle; margin-left: 8px;">Bestillinger</span>
+                                        </MudListItem>
+                                    }
+                                    <AuthorizeView Roles="Administrator">
+                                        <Authorized Context="n">
+                                            @if (activeTab == "AdminBestillinger")
+                                            {
+                                                <MudListItem Class="active-tab">
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Bestillinger (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                            else
+                                            {
+                                                <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBestillinger")'>
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Bestillinger (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                            @if (activeTab == "AdminBrukere")
+                                            {
+                                                <MudListItem Class="active-tab">
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                            else
+                                            {
+                                                <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBrukere")'>
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Brukere (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                            @if (activeTab == "AdminFirmabrukere")
+                                            {
+                                                <MudListItem Class="active-tab">
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Firmabrukere (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                            else
+                                            {
+                                                <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminFirmabrukere")'>
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Firmabrukere (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                            @if (activeTab == "AdminBoder")
+                                            {
+                                                <MudListItem Class="active-tab">
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Boder (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                            else
+                                            {
+                                                <MudListItem Style="cursor: pointer;" Class="hover-effect" @onclick='() => SetActiveTab("AdminBoder")'>
+                                                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="vertical-align: middle;" />
+                                                    <span style="vertical-align: middle; margin-left: 8px;">Boder (Admin)</span>
+                                                </MudListItem>
+                                            }
+                                        </Authorized>
+                                    </AuthorizeView>
 
-                            </MudList>
-                        </MudPaper>
-                    </MudItem>
-                    @if (activeTab == "profil")
-                    {
-                        @if (isCompanyUser)
+                                </MudList>
+                            </MudPaper>
+                        </MudItem>
+                        @if (activeTab == "profil")
                         {
-                            <MudItem xs="12" md="9">
-                                <MudPaper Elevation="1" Class="pa-4">
-                                    <MudText Typo="Typo.h6">Profil</MudText>
-                                    <MudText Typo="Typo.subtitle1">Velkommen, @companyUser.Name!</MudText>
+                            @if (isCompanyUser)
+                            {
+                                <MudItem xs="12" md="9">
+                                    <MudPaper Elevation="1" Class="pa-4">
+                                        <MudText Typo="Typo.h6">Profil</MudText>
+                                        <MudText Typo="Typo.subtitle1">Velkommen, @companyUser.Name!</MudText>
                                         <MudDivider Class="my-4" />
                                         <div class="d-flex align-items-center">
                                             @if (!string.IsNullOrEmpty(companyUser?.Name))
-                                        {
-                                            <MudAvatar Color="Color.Primary" Src="path_to_image.jpg">@companyUser.FirstName.Substring(0, 1)</MudAvatar>
-                                        }
-                                        <div class="ml-2">
-                                            <MudText Typo="Typo.subtitle1"><MudText Style=" font-weight:780; display:inline">@companyUser.FirstName</MudText> @companyUser.LastName</MudText>
+                                            {
+                                                <MudAvatar Color="Color.Primary" Src="path_to_image.jpg">@companyUser.FirstName.Substring(0, 1)</MudAvatar>
+                                            }
+                                            <div class="ml-2">
+                                                <MudText Typo="Typo.subtitle1"><MudText Style=" font-weight:780; display:inline">@companyUser.FirstName</MudText> @companyUser.LastName</MudText>
                                             </div>
                                         </div>
                                         @if (_editMode)
-                                    {
-                                        <MudButton Style="margin-top: 16px; margin-bottom: 22px;" Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
-                                    }
-                                    else
-                                    {
-                                        <MudButton Style="margin-top: 16px; margin-bottom: 22px;" Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
-                                        <MudButton Style="margin-top: 16px; margin-bottom: 22px; margin-left: 12px;" @onclick="ShowResetPasswordComponents" Variant="Variant.Filled">Endre Passord</MudButton>
-                                    }
-                                    @if (_editMode)
-                                    {
-                                        @if (_editPasswordMode)
                                         {
-                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
-                                        <ResetPasswordFormCompanyUser UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
+                                            <MudButton Style="margin-top: 16px; margin-bottom: 22px;" Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
                                         }
                                         else
                                         {
-                                            <MudForm @ref="companyUserForm" Model="updatedCompanyUser" Validation="@(companyUserValidator.ValidateValue)">
-                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="updatedCompanyUser.Name" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Name)" Immediate="true"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="updatedCompanyUser.FirstName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.FirstName)" Immediate="true"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="updatedCompanyUser.LastName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.LastName)" Immediate="true"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Organisasjonsnummer" @bind-Value="updatedCompanyUser.CompanyNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.CompanyNumber)" Immediate="true"></MudTextField>
-                                                @*Disabled temporarily*@
-                                                <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="E-post" @bind-Value="updatedCompanyUser.Email" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Email)" Immediate="true"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="Telefonnummer" @bind-Value="updatedCompanyUser.PhoneNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.PhoneNumber)" Immediate="true"></MudTextField>
-                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="updatedCompanyUser.Address.StreetAddress" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.StreetAddress)" Immediate="true"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="updatedCompanyUser.Address.PostalCode" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.PostalCode)" Immediate="true"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="updatedCompanyUser.Address.City" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.City)" Immediate="true"></MudTextField>
-                                            </MudForm>
+                                            <MudButton Style="margin-top: 16px; margin-bottom: 22px;" Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
+                                            <MudButton Style="margin-top: 16px; margin-bottom: 22px; margin-left: 12px;" @onclick="ShowResetPasswordComponents" Variant="Variant.Filled">Endre Passord</MudButton>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="companyUser.Name" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="companyUser.FirstName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="companyUser.LastName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Organisasjonsnummer" @bind-Value="companyUser.CompanyNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="companyUser.Email" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Telefonnummer" @bind-Value="companyUser.PhoneNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="companyUser.Address.StreetAddress" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="companyUser.Address.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="companyUser.Address.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                    }
-                                    @if (!_editPasswordMode)
-                                    {
-                                        <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
-                                    }
-                                    @if (_editMode)
-                                    {
+                                        @if (_editMode)
+                                        {
+                                            @if (_editPasswordMode)
+                                            {
+                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
+                                                <ResetPasswordFormCompanyUser UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
+                                            }
+                                            else
+                                            {
+                                                <MudForm @ref="companyUserForm" Model="updatedCompanyUser" Validation="@(companyUserValidator.ValidateValue)">
+                                                    <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="updatedCompanyUser.Name" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Name)" Immediate="true"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="updatedCompanyUser.FirstName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.FirstName)" Immediate="true"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="updatedCompanyUser.LastName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.LastName)" Immediate="true"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Organisasjonsnummer" @bind-Value="updatedCompanyUser.CompanyNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.CompanyNumber)" Immediate="true"></MudTextField>
+                                                    @*Disabled temporarily*@
+                                                    <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="E-post" @bind-Value="updatedCompanyUser.Email" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Email)" Immediate="true"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="Telefonnummer" @bind-Value="updatedCompanyUser.PhoneNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.PhoneNumber)" Immediate="true"></MudTextField>
+                                                    <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="updatedCompanyUser.Address.StreetAddress" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.StreetAddress)" Immediate="true"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="updatedCompanyUser.Address.PostalCode" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.PostalCode)" Immediate="true"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="updatedCompanyUser.Address.City" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.City)" Immediate="true"></MudTextField>
+                                                </MudForm>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="companyUser.Name" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="companyUser.FirstName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="companyUser.LastName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Organisasjonsnummer" @bind-Value="companyUser.CompanyNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="companyUser.Email" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Telefonnummer" @bind-Value="companyUser.PhoneNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="companyUser.Address.StreetAddress" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="companyUser.Address.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="companyUser.Address.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                        }
                                         @if (!_editPasswordMode)
                                         {
-                                            <MudButton ButtonType="ButtonType.Button" Style="margin-left: 12px;" OnClick="@((e) => UpdateCompanyUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+                                            <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
                                         }
-                                    }
-                                </MudPaper>
-                            </MudItem>
-                        }
-                        else
-                        {
-                            <MudItem xs="12" md="9">
-                                <MudPaper Elevation="1" Class="pa-4">
-                                    <MudText Typo="Typo.h6">Profil</MudText>
-                                    <MudText Typo="Typo.subtitle1">Velkommen, @_userValues.FirstName!</MudText>
+                                        @if (_editMode)
+                                        {
+                                            @if (!_editPasswordMode)
+                                            {
+                                                <MudButton ButtonType="ButtonType.Button" Style="margin-left: 12px;" OnClick="@((e) => UpdateCompanyUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+                                            }
+                                        }
+                                    </MudPaper>
+                                </MudItem>
+                            }
+                            else
+                            {
+                                <MudItem xs="12" md="9">
+                                    <MudPaper Elevation="1" Class="pa-4">
+                                        <MudText Typo="Typo.h6">Profil</MudText>
+                                        <MudText Typo="Typo.subtitle1">Velkommen, @_userValues.FirstName!</MudText>
                                         <MudDivider Class="my-4" />
                                         <div class="d-flex align-items-center">
                                             @if (!string.IsNullOrEmpty(_userValues?.FirstName))
-                                        {
-                                            <MudAvatar Color="Color.Primary" Src="path_to_image.jpg">@_userValues.FirstName.Substring(0, 1)</MudAvatar>
-                                        }
-                                        <div class="ml-2">
-                                            <MudText Typo="Typo.subtitle1"><MudText Style=" font-weight:780; display:inline">@_userValues.FirstName</MudText> @_userValues.LastName</MudText>
+                                            {
+                                                <MudAvatar Color="Color.Primary" Src="path_to_image.jpg">@_userValues.FirstName.Substring(0, 1)</MudAvatar>
+                                            }
+                                            <div class="ml-2">
+                                                <MudText Typo="Typo.subtitle1"><MudText Style=" font-weight:780; display:inline">@_userValues.FirstName</MudText> @_userValues.LastName</MudText>
                                             </div>
                                         </div>
                                         <div Style="height: 8px"></div>
                                         @if (_editMode)
-                                    {
-                                        <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
-                                    }
-                                    else
-                                    {
-                                        <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
-                                    }
-                                    <div style="height:10px"></div>
-                                    @if (_editMode)
-                                    {
-                                        <MudForm Model="@_userValues" @ref="_form">
+                                        {
+                                            <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
+                                        }
+                                        else
+                                        {
+                                            <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
+                                        }
+                                        <div style="height:10px"></div>
+                                        @if (_editMode)
+                                        {
+                                            <MudForm Model="@_userValues" @ref="_form">
+                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" For="@(() => _userValues.FirstName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" For="@(() => _userValues.LastName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Disabled="true" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" For="@(() => _userValues.Email)" Immediate="true" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" For="@(() => _userValues.StreetAddress)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" For="@(() => _userValues.PostalCode)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" For="@(() => _userValues.City)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SaveUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+                                            </MudForm>
+                                        }
+                                        else
+                                        {
                                             <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" For="@(() => _userValues.FirstName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" For="@(() => _userValues.LastName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Disabled="true" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" For="@(() => _userValues.Email)" Immediate="true" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" For="@(() => _userValues.StreetAddress)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode"For="@(() => _userValues.PostalCode)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" For="@(() => _userValues.City)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                             <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SaveUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
-                                         </MudForm>
-                                    }
-                                    else
-                                    {
-                                        <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                        <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                    }
-                                    <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="margin-top: 10px; color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                        }
+                                        <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="margin-top: 10px; color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                    </MudPaper>
+                                </MudItem>
+                            }
+                        }
+                        else if (activeTab == "Bestillinger")
+                        {
+                            <MudItem xs="12" md="9">
+                                <MudPaper Elevation="1" Class="pa-4">
+                                    <UserOrders />
                                 </MudPaper>
                             </MudItem>
                         }
-                    }
-                    else if (activeTab == "Bestillinger")
-                    {
-                        <MudItem xs="12" md="9">
-                            <MudPaper Elevation="1" Class="pa-4">
-                                <UserOrders />
-                            </MudPaper>
-                        </MudItem>
-                    }
-                    else if (activeTab == "AdminBestillinger")
-                    {
-                        <MudItem xs="12" md="9">
-                            <MudPaper Elevation="0" Class="pa-4">
-                                <Lagerhotell.Pages.UserSettings.Admin.UserOrdersAdminView />
-                            </MudPaper>
-                        </MudItem>
-                    }
-                    else if (activeTab == "AdminBrukere")
-                    {
-                        <MudItem xs="12" md="9">
-                            <MudPaper Elevation="0" Class="pa-4">
-                                <Lagerhotell.Pages.UserSettings.Admin.UsersAdminView />
-                            </MudPaper>
-                        </MudItem>
-                    }
-                    else if (activeTab == "AdminFirmabrukere") {
-                        <MudItem xs="12" md="9">
-                            <MudPaper Elevation="0" Class="pa-4">
-                                <Lagerhotell.Pages.UserSettings.Admin.CompanyUsersAdminView />
-                            </MudPaper>
-                        </MudItem>
-                    }
-                    else if (activeTab == "AdminBoder")
-                    {
-                        <MudItem xs="12" md="9">
-                            <MudPaper Elevation="0" Class="pa-4">
-                                <Lagerhotell.Pages.UserSettings.Admin.StorageUnitsAdminView />
-                            </MudPaper>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </MudContainer>
-        @*</Authorized>
-    </AuthorizeView>*@
+                        else if (activeTab == "AdminBestillinger")
+                        {
+                            <MudItem xs="12" md="9">
+                                <MudPaper Elevation="0" Class="pa-4">
+                                    <Lagerhotell.Pages.UserSettings.Admin.UserOrdersAdminView />
+                                </MudPaper>
+                            </MudItem>
+                        }
+                        else if (activeTab == "AdminBrukere")
+                        {
+                            <MudItem xs="12" md="9">
+                                <MudPaper Elevation="0" Class="pa-4">
+                                    <Lagerhotell.Pages.UserSettings.Admin.UsersAdminView />
+                                </MudPaper>
+                            </MudItem>
+                        }
+                        else if (activeTab == "AdminFirmabrukere")
+                        {
+                            <MudItem xs="12" md="9">
+                                <MudPaper Elevation="0" Class="pa-4">
+                                    <Lagerhotell.Pages.UserSettings.Admin.CompanyUsersAdminView />
+                                </MudPaper>
+                            </MudItem>
+                        }
+                        else if (activeTab == "AdminBoder")
+                        {
+                            <MudItem xs="12" md="9">
+                                <MudPaper Elevation="0" Class="pa-4">
+                                    <Lagerhotell.Pages.UserSettings.Admin.StorageUnitsAdminView />
+                                </MudPaper>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudContainer>
+            </Authorized>
+        </AuthorizeView>
+    </CascadingAuthenticationState>
 }
 
 
