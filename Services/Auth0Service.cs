@@ -1,5 +1,6 @@
 ﻿using LagerhotellAPI.Models.CustomExceptionModels;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 
@@ -16,9 +17,10 @@ public class Auth0Service
     private readonly string _apiClientId;
     private readonly SessionService _sessionService;
     private readonly NavigationManager _navigationManager;
+    private readonly AuthenticationStateProvider _authenticationStateProvider;
     private readonly string _baseUrl = "https://localhost:7272/auth0-users";
 
-    public Auth0Service(IConfiguration configuration, SessionService sessionService, NavigationManager navigationManager)
+    public Auth0Service(IConfiguration configuration, SessionService sessionService, NavigationManager navigationManager, AuthenticationStateProvider authenticationStateProvider)
     {
         _auth0Domain = configuration["Auth0:Domain"];
         _auth0FullDomain = $"https://{_auth0Domain}";
@@ -28,6 +30,7 @@ public class Auth0Service
         _apiClientId = configuration["Auth0:ApiClientId"];
         _sessionService = sessionService;
         _navigationManager = navigationManager;
+        _authenticationStateProvider = authenticationStateProvider;
     }
 
     public static string GenerateState()
@@ -60,6 +63,11 @@ public class Auth0Service
         var responseContent = await response.Content.ReadAsStringAsync();
         var deserializedResponse = JsonSerializer.Deserialize<ExchangeCodeForTokensResponse>(responseContent);
         await _sessionService.AddJwtToLocalStorage(deserializedResponse.AccessToken);
+        _authenticationStateProvider.AuthenticationStateChanged += async (Task<AuthenticationState> task) =>
+        {
+            var authState = await task;
+            var user = authState.User;
+        };
         _navigationManager.NavigateTo($"user/{deserializedResponse.UserId}");
     }
 }
