@@ -71,34 +71,28 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _appState.OnChange += UpdateUserAndState;
-        UpdateUserAndState();
+        _appState.OnChange += async () => await UpdateUserAndState();
+        await UpdateUserAndState();
         isInitialized = true;
     }
 
-    private async void UpdateUserAndState()
+    private async Task UpdateUserAndState()
     {
-        string phoneNumber = "";
         try
         {
             string? jwt = await SessionService.GetJwtFromLocalStorage();
             if (jwt != null)
             {
-                user = await _customAuthStateProviderService.GetUser();
-            }
-            StateHasChanged();
-        }
-        catch (KeyNotFoundException)
-        {
-            try
-            {
-                user = null;
-                companyUser = await _companyUserService.GetCompanyUserByPhoneNumber(phoneNumber);
-                StateHasChanged();
-            }
-            catch (Exception e)
-            {
-                Snackbar.Add("En feil oppstod, vær så snill og logg inn på nytt", MudBlazor.Severity.Error);
+                var userOrCompanyUser = await _customAuthStateProviderService.GetUser();
+                Console.WriteLine(userOrCompanyUser.CompanyUser.FirstName);
+                if (userOrCompanyUser.User.FirstName != null)
+				{
+					user = userOrCompanyUser.User;
+				}
+				else
+				{
+					companyUser = userOrCompanyUser.CompanyUser;
+				}
             }
         }
         catch (Exception e)
@@ -110,12 +104,12 @@
 
     public void Dispose()
     {
-        _appState.OnChange -= UpdateUserAndState;
+        _appState.OnChange += async () => await UpdateUserAndState();
     }
 
     private async Task NavigateToUserSettings(object userLoggedIn)
     {
-        if (user is User)
+        if (user != null)
         {
             _navigationManager.NavigateTo($"/user/{user.Id}");
         }
