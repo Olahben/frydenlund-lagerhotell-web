@@ -16,7 +16,7 @@ public class SessionService
     }
     public async Task AddJwtToLocalStorage(string jwt)
     {
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "jwtToken", jwt);
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "access_token", jwt);
     }
 
     public async Task AddLoginStateToLocalStorage(string state)
@@ -36,7 +36,7 @@ public class SessionService
 
     public async Task<string> GetJwtFromLocalStorage()
     {
-        var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "jwtToken");
+        var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "access_token");
         return token ?? null;
     }
 
