@@ -1,6 +1,7 @@
 using Lagerhotell;
 using Lagerhotell.Services;
 using LagerhotellAPI.Models.DomainModels.Validators;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -22,7 +23,7 @@ builder.Services.AddOidcAuthentication(options =>
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddMudServices();
 builder.Services.AddScoped<SessionService>();
-builder.Services.AddScoped<AuthStateProviderService>();
+builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProviderService>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<WarehouseHotelService>();
