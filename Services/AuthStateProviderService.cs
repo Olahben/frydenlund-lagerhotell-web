@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace Lagerhotell.Services;
 
-public class AuthStateProviderService
+public class AuthStateProviderService : AuthenticationStateProvider
 {
     private readonly SessionService _sessionService;
     private readonly HttpClient _tokenHttpClient;
@@ -50,7 +50,7 @@ public class AuthStateProviderService
         return Convert.FromBase64String(base64);
     }
 
-    /*public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         string? accessToken = await _sessionService.GetJwtFromLocalStorage();
 
@@ -96,7 +96,7 @@ public class AuthStateProviderService
         NotifyAuthenticationStateChanged(Task.FromResult(state));
 
         return state;
-    }*/
+    }
 
     /*public async Task<string> GetCurrentUserPhoneNumber()
     {
