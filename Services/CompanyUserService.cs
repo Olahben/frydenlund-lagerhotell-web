@@ -267,4 +267,17 @@ public class CompanyUserService
         }
         return false;
     }
+
+    public async Task<CompanyUser> GetCompanyUserByAuth0Id(string id)
+    {
+        string endpointUrl = _baseUrl + $"/get-user-by-auth0-id/{id}";
+        HttpResponseMessage response = await client.GetAsync(endpointUrl);
+        response.EnsureSuccessStatusCode();
+        string responseContent = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        return JsonSerializer.Deserialize<GetCompanyUserResponse>(responseContent, options).CompanyUser;
+    }
 }
