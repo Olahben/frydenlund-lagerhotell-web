@@ -82,13 +82,11 @@
         try
         {
             string? jwt = await SessionService.GetJwtFromLocalStorage();
-            /*if (jwt != null)
+            if (jwt != null)
             {
-                phoneNumber = await _authStateProviderService.GetCurrentUserPhoneNumber();
-                companyUser = null;
-                user = await _userService.GetUserByPhoneNumber(phoneNumber);
+                user = await _customAuthStateProviderService.GetUser();
             }
-            StateHasChanged();*/
+            StateHasChanged();
         }
         catch (KeyNotFoundException)
         {
