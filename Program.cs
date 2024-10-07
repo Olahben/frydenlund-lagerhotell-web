@@ -24,6 +24,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddMudServices();
 builder.Services.AddScoped<SessionService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProviderService>();
+builder.Services.AddScoped<AuthStateProviderService>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<WarehouseHotelService>();
