@@ -55,7 +55,27 @@ public class UserService
             throw new KeyNotFoundException($"Something went wrong when fetching user with id: {id} ");
         }
     }
-    public async Task<List<User>> GetAllUsers(int? skip, int? take)
+    /// <summary>
+    /// Gets a user via their auth0Id
+    /// Propagates the exception if the user is not found
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<User> GetUserByAuth0Id(string id)
+    {
+        string endpointUrl = url + "/get-user-by-auth0-id/" + id;
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+        response.EnsureSuccessStatusCode();
+        string responseContent = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        User user = JsonSerializer.Deserialize<GetUser.GetUserResponse>(responseContent, options).User;
+        return user;
+    }
+        public async Task<List<User>> GetAllUsers(int? skip, int? take)
     {
         string endpointUrl = url + $"/get-all/{skip}/{take}";
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
