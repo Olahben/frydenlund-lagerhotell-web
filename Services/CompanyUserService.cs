@@ -85,7 +85,11 @@ public class CompanyUserService
     public async Task<string> CreateCompanyUserAsync(CompanyUser companyUser)
     {
         string url = _baseUrl + "/create";
+
+        // Populate to escape bad request
         companyUser.CompanyUserId = "";
+        companyUser.Auth0Id = "";
+
         string companyUserJson = JsonSerializer.Serialize(new CreateCompanyUserRequest(companyUser));
         StringContent content = new(companyUserJson, Encoding.UTF8, "application/json");
         HttpResponseMessage response = await client.PostAsync(url, content);
