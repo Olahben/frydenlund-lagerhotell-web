@@ -12,15 +12,17 @@ public class AuthStateProviderService : AuthenticationStateProvider
     private readonly HttpClient _backofficeHttpClient;
     private readonly NavigationManager _navigationManager;
     private readonly UserService _userService;
+    private readonly CompanyUserService _companyUserService;
 
 
-    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient, NavigationManager navigationManager, UserService userService)
+    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient, NavigationManager navigationManager, UserService userService, CompanyUserService companyUserService)
     {
         _tokenHttpClient = tokenHttpClient;
         _backofficeHttpClient = backofficeHttpClient;
         _sessionService = sessionService;
         _navigationManager = navigationManager;
         _userService = userService;
+        _companyUserService = companyUserService;
     }
 
     private IEnumerable<Claim> Parse(string jwt)
@@ -100,15 +102,23 @@ public class AuthStateProviderService : AuthenticationStateProvider
         return state;
     }
 
-    public async Task<User> GetUser()
+    public async Task<UserAndCompanyUser> GetUser()
     {
+        User? user = new();
+        CompanyUser? companyUser = new();
         var token = await _sessionService.GetJwtFromLocalStorage();
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
-        var userId = jwtToken.Claims.First(claim => claim.Type == "sub").Value;
-        var user = await _userService.GetUserByAuth0Id(userId);
+        var auth0Id = jwtToken.Claims.First(claim => claim.Type == "sub").Value;
+        try
+        {
+            user = await _userService.GetUserByAuth0Id(auth0Id);
+        } catch (HttpRequestException e)
+        {
+           companyUser = await _companyUserService.GetCompanyUserByAuth0Id(auth0Id);
+        }
 
-        return user;
+        return new UserAndCompanyUser(user, companyUser);
     }
 
     /*public async Task<string> GetCurrentUserPhoneNumber()
