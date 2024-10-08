@@ -115,7 +115,13 @@ public class AuthStateProviderService : AuthenticationStateProvider
             user = await _userService.GetUserByAuth0Id(auth0Id);
         } catch (HttpRequestException e)
         {
-           companyUser = await _companyUserService.GetCompanyUserByAuth0Id(auth0Id);
+            if (e.StatusCode == HttpStatusCode.NotFound)
+            {
+                companyUser = await _companyUserService.GetCompanyUserByAuth0Id(auth0Id);
+            } else
+            {
+                throw new InvalidOperationException("Something went wrong when fetching user");
+            }
         }
 
         return new UserAndCompanyUser(user, companyUser);
