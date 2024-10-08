@@ -409,7 +409,7 @@
         // Checks if UserId in the URL is the same as the UserId in the accesstoken
         var userOrCompanyUser = await _customAuthStateProvider.GetUser();
         string userIdViaAccessToken;
-        if (userOrCompanyUser.User != null)
+        if (userOrCompanyUser.User.FirstName != null)
         {
             userIdViaAccessToken = userOrCompanyUser.User.Id;
         } else
