@@ -9,6 +9,7 @@
 @inject OrderService _orderService
 @inject CompanyUserService _companyUserService
 @inject SessionService _sessionService
+@inject AuthStateProviderService _customAuthStateProvider
 
 @page "/user/{userId}"
 
@@ -406,8 +407,15 @@
     {
         string token = await sessionService.GetJwtFromLocalStorage();
         // Checks if UserId in the URL is the same as the UserId in the accesstoken
-        /*var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-        string userIdViaAccessToken = _sessionService.GetUserId(state);
+        var userOrCompanyUser = await _customAuthStateProvider.GetUser();
+        string userIdViaAccessToken;
+        if (userOrCompanyUser.User != null)
+        {
+            userIdViaAccessToken = userOrCompanyUser.User.Id;
+        } else
+        {
+            userIdViaAccessToken = userOrCompanyUser.CompanyUser.CompanyUserId;
+        }
         if (userIdViaAccessToken == null)
         {
             _navigationManager.NavigateTo("/");
@@ -416,7 +424,7 @@
         {
             UserId = userIdViaAccessToken;
             _navigationManager.NavigateTo($"/user/{UserId}");
-        }*/
+        }
         try
         {
             var user = await _userServiceUserSettings.LoadUser(client, _userValues, UserId, token);
