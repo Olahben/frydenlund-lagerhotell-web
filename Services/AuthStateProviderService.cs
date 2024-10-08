@@ -84,6 +84,11 @@ public class AuthStateProviderService : AuthenticationStateProvider
                     await RefreshAccessToken();
                 }
                 identity = new ClaimsIdentity(Parse(accessToken), "jwt");
+                var rolesClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "https://lagerhotell.com/roles");
+                if (rolesClaim != null)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, rolesClaim.Value));
+                }
                 accessToken = accessToken.Replace("\"", "").Replace("\"", "");
 
                 _tokenHttpClient
