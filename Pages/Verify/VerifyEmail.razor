@@ -152,7 +152,7 @@
 
                     (userId, token) = await _userServiceSignup.SignupUserWithUserModel(user);
                     await _sessionService.AddJwtToLocalStorage(token);
-                    // await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                    await _authenticationStateProvider.GetAuthenticationStateAsync();
                     _appState.NotifyStateChanged();
                     NavigationManager.NavigateTo($"/user/{userId}");
                     StateHasChanged();
