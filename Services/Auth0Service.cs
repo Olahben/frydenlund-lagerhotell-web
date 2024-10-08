@@ -70,4 +70,17 @@ public class Auth0Service
         };
         _navigationManager.NavigateTo($"user/{deserializedResponse.UserId}");
     }
+
+    public async Task<string> RefreshAccessToken(string auth0Id)
+    {
+        string endpoint = _baseUrl + "/refresh-token";
+        var request = new RefreshAccessTokenRequest(auth0Id);
+        var json = JsonSerializer.Serialize(request);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(endpoint, data);
+        response.EnsureSuccessStatusCode();
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var deserializedResponse = JsonSerializer.Deserialize<RefreshAccessTokenResponse>(responseContent);
+        return deserializedResponse.AccessToken;
+    }
 }
