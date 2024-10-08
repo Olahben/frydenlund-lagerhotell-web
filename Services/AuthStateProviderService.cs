@@ -13,9 +13,10 @@ public class AuthStateProviderService : AuthenticationStateProvider
     private readonly NavigationManager _navigationManager;
     private readonly UserService _userService;
     private readonly CompanyUserService _companyUserService;
+    private readonly Auth0Service _auth0Service;
 
 
-    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient, NavigationManager navigationManager, UserService userService, CompanyUserService companyUserService)
+    public AuthStateProviderService(SessionService sessionService, HttpClient tokenHttpClient, HttpClient backofficeHttpClient, NavigationManager navigationManager, UserService userService, CompanyUserService companyUserService, Auth0Service auth0Service)
     {
         _tokenHttpClient = tokenHttpClient;
         _backofficeHttpClient = backofficeHttpClient;
@@ -23,6 +24,7 @@ public class AuthStateProviderService : AuthenticationStateProvider
         _navigationManager = navigationManager;
         _userService = userService;
         _companyUserService = companyUserService;
+        _auth0Service = auth0Service;
     }
 
     private IEnumerable<Claim> Parse(string jwt)
@@ -35,6 +37,15 @@ public class AuthStateProviderService : AuthenticationStateProvider
         IEnumerable<Claim> claims = keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
 
         return claims;
+    }
+
+    private async Task<string> ExtractUserAuth0Id()
+    {
+        string accessToken = await _sessionService.GetJwtFromLocalStorage();
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(accessToken);
+        var auth0Id = jwtToken.Claims.First(claim => claim.Type == "sub").Value;
+        return auth0Id;
     }
 
     /*private async Task<string> ExtractUserPhoneNumber(string jwt)
@@ -68,13 +79,9 @@ public class AuthStateProviderService : AuthenticationStateProvider
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var jwtToken = tokenHandler.ReadJwtToken(accessToken);
-                if (jwtToken.ValidTo < DateTime.UtcNow)
+                if (jwtToken.ValidTo < DateTime.UtcNow.AddMinutes(15) || jwtToken.ValidTo < DateTime.UtcNow)
                 {
-                    await _sessionService.RemoveItemAsync("jwtToken");
-                    identity = new ClaimsIdentity();
-                    _navigationManager.NavigateTo("/logg-inn");
-                    _navigationManager.NavigateTo(_navigationManager.Uri, true);
-                    Console.WriteLine("Token expired");
+                    await RefreshAccessToken();
                 }
                 identity = new ClaimsIdentity(Parse(accessToken), "jwt");
                 accessToken = accessToken.Replace("\"", "").Replace("\"", "");
@@ -102,6 +109,24 @@ public class AuthStateProviderService : AuthenticationStateProvider
         return state;
     }
 
+    public async Task RefreshAccessToken()
+    {
+        try
+        {
+            string auth0Id = await ExtractUserAuth0Id();
+            string accessToken = await _auth0Service.RefreshAccessToken(auth0Id);
+            await _sessionService.AddJwtToLocalStorage(accessToken);
+        }
+        catch (HttpRequestException e)
+        {
+            if (e.Message.Contains("400") || e.Message.Contains("401") || e.Message.Contains("403"))
+            {
+                _sessionService.RemoveItemAsync("access_token");
+                _navigationManager.NavigateTo("/logg-inn");
+            }
+        }
+    }
+
     public async Task<UserAndCompanyUser> GetUser()
     {
         User? user = new();
@@ -113,12 +138,14 @@ public class AuthStateProviderService : AuthenticationStateProvider
         try
         {
             user = await _userService.GetUserByAuth0Id(auth0Id);
-        } catch (HttpRequestException e)
+        }
+        catch (HttpRequestException e)
         {
             if (e.StatusCode == HttpStatusCode.NotFound)
             {
                 companyUser = await _companyUserService.GetCompanyUserByAuth0Id(auth0Id);
-            } else
+            }
+            else
             {
                 throw new InvalidOperationException("Something went wrong when fetching user");
             }
