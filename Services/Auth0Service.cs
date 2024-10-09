@@ -15,6 +15,7 @@ public class Auth0Service
     private readonly string _clientSecret;
     private readonly string _loginCallBackUrl;
     private readonly string _apiClientId;
+    private readonly string _customApiUrl;
     private readonly SessionService _sessionService;
     private readonly NavigationManager _navigationManager;
     private readonly string _baseUrl = "https://localhost:7272/auth0-users";
@@ -27,6 +28,7 @@ public class Auth0Service
         _clientSecret = configuration["Auth0:ClientSecret"];
         _loginCallBackUrl = $"https://localhost:5001{configuration["Auth0:LoginCallback"]}";
         _apiClientId = configuration["Auth0:ApiClientId"];
+        _customApiUrl = configuration["Auth0:ApiUrl"];
         _sessionService = sessionService;
         _navigationManager = navigationManager;
     }
@@ -46,7 +48,7 @@ public class Auth0Service
     {
         string state = GenerateState();
         await _sessionService.AddLoginStateToLocalStorage(state);
-        string redirectUrl = $"https://{_auth0Domain}/authorize?response_type=code&client_id={_apiClientId}&redirect_uri={_loginCallBackUrl}&state={state}&scope=openid profile email offline_access";
+        string redirectUrl = $"https://{_auth0Domain}/authorize?response_type=code&client_id={_apiClientId}&redirect_uri={_loginCallBackUrl}&state={state}&scope=openid profile email offline_access&audience={_customApiUrl}";
         _navigationManager.NavigateTo(redirectUrl);
     }
 
@@ -59,7 +61,11 @@ public class Auth0Service
         var response = await client.PostAsync(endpoint, data);
         response.EnsureSuccessStatusCode();
         var responseContent = await response.Content.ReadAsStringAsync();
-        var deserializedResponse = JsonSerializer.Deserialize<ExchangeCodeForTokensResponse>(responseContent);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        var deserializedResponse = JsonSerializer.Deserialize<ExchangeCodeForTokensResponse>(responseContent, options);
         await _sessionService.AddJwtToLocalStorage(deserializedResponse.AccessToken);
         _navigationManager.NavigateTo($"user/{deserializedResponse.UserId}");
     }
