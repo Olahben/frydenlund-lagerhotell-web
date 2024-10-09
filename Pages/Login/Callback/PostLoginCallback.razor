@@ -2,8 +2,6 @@
 @inject SessionService _sessionService
 @inject Auth0Service _auth0Service
 
-<h1>Test</h1>
-
 @code {
     private string code { get; set; }
     private string state { get; set; }
@@ -31,8 +29,6 @@
         }
         try {
             await _auth0Service.ExchangeCodeForTokenAndLogin(code);
-            // TODO: fetch user info
-            // TODO: redirect to user settings/id
         } catch (Exception e) {
             Snackbar.Add("Noe gikk galt");
             await _sessionService.RemoveItemAsync("loginState");
