@@ -48,7 +48,7 @@ public class Auth0Service
     {
         string state = GenerateState();
         await _sessionService.AddLoginStateToLocalStorage(state);
-        string redirectUrl = $"https://{_auth0Domain}/authorize?response_type=code&client_id={_apiClientId}&redirect_uri={_loginCallBackUrl}&state={state}&scope=openid profile email offline_access&audience={_customApiUrl}";
+        string redirectUrl = $"https://{_auth0Domain}/authorize?response_type=code&client_id={_apiClientId}&redirect_uri={_loginCallBackUrl}&state={state}&scope=openid profile email offline_access&audience={_customApiUrl}&ui_locales=nb";
         _navigationManager.NavigateTo(redirectUrl);
     }
 
