@@ -9,6 +9,9 @@
 @inject NavigationManager _navigationManager
 @inject UserService _userService
 @inject AuthenticateUserService _authenticationService
+@inject SessionService _sessionService
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject UserServiceSignup _userServiceSignup
 
 <MudGrid Justify="Justify.Center">
     <MudItem Style="height: fit-content;">
@@ -181,7 +184,10 @@
                 return;
             }
             _appState.SetUserBeforeEmailVerified(user);
-            await _authenticationService.StartEmailVerification(user.Email);
+            (string userId, string token) = await _userServiceSignup.SignupUserWithUserModel(user);
+            await _sessionService.AddJwtToLocalStorage(token);
+            await _authenticationStateProvider.GetAuthenticationStateAsync();
+            _appState.NotifyStateChanged();
             _navigationManager.NavigateTo("/verifiser-epost");
         }
         catch (Exception ex)
