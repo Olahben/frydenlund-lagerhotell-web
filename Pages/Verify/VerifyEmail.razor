@@ -7,6 +7,8 @@
 @inject SessionService _sessionService
 @using System.Data.SqlTypes
 
+@layout NoFooterOrNavBar
+
 
 @if (isInitialized)
 {
@@ -119,48 +121,6 @@
                 {
                     Console.WriteLine(e);
                     Snackbar.Add($"Noe gikk galt, prøv på nytt senere", MudBlazor.Severity.Error);
-                }
-            }
-            else
-            {
-                try
-                {
-                    await _authenticationService.VerifyEmailVerificationCode(user.Email, userCode);
-                }
-                catch (BadRequestException)
-                {
-                    Snackbar.Add("Koden du har skrevet inn er feil", MudBlazor.Severity.Error);
-                }
-                catch (KeyNotFoundException)
-                {
-                    // No codes with the following email were found
-                    Snackbar.Add("Noe gikk galt, vennligst send en ny kode", MudBlazor.Severity.Error);
-                }
-                catch (InvalidOperationException)
-                {
-                    Snackbar.Add("Koden har utløpt, vennligst send en ny en", MudBlazor.Severity.Error);
-                }
-                catch (Exception e)
-                {
-                    Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
-                }
-
-                try
-                {
-                    string? userId;
-                    string? token;
-
-                    (userId, token) = await _userServiceSignup.SignupUserWithUserModel(user);
-                    await _sessionService.AddJwtToLocalStorage(token);
-                    await _authenticationStateProvider.GetAuthenticationStateAsync();
-                    _appState.NotifyStateChanged();
-                    NavigationManager.NavigateTo($"/user/{userId}");
-                    StateHasChanged();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    Snackbar.Add("Noen er allerede registrert med denne informasjonen", MudBlazor.Severity.Error);
                 }
             }
         }
