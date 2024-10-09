@@ -1,6 +1,7 @@
 ﻿@page "/authentication/login-callback/"
 @inject SessionService _sessionService
 @inject Auth0Service _auth0Service
+@inject AppState _appState
 
 @code {
     private string code { get; set; }
@@ -27,9 +28,14 @@
             NavigationManager.NavigateTo("/");
             return;
         }
-        try {
+        try
+        {
             await _auth0Service.ExchangeCodeForTokenAndLogin(code);
-        } catch (Exception e) {
+            _appState.UserLoggedIn();
+            await _sessionService.RemoveItemAsync("loginState");
+        }
+        catch (Exception e)
+        {
             Snackbar.Add("Noe gikk galt");
             await _sessionService.RemoveItemAsync("loginState");
             NavigationManager.NavigateTo("/");
