@@ -54,7 +54,7 @@ public class SessionService
 
     public async Task LogUserOut()
     {
-        await RemoveItemAsync("jwtToken");
+        await RemoveItemAsync("access_token");
         appState.UserLoggedOut();
     }
 
