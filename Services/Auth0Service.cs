@@ -1,4 +1,5 @@
 ﻿using LagerhotellAPI.Models.CustomExceptionModels;
+using LagerhotellAPI.Models.DbModels.Auth0;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Json;
@@ -81,5 +82,19 @@ public class Auth0Service
         var responseContent = await response.Content.ReadAsStringAsync();
         var deserializedResponse = JsonSerializer.Deserialize<RefreshAccessTokenResponse>(responseContent);
         return deserializedResponse.AccessToken;
+    }
+
+    public async Task<UserAuth0> GetAuth0UserbyAuth0Id(string auth0Id)
+    {
+        string endpoint = _baseUrl + $"/get-user/{auth0Id}";
+        var response = await client.GetAsync(endpoint);
+        response.EnsureSuccessStatusCode();
+        string responseContent = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        var deserializedResponse = JsonSerializer.Deserialize<GetAuth0UserResponse>(responseContent, options);
+        return deserializedResponse.User;
     }
 }
