@@ -45,5 +45,6 @@ builder.Services.AddScoped<CompanyUserService>();
 builder.Services.AddScoped<CompanyUserValidator>();
 builder.Services.AddSingleton<Lagerhotell.Services.State.AppState>();
 builder.Services.AddScoped<Auth0Service>();
+builder.Services.AddScoped<UserServiceSignup>();
 
 await builder.Build().RunAsync();
