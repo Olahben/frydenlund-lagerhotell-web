@@ -53,6 +53,7 @@
     MudForm form;
     private string sendCodeButtonText = "60";
     private Timer _timer;
+    private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
     private readonly UserServiceSignup _userServiceSignup = new UserServiceSignup();
 
@@ -78,6 +79,9 @@
 
     private void OnTimerCallback(object? state)
     {
+        if (_cancellationTokenSource.IsCancellationRequested)
+            return;
+        // run async
         CheckEmailVerifiedStatus();
     }
 
@@ -160,27 +164,23 @@
     {
         try
         {
+            DisposeTimer();
             if (user.User.FirstName != null)
             {
-                DisposeTimer();
                 await _auth0Service.CancelEmailVerification(user.User.Id);
             }
             else
             {
-                DisposeTimer();
                 await _auth0Service.CancelEmailVerification(user.CompanyUser.CompanyUserId);
             }
         }
         catch (InvalidOperationException)
         {
-            // restart timer
-            _timer = new Timer(OnTimerCallback, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
             Snackbar.Add("E-posten er allerede verifisert, vennligst vent før du blir sendt videre", MudBlazor.Severity.Error);
+            CheckEmailVerifiedStatus();
         }
         catch (Exception e)
         {
-            // restart timer
-            _timer = new Timer(OnTimerCallback, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
             Snackbar.Add("Noe gikk galt, vennligst prøv igjen. Last siden inn på nytt hvis feilen fortsetter.", MudBlazor.Severity.Error);
         }
     }
@@ -206,6 +206,8 @@
 
     private void DisposeTimer()
     {
+        _cancellationTokenSource.Cancel();
         _timer?.Dispose();
+        _timer = null;
     }
 }
