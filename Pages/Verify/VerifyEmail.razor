@@ -114,7 +114,7 @@
                     await _companyUserService.UpdateCompanyUserAsync(updatedCompanyUser);
                 }
                 DisposeTimer();
-                _navigationManager.NavigateTo($"user/{user.CompanyUser.CompanyUserId}");
+                _navigationManager.NavigateTo($"user/{auth0User.UserId}");
             }
         }
         catch (HttpRequestException e)
