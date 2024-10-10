@@ -43,6 +43,20 @@ namespace Lagerhotell.Pages
                         NavigationManager.NavigateTo($"/user/{user.User.Id}");
                     }
                 }
+                else
+                {
+                    if (!user.User.IsEmailVerified)
+                    {
+                        if (NavigationManager.Uri != Configuration["HostSettings:HostUrl"] + "/verifiser-epost")
+                        {
+                            NavigationManager.NavigateTo("/verifiser-epost");
+                        }
+                    }
+                    else
+                    {
+                        NavigationManager.NavigateTo($"/user/{user.CompanyUser.CompanyUserId}");
+                    }
+                }
             }
         }
     }
