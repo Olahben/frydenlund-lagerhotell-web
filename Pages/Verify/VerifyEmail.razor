@@ -36,6 +36,7 @@
                     <MudTextField @bind-Value="email" T="string" Label="E-post" Variant="Variant.Outlined"></MudTextField>
                 }
                 <MudButton Style="margin-top: 24px;" @onclick="() => SendNewVerificationEmail()" Color="Color.Primary" Variant="Variant.Outlined">Send ny e-post</MudButton>
+                <MudButton Style="margin-top: 24px;" @onclick="() => CancelEmailVerification()" Color="Color.Primary" Variant="Variant.Outlined">Avbryt</MudButton>
             </MudForm>
         </MudPaper>
     </MudContainer>
@@ -60,7 +61,8 @@
         try
         {
             user = await _customAuthenticationStateprovider.GetUser();
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             Snackbar.Add("Fant ikke brukeren", MudBlazor.Severity.Error);
         }
@@ -107,6 +109,7 @@
                     CompanyUser updatedCompanyUser = new CompanyUser(user.CompanyUser.CompanyUserId, user.CompanyUser.FirstName, user.CompanyUser.LastName, user.CompanyUser.Name, user.CompanyUser.CompanyNumber, user.CompanyUser.Email, user.CompanyUser.PhoneNumber, user.CompanyUser.Address, user.CompanyUser.Password, true, user.CompanyUser.Auth0Id);
                     await _companyUserService.UpdateCompanyUserAsync(updatedCompanyUser);
                 }
+                DisposeTimer();
                 _navigationManager.NavigateTo($"user/{user.CompanyUser.CompanyUserId}");
             }
         }
@@ -153,6 +156,35 @@
         await CountDown();
     }
 
+    private async Task CancelEmailVerification()
+    {
+        try
+        {
+            if (user.User.FirstName != null)
+            {
+                DisposeTimer();
+                await _auth0Service.CancelEmailVerification(user.User.Id);
+            }
+            else
+            {
+                DisposeTimer();
+                await _auth0Service.CancelEmailVerification(user.CompanyUser.CompanyUserId);
+            }
+        }
+        catch (InvalidOperationException)
+        {
+            // restart timer
+            _timer = new Timer(OnTimerCallback, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            Snackbar.Add("E-posten er allerede verifisert, vennligst vent før du blir sendt videre", MudBlazor.Severity.Error);
+        }
+        catch (Exception e)
+        {
+            // restart timer
+            _timer = new Timer(OnTimerCallback, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            Snackbar.Add("Noe gikk galt, vennligst prøv igjen. Last siden inn på nytt hvis feilen fortsetter.", MudBlazor.Severity.Error);
+        }
+    }
+
     public async Task CountDown()
     {
         int time = 60;
@@ -170,5 +202,10 @@
     private void RedirectToRegister()
     {
         _navigationManager.NavigateTo("/registrer-deg");
+    }
+
+    private void DisposeTimer()
+    {
+        _timer?.Dispose();
     }
 }
