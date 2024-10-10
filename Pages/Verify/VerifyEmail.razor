@@ -17,27 +17,10 @@
 @if (isInitialized)
 {
     <MudContainer Style="justify-content: start; display: flex; flex-direction: column; margin-top: 126px; max-width: 716px;">
-        <MudText Style="text-align: start; text-decoration: underline;"><span @onclick="() => RedirectToRegister()" style="cursor: pointer; display: flex; align-content: center; gap: 6px; width: fit-content;"><MudIcon Icon="@Icons.Material.Filled.ArrowBack"></MudIcon> Gå tilbake</span></MudText>
-        <MudPaper Elevation="2" Style="padding: 12px; padding-bottom: 46px;">
-            <MudForm @ref="form">
-                <MudText Typo="Typo.h4" Style="font-weight: 480; margin-bottom: 24px;">Verifiser e-post</MudText>
-                @if (user.CompanyUser.FirstName != null)
-                {
-                    @*
-            <MudBlazor.MudTextField @bind-Value="companyUser.Email" Variant="Variant.Outlined"></MudBlazor.MudTextField>
-            *@
-                    <MudTextField @bind-Value="email" T="string" Label="E-post" Variant="Variant.Outlined">Example@example.com</MudTextField>
-                }
-                else
-                {
-                    @*
-            <MudBlazor.MudTextField @bind-Value="user.Email" Variant="Variant.Outlined"></MudBlazor.MudTextField>
-            *@
-                    <MudTextField @bind-Value="email" T="string" Label="E-post" Variant="Variant.Outlined"></MudTextField>
-                }
+        <MudPaper Square="false" Elevation="2" Style="padding: 12px; padding-bottom: 46px;">
+
                 <MudButton Style="margin-top: 24px;" @onclick="() => SendNewVerificationEmail()" Color="Color.Primary" Variant="Variant.Outlined">Send ny e-post</MudButton>
                 <MudButton Style="margin-top: 24px;" @onclick="() => CancelEmailVerification()" Color="Color.Primary" Variant="Variant.Outlined">Avbryt</MudButton>
-            </MudForm>
         </MudPaper>
     </MudContainer>
 }
