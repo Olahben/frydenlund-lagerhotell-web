@@ -21,7 +21,7 @@
         <MudPaper Elevation="2" Style="padding: 12px; padding-bottom: 46px;">
             <MudForm @ref="form">
                 <MudText Typo="Typo.h4" Style="font-weight: 480; margin-bottom: 24px;">Verifiser e-post</MudText>
-                @if (companyUser != null)
+                @if (user.CompanyUser.FirstName != null)
                 {
                     @*
             <MudBlazor.MudTextField @bind-Value="companyUser.Email" Variant="Variant.Outlined"></MudBlazor.MudTextField>
@@ -43,8 +43,7 @@
 
 
 @code {
-    CompanyUser companyUser;
-    User user;
+    private UserAndCompanyUser user;
     private bool isInitialized = false;
     [Required(ErrorMessage = "Kodefeltet er påkrevd")]
     [Length(4, 4, ErrorMessage = "Koden må være 4 siffer")]
@@ -58,13 +57,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (_appState.CompanyUserBeforeVerified != null)
+        try
         {
-            companyUser = _appState.CompanyUserBeforeVerified;
-        }
-        else
+            user = await _customAuthenticationStateprovider.GetUser();
+        } catch (Exception)
         {
-            user = _appState.UserBeforeEmailVerified;
+            Snackbar.Add("Fant ikke brukeren", MudBlazor.Severity.Error);
         }
         isInitialized = true;
         Snackbar.Add("En e-post med en kode har blitt sendt til deg", MudBlazor.Severity.Success);
@@ -85,7 +83,6 @@
     {
         try
         {
-            var user = await _customAuthenticationStateprovider.GetUser();
             LagerhotellAPI.Models.DbModels.Auth0.UserAuth0 auth0User;
             bool companyUser = false;
             if (user.User.FirstName != null)
@@ -110,7 +107,7 @@
                     CompanyUser updatedCompanyUser = new CompanyUser(user.CompanyUser.CompanyUserId, user.CompanyUser.FirstName, user.CompanyUser.LastName, user.CompanyUser.Name, user.CompanyUser.CompanyNumber, user.CompanyUser.Email, user.CompanyUser.PhoneNumber, user.CompanyUser.Address, user.CompanyUser.Password, true, user.CompanyUser.Auth0Id);
                     await _companyUserService.UpdateCompanyUserAsync(updatedCompanyUser);
                 }
-                _navigationManager.NavigateTo($"user/{user.User.Id}");
+                _navigationManager.NavigateTo($"user/{user.CompanyUser.CompanyUserId}");
             }
         }
         catch (HttpRequestException e)
@@ -135,11 +132,14 @@
     private async Task SendNewVerificationEmail()
     {
         string auth0Id;
-        if (user.Auth0Id != null)
+        if (user.User.FirstName != null)
+
         {
-            auth0Id = user.Auth0Id;
-        } else {
-            auth0Id = companyUser.Auth0Id;
+            auth0Id = user.User.Auth0Id;
+        }
+        else
+        {
+            auth0Id = user.CompanyUser.Auth0Id;
         }
         try
         {
