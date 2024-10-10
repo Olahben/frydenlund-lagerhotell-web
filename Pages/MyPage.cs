@@ -45,7 +45,7 @@ namespace Lagerhotell.Pages
                 }
                 else
                 {
-                    if (!user.User.IsEmailVerified)
+                    if (!user.CompanyUser.IsEmailVerified)
                     {
                         if (NavigationManager.Uri != Configuration["HostSettings:HostUrl"] + "/verifiser-epost")
                         {
