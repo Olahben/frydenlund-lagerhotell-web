@@ -71,7 +71,10 @@
                 return;
             }
             _appState.SetCompanyUserBeforeEmailVerified(companyUser);
-            await _authenticationService.StartEmailVerification(companyUser.Email);
+            string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
+            await _authenticationStateProvider.GetAuthenticationStateAsync();
+            StateHasChanged();
+            _appState.NotifyStateChanged();
             _navigationManager.NavigateTo("/verifiser-epost");
 
         } catch (KeyNotFoundException e)

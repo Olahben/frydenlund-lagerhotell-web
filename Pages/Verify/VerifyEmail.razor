@@ -35,9 +35,7 @@
             *@
                     <MudTextField @bind-Value="email" T="string" Label="E-post" Variant="Variant.Outlined"></MudTextField>
                 }
-                <MudTextField Style="" @bind-Value="userCode" Validation="@codeValidator.Validation" Variant="Variant.Outlined" Label="Koden som er sendt til deg via e-post"></MudTextField>
                 <MudButton Style="margin-top: 24px;" Color="Color.Primary" Variant="Variant.Outlined">@sendCodeButtonText</MudButton>
-                <MudButton Style="margin-top: 24px;" OnClick="VerifyUserEmailCode" Color="Color.Primary" Variant="Variant.Outlined">Verifiser</MudButton>
             </MudForm>
         </MudPaper>
     </MudContainer>
@@ -75,66 +73,8 @@
     }
 
 
-    FluentValueValidator<int> codeValidator = new FluentValueValidator<int>(x =>
-     x.InclusiveBetween(1000, 9999).WithMessage("Koden må være 4 siffer"));
     FluentValueValidator<string> emailValidator = new FluentValueValidator<string>(x => x
     .EmailAddress());
-
-    private async Task VerifyUserEmailCode()
-    {
-        if (userCode.ToString().Length == 4)
-        {
-            if (companyUser != null)
-            {
-                try
-                {
-                    await _authenticationService.VerifyEmailVerificationCode(companyUser.Email, userCode);
-                }
-                catch (BadRequestException)
-                {
-                    Snackbar.Add("Koden du har skrevet inn er feil", MudBlazor.Severity.Error);
-                }
-                catch (KeyNotFoundException)
-                {
-                    // No codes with the following email were found
-                    Snackbar.Add("Noe gikk galt, vennligst send en ny kode", MudBlazor.Severity.Error);
-                }
-                catch (InvalidOperationException)
-                {
-                    Snackbar.Add("Koden har utløpt, vennligst send en ny en", MudBlazor.Severity.Error);
-                }
-                catch (Exception e)
-                {
-                    Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
-                }
-                try
-                {
-                    string id = await _companyUserService.CreateCompanyUserAsync(companyUser);
-                    await _authenticationStateProvider.GetAuthenticationStateAsync();
-                    StateHasChanged();
-                    _appState.NotifyStateChanged();
-                    _navigationManager.NavigateTo($"/user/{id}");
-                }
-                catch (KeyNotFoundException e)
-                {
-                    Snackbar.Add("Det er ingen norske registrerte firmaer med denne informasjonen", MudBlazor.Severity.Error);
-                }
-                catch (SqlAlreadyFilledException e)
-                {
-                    Snackbar.Add("Det er allerede registrert en bruker med denne informasjonen", MudBlazor.Severity.Error);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    Snackbar.Add($"Noe gikk galt, prøv på nytt senere", MudBlazor.Severity.Error);
-                }
-            }
-        }
-        else
-        {
-            Snackbar.Add("Koden du har skrevet inn er ugyldig", MudBlazor.Severity.Error);
-        }
-    }
 
     private void OnTimerCallback(object? state)
     {
