@@ -40,7 +40,10 @@ namespace Lagerhotell.Pages
                     }
                     else
                     {
-                        NavigationManager.NavigateTo($"/user/{user.User.Id}");
+                        if (NavigationManager.Uri == Configuration["HostSettings:HostUrl"] + "/verifiser-epost")
+                        {
+                            NavigationManager.NavigateTo($"/user/{user.User.Id}");
+                        }
                     }
                 }
                 else
@@ -54,7 +57,10 @@ namespace Lagerhotell.Pages
                     }
                     else
                     {
-                        NavigationManager.NavigateTo($"/user/{user.CompanyUser.CompanyUserId}");
+                        if (NavigationManager.Uri == Configuration["HostSettings:HostUrl"] + "/verifiser-epost")
+                        {
+                            NavigationManager.NavigateTo($"/user/{user.CompanyUser.CompanyUserId}");
+                        }
                     }
                 }
             }
