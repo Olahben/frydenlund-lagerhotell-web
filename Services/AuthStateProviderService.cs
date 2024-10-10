@@ -79,7 +79,7 @@ public class AuthStateProviderService : AuthenticationStateProvider
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var jwtToken = tokenHandler.ReadJwtToken(accessToken);
-                if (jwtToken.ValidTo < DateTime.UtcNow.AddMinutes(15) || jwtToken.ValidTo < DateTime.UtcNow)
+                if (jwtToken.ValidTo < DateTime.UtcNow.AddMinutes(15))
                 {
                     await RefreshAccessToken();
                 }
