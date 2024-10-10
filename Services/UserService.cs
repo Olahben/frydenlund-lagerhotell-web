@@ -131,4 +131,27 @@ public class UserService
         }
         return false;
     }
+
+    public async Task UpdateUser(User user)
+    {
+        string endpointUrl = url + "/update-user-values";
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        var request = new UpdateUserValuesRequest2
+        {
+            UserId = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            PhoneNumber = user.PhoneNumber,
+            BirthDate = user.BirthDate,
+            Address = user.Address,
+            Password = user.Password,
+            IsAdministrator = user.IsAdministrator,
+            Email = user.Email,
+            IsEmailVerified = user.IsEmailVerified
+        };
+        var json = JsonSerializer.Serialize(request);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PutAsync(endpointUrl, data);
+        response.EnsureSuccessStatusCode();
+    }
 }
