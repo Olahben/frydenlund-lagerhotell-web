@@ -35,7 +35,7 @@
             *@
                     <MudTextField @bind-Value="email" T="string" Label="E-post" Variant="Variant.Outlined"></MudTextField>
                 }
-                <MudButton Style="margin-top: 24px;" Color="Color.Primary" Variant="Variant.Outlined">@sendCodeButtonText</MudButton>
+                <MudButton Style="margin-top: 24px;" @onclick="() => SendNewVerificationEmail()" Color="Color.Primary" Variant="Variant.Outlined">Send ny e-post</MudButton>
             </MudForm>
         </MudPaper>
     </MudContainer>
@@ -91,7 +91,8 @@
             if (user.User.FirstName != null)
             {
                 auth0User = await _auth0Service.GetAuth0UserbyAuth0Id(user.User.Auth0Id);
-            } else
+            }
+            else
             {
                 auth0User = await _auth0Service.GetAuth0UserbyAuth0Id(user.CompanyUser.Auth0Id);
                 companyUser = true;
@@ -111,21 +112,45 @@
                 }
                 _navigationManager.NavigateTo($"user/{user.User.Id}");
             }
-        } catch (HttpRequestException e)
+        }
+        catch (HttpRequestException e)
         {
             if (e.Message.Contains("401"))
             {
                 Snackbar.Add("Du er ikke autentisert, vennligst logg inn på nytt", MudBlazor.Severity.Error);
                 await _sessionService.RemoveItemAsync("access_token");
                 _navigationManager.NavigateTo("/logg-inn");
-            } else if (e.Message.Contains("404"))
+            }
+            else if (e.Message.Contains("404"))
             {
                 Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
-            } else
+            }
+            else
             {
                 Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
             }
         }
+    }
+
+    private async Task SendNewVerificationEmail()
+    {
+        string auth0Id;
+        if (user.Auth0Id != null)
+        {
+            auth0Id = user.Auth0Id;
+        } else {
+            auth0Id = companyUser.Auth0Id;
+        }
+        try
+        {
+            await _auth0Service.SendNewVerificationEmail(auth0Id);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
+        }
+        Snackbar.Add("En ny e-post har blitt sendt til deg", MudBlazor.Severity.Success);
+        await CountDown();
     }
 
     public async Task CountDown()
