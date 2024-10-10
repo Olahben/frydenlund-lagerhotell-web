@@ -4,7 +4,11 @@
 @inject AuthenticateUserService _authenticationService
 @inject CompanyUserService _companyUserService
 @inject AuthenticationStateProvider _authenticationStateProvider
+@inject AuthStateProviderService _customAuthenticationStateprovider
+@inject Auth0Service _auth0Service
 @inject SessionService _sessionService
+@inject CompanyUserService _companyUserService
+@inject UserService _userService
 @using System.Data.SqlTypes
 
 @layout NoFooterOrNavBar
@@ -50,6 +54,7 @@
     private string email = "example@example.com";
     MudForm form;
     private string sendCodeButtonText = "60";
+    private Timer _timer;
 
     private readonly UserServiceSignup _userServiceSignup = new UserServiceSignup();
 
@@ -66,6 +71,7 @@
         isInitialized = true;
         Snackbar.Add("En e-post med en kode har blitt sendt til deg", MudBlazor.Severity.Success);
         await CountDown();
+        _timer = new Timer(OnTimerCallback, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
     }
 
 
@@ -127,6 +133,58 @@
         else
         {
             Snackbar.Add("Koden du har skrevet inn er ugyldig", MudBlazor.Severity.Error);
+        }
+    }
+
+    private void OnTimerCallback(object? state)
+    {
+        CheckEmailVerifiedStatus();
+    }
+
+    private async Task CheckEmailVerifiedStatus()
+    {
+        try
+        {
+            var user = await _customAuthenticationStateprovider.GetUser();
+            LagerhotellAPI.Models.DbModels.Auth0.UserAuth0 auth0User;
+            bool companyUser = false;
+            if (user.User.FirstName != null)
+            {
+                auth0User = await _auth0Service.GetAuth0UserbyAuth0Id(user.User.Auth0Id);
+            } else
+            {
+                auth0User = await _auth0Service.GetAuth0UserbyAuth0Id(user.CompanyUser.Auth0Id);
+                companyUser = true;
+
+            }
+            if (auth0User.EmailVerified)
+            {
+                if (!companyUser)
+                {
+                    User updatedUser = new User(user.User.Id, user.User.FirstName, user.User.LastName, user.User.PhoneNumber, user.User.BirthDate, user.User.Address, user.User.Password, user.User.IsAdministrator, user.User.Email, true, user.User.Auth0Id);
+                    await _userService.UpdateUser(updatedUser);
+                }
+                else
+                {
+                    CompanyUser updatedCompanyUser = new CompanyUser(user.CompanyUser.CompanyUserId, user.CompanyUser.FirstName, user.CompanyUser.LastName, user.CompanyUser.Name, user.CompanyUser.CompanyNumber, user.CompanyUser.Email, user.CompanyUser.PhoneNumber, user.CompanyUser.Address, user.CompanyUser.Password, true, user.CompanyUser.Auth0Id);
+                    await _companyUserService.UpdateCompanyUserAsync(updatedCompanyUser);
+                }
+                _navigationManager.NavigateTo($"user/{user.User.Id}");
+            }
+        } catch (HttpRequestException e)
+        {
+            if (e.Message.Contains("401"))
+            {
+                Snackbar.Add("Du er ikke autentisert, vennligst logg inn på nytt", MudBlazor.Severity.Error);
+                await _sessionService.RemoveItemAsync("access_token");
+                _navigationManager.NavigateTo("/logg-inn");
+            } else if (e.Message.Contains("404"))
+            {
+                Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
+            } else
+            {
+                Snackbar.Add("Noe gikk galt, vennligst prøv igjen", MudBlazor.Severity.Error);
+            }
         }
     }
 
