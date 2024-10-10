@@ -19,9 +19,11 @@ public class Auth0Service
     private readonly string _customApiUrl;
     private readonly SessionService _sessionService;
     private readonly NavigationManager _navigationManager;
+    private readonly UserService _userService;
+    private readonly CompanyUserService _companyUserService;
     private readonly string _baseUrl = "https://localhost:7272/auth0-users";
 
-    public Auth0Service(IConfiguration configuration, SessionService sessionService, NavigationManager navigationManager)
+    public Auth0Service(IConfiguration configuration, SessionService sessionService, NavigationManager navigationManager, UserService userService, CompanyUserService companyUserService)
     {
         _auth0Domain = configuration["Auth0:Domain"];
         _auth0FullDomain = $"https://{_auth0Domain}";
@@ -32,6 +34,8 @@ public class Auth0Service
         _customApiUrl = configuration["Auth0:ApiUrl"];
         _sessionService = sessionService;
         _navigationManager = navigationManager;
+        _userService = userService;
+        _companyUserService = companyUserService;
     }
 
     public static string GenerateState()
@@ -107,5 +111,32 @@ public class Auth0Service
         var data = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await client.PostAsync(endpoint, data);
         response.EnsureSuccessStatusCode();
+    }
+
+    public async Task CancelEmailVerification(string userId)
+    {
+        // The methods that delete the user in the database also delete the user in Auth0
+        try
+        {
+            var user = await _userService.GetUserById(userId);
+            if (user.IsEmailVerified)
+            {
+                throw new InvalidOperationException("User has already verified their email");
+            }
+            await _userService.DeleteUser(userId);
+            await _sessionService.LogUserOut();
+            _navigationManager.NavigateTo("/registrer-deg");
+        }
+        catch (KeyNotFoundException)
+        {
+            var user = await _companyUserService.GetCompanyUserAsync(userId);
+            if (user.IsEmailVerified)
+            {
+                throw new InvalidOperationException("User has already verified their email");
+            }
+            await _companyUserService.DeleteCompanyUserAsync(userId);
+            await _sessionService.LogUserOut();
+            _navigationManager.NavigateTo("/registrer-deg");
+        }
     }
 }
