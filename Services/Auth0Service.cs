@@ -97,4 +97,15 @@ public class Auth0Service
         var deserializedResponse = JsonSerializer.Deserialize<GetAuth0UserResponse>(responseContent, options);
         return deserializedResponse.User;
     }
+
+    public async Task SendNewVerificationEmail(string auth0Id)
+    {
+        string endpoint = _baseUrl + "/send-verification-email";
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        var request = new SendVerificationEmailRequest(auth0Id);
+        var json = JsonSerializer.Serialize(request);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(endpoint, data);
+        response.EnsureSuccessStatusCode();
+    }
 }
