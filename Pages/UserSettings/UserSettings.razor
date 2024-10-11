@@ -277,7 +277,10 @@
                                             <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                         }
-                                        <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="margin-top: 10px; color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                        @if (!_editPasswordMode)
+                                        {
+                                            <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                        }
                                     </MudPaper>
                                 </MudItem>
                             }
