@@ -166,13 +166,13 @@
                                         {
                                             @if (_editPasswordMode)
                                             {
-                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
+                                                <MudText Typo="Typo.h6" Style="font-size: 24px;">Endre passord</MudText>
                                                 <ResetPasswordForm UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
                                             }
                                             else
                                             {
                                                 <MudForm @ref="companyUserForm" Model="updatedCompanyUser" Validation="@(companyUserValidator.ValidateValue)">
-                                                    <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
+                                                    <MudText Typo="Typo.h6" Style="font-size: 24px;">Kontaktinformasjon</MudText>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="updatedCompanyUser.Name" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Name)" Immediate="true"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="updatedCompanyUser.FirstName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.FirstName)" Immediate="true"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="updatedCompanyUser.LastName" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.LastName)" Immediate="true"></MudTextField>
@@ -180,7 +180,7 @@
                                                     @*Disabled temporarily*@
                                                     <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="E-post" @bind-Value="updatedCompanyUser.Email" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Email)" Immediate="true"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Disabled="true" Label="Telefonnummer" @bind-Value="updatedCompanyUser.PhoneNumber" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.PhoneNumber)" Immediate="true"></MudTextField>
-                                                    <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
+                                                    <MudText Typo="Typo.h6" Style="font-size: 24px;">Adresse</MudText>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="updatedCompanyUser.Address.StreetAddress" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.StreetAddress)" Immediate="true"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="updatedCompanyUser.Address.PostalCode" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.PostalCode)" Immediate="true"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="updatedCompanyUser.Address.City" Variant="Variant.Outlined" For="@(() => updatedCompanyUser.Address.City)" Immediate="true"></MudTextField>
@@ -189,14 +189,14 @@
                                         }
                                         else
                                         {
-                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
+                                            <MudText Typo="Typo.h6" Style="font-size: 24px;">Kontaktinformasjon</MudText>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Firma" @bind-Value="companyUser.Name" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson fornavn" @bind-Value="companyUser.FirstName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Kontaktperson etternavn" @bind-Value="companyUser.LastName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Organisasjonsnummer" @bind-Value="companyUser.CompanyNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="companyUser.Email" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Telefonnummer" @bind-Value="companyUser.PhoneNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
+                                            <MudText Typo="Typo.h6" Style="font-size: 24px;">Adresse</MudText>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="companyUser.Address.StreetAddress" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="companyUser.Address.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="companyUser.Address.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
@@ -246,33 +246,35 @@
                                         {
                                             @if (_editPasswordMode)
                                             {
-                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
+                                                <MudText Typo="Typo.h6" Style="font-size: 24px;">Endre passord</MudText>
                                                 <ResetPasswordForm UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
-                                            } else {
-                                            <MudForm Model="@_userValues" @ref="_form">
-                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" For="@(() => _userValues.FirstName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" For="@(() => _userValues.LastName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Disabled="true" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" For="@(() => _userValues.Email)" Immediate="true" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" For="@(() => _userValues.StreetAddress)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" For="@(() => _userValues.PostalCode)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" For="@(() => _userValues.City)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
-                                                <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SaveUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
-                                            </MudForm>
+                                            }
+                                            else
+                                            {
+                                                <MudForm Model="@_userValues" @ref="_form">
+                                                    <MudText Typo="Typo.h6" Style="font-size: 24px;">Kontaktinformasjon</MudText>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" For="@(() => _userValues.FirstName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" For="@(() => _userValues.LastName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Disabled="true" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" For="@(() => _userValues.Email)" Immediate="true" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudText Typo="Typo.h6" Style="font-size: 24px;">Adresse</MudText>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" For="@(() => _userValues.StreetAddress)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" For="@(() => _userValues.PostalCode)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" For="@(() => _userValues.City)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SaveUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
+                                                </MudForm>
                                             }
                                         }
                                         else
                                         {
-                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
+                                            <MudText Typo="Typo.h6" Style="font-size: 24px;">Kontaktinformasjon</MudText>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudText Typo="Typo.h5" Style="font-weight: 600;">Adresse</MudText>
+                                            <MudText Typo="Typo.h6" Style="font-size: 24px;">Adresse</MudText>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" Disabled="true" Variant="Variant.Outlined"></MudTextField>
@@ -423,7 +425,8 @@
         if (userOrCompanyUser.User.FirstName != null)
         {
             userIdViaAccessToken = userOrCompanyUser.User.Id;
-        } else
+        }
+        else
         {
             userIdViaAccessToken = userOrCompanyUser.CompanyUser.CompanyUserId;
         }
