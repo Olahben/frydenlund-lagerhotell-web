@@ -167,7 +167,7 @@
                                             @if (_editPasswordMode)
                                             {
                                                 <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
-                                                <ResetPasswordFormCompanyUser UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
+                                                <ResetPasswordForm UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
                                             }
                                             else
                                             {
@@ -247,7 +247,7 @@
                                             @if (_editPasswordMode)
                                             {
                                                 <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
-                                                <ResetPasswordFormCompanyUser UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
+                                                <ResetPasswordForm UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
                                             } else {
                                             <MudForm Model="@_userValues" @ref="_form">
                                                 <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
