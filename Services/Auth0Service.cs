@@ -159,4 +159,13 @@ public class Auth0Service
         var response = await client.PatchAsync(endpoint, data);
         response.EnsureSuccessStatusCode();
     }
+
+    public async Task DeleteUser(string auth0Id)
+    {
+        string endpoint = _baseUrl + $"/delete-user/{auth0Id}";
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
+        var response = await client.DeleteAsync(endpoint);
+        response.EnsureSuccessStatusCode();
+
+    }
 }
