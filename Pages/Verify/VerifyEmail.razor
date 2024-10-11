@@ -127,15 +127,20 @@
 
     private async Task SendNewVerificationEmail()
     {
-        string auth0Id;
-        if (user.User.FirstName != null)
+        string auth0Id = "";
+        try {
+            if (user.User.FirstName != null)
 
+            {
+                auth0Id = user.User.Auth0Id;
+            }
+            else
+            {
+                auth0Id = user.CompanyUser.Auth0Id;
+            }
+        } catch (Exception)
         {
-            auth0Id = user.User.Auth0Id;
-        }
-        else
-        {
-            auth0Id = user.CompanyUser.Auth0Id;
+            Snackbar.Add("Fant ikke brukeren", MudBlazor.Severity.Error);
         }
         try
         {
