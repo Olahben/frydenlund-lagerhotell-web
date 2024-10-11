@@ -149,4 +149,14 @@ public class Auth0Service
         var response = await client.PostAsync(endpoint, data);
         response.EnsureSuccessStatusCode();
     }
+
+    public async Task UpdatePassword(string auth0Id, string email, string oldPassword, string newPassword)
+    {
+        string endpoint = _baseUrl + "/update-password";
+        var request = new ChangeUserPasswordRequest(auth0Id, email, oldPassword, newPassword);
+        var json = JsonSerializer.Serialize(request);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await client.PatchAsync(endpoint, data);
+        response.EnsureSuccessStatusCode();
+    }
 }
