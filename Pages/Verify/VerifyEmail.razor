@@ -13,11 +13,17 @@
 
 @layout NoFooterOrNavBar
 
+<style>
+    .custom-box-shadow {
+        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    }
+</style>
+
 
 @if (isInitialized)
 {
     <MudContainer Style="justify-content: center; display: flex; flex-direction: column; max-width: 716px;">
-        <MudPaper Square="true" Elevation="2" Style="padding: 28px; padding-bottom: 46px; padding-top: 36px;">
+        <MudPaper Class="custom-box-shadow" Square="false" Elevation="2" Style="padding: 28px; padding-bottom: 46px; padding-top: 36px;">
             <MudText Typo="Typo.h4" Style="text-align: center; margin-bottom: 10px;">Verifiser e-postadresse</MudText>
             <MudText Typo="Typo.subtitle1" Style="text-align: center; margin-bottom: 22px;">Vi har sendt en e-post til deg som vil inneholde en lenke. Etter du har trykket på lenken vil denne siden etterhvert sende deg videre.</MudText>
             <MudText Typo="Typo.body2" Style="text-align: center; margin-bottom: 18px;">Har du ikke mottatt e-posten? Trykk på knappen under for å sende en ny e-post. E-posten kan også ligge i søppelpost mappen.</MudText>
@@ -128,7 +134,8 @@
     private async Task SendNewVerificationEmail()
     {
         string auth0Id = "";
-        try {
+        try
+        {
             if (user.User.FirstName != null)
 
             {
@@ -138,7 +145,8 @@
             {
                 auth0Id = user.CompanyUser.Auth0Id;
             }
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             Snackbar.Add("Fant ikke brukeren", MudBlazor.Severity.Error);
         }
