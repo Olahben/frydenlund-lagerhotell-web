@@ -239,10 +239,16 @@
                                         else
                                         {
                                             <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
+                                            <MudButton Style="margin-top: 16px; margin-bottom: 22px; margin-left: 12px;" @onclick="ShowResetPasswordComponents" Variant="Variant.Filled">Endre Passord</MudButton>
                                         }
                                         <div style="height:10px"></div>
                                         @if (_editMode)
                                         {
+                                            @if (_editPasswordMode)
+                                            {
+                                                <MudText Typo="Typo.h5" Style="font-weight: 600;">Endre passord</MudText>
+                                                <ResetPasswordFormCompanyUser UserId="@UserId" OnPasswordResetDone="ToggleEditMode" />
+                                            } else {
                                             <MudForm Model="@_userValues" @ref="_form">
                                                 <MudText Typo="Typo.h5" Style="font-weight: 600;">Kontaktinformasjon</MudText>
                                                 <MudTextField Style="margin-bottom: 10px;" Label="Fornavn" @bind-Value="_userValues.FirstName" For="@(() => _userValues.FirstName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
@@ -256,6 +262,7 @@
                                                 <MudTextField Style="margin-bottom: 10px;" Label="Poststed" @bind-Value="_userValues.City" For="@(() => _userValues.City)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
                                                 <MudButton ButtonType="ButtonType.Button" OnClick="@((e) => SaveUserValues())" Variant="Variant.Filled" Color="Color.Primary">Lagre endringer</MudButton>
                                             </MudForm>
+                                            }
                                         }
                                         else
                                         {
