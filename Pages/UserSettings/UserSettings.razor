@@ -234,7 +234,7 @@
                                         <div Style="height: 8px"></div>
                                         @if (_editMode)
                                         {
-                                            <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
+                                            <MudButton Style="margin-top: 16px;" Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
                                         }
                                         else
                                         {
@@ -281,7 +281,7 @@
                                         }
                                         @if (!_editPasswordMode)
                                         {
-                                            <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                            <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white; margin-top: 8px;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
                                         }
                                     </MudPaper>
                                 </MudItem>
