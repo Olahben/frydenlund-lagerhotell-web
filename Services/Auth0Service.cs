@@ -152,7 +152,7 @@ public class Auth0Service
 
     public async Task UpdatePassword(string auth0Id, string email, string oldPassword, string newPassword)
     {
-        string endpoint = _baseUrl + "/update-password";
+        string endpoint = _baseUrl + "/change-user-password";
         var request = new ChangeUserPasswordRequest(auth0Id, email, oldPassword, newPassword);
         var json = JsonSerializer.Serialize(request);
         var data = new StringContent(json, Encoding.UTF8, "application/json");
