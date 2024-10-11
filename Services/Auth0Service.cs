@@ -139,4 +139,14 @@ public class Auth0Service
             _navigationManager.NavigateTo("/registrer-deg");
         }
     }
+
+    public async Task SendForgotPasswordEmail(string email)
+    {
+        string endpoint = _baseUrl + "/send-forgot-password-email";
+        var request = new SendForgotPasswordEmailRequest(email);
+        var json = JsonSerializer.Serialize(request);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(endpoint, data);
+        response.EnsureSuccessStatusCode();
+    }
 }
