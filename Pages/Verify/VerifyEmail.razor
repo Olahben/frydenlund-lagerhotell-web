@@ -16,11 +16,13 @@
 
 @if (isInitialized)
 {
-    <MudContainer Style="justify-content: start; display: flex; flex-direction: column; margin-top: 126px; max-width: 716px;">
-        <MudPaper Square="false" Elevation="2" Style="padding: 12px; padding-bottom: 46px;">
-
-                <MudButton Style="margin-top: 24px;" @onclick="() => SendNewVerificationEmail()" Color="Color.Primary" Variant="Variant.Outlined">Send ny e-post</MudButton>
-                <MudButton Style="margin-top: 24px;" @onclick="() => CancelEmailVerification()" Color="Color.Primary" Variant="Variant.Outlined">Avbryt</MudButton>
+    <MudContainer Style="justify-content: center; display: flex; flex-direction: column; max-width: 716px;">
+        <MudPaper Square="true" Elevation="2" Style="padding: 24px; padding-bottom: 46px;">
+            <MudText>Verifiser e-postadresse</MudText>
+            <MudText>Vi har sendt en e-post til deg som vil inneholde en lenke. Etter du har trykket på lenken vil denne siden sende deg videre om maks ett minutt.</MudText>
+            <MudText>Har du ikke mottatt e-posten? Trykk på knappen under for å sende en ny e-post eller avbryte. E-posten kan også ligge i søppelpost mappen.</MudText>
+                <MudButton Style="" @onclick="() => SendNewVerificationEmail()" Color="Color.Primary" Variant="Variant.Outlined">Send ny e-post</MudButton>
+                <MudButton Style="" @onclick="() => CancelEmailVerification()" Color="Color.Primary" Variant="Variant.Outlined">Avbryt</MudButton>
         </MudPaper>
     </MudContainer>
 }
