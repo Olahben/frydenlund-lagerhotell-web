@@ -225,7 +225,7 @@
                                         <MudText Typo="Typo.h6">Profil</MudText>
                                         <MudText Typo="Typo.subtitle1">Velkommen, @_userValues.FirstName!</MudText>
                                         <MudDivider Class="my-4" />
-                                        <div class="d-flex align-items-center">
+                                        <div style="margin-bottom: 16px;" class="d-flex align-items-center">
                                             @if (!string.IsNullOrEmpty(_userValues?.FirstName))
                                             {
                                                 <MudAvatar Color="Color.Primary" Src="path_to_image.jpg">@_userValues.FirstName.Substring(0, 1)</MudAvatar>
@@ -237,12 +237,12 @@
                                         <div Style="height: 8px"></div>
                                         @if (_editMode)
                                         {
-                                            <MudButton Style="margin-top: 16px;" Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
+                                            <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Kanseller endringer</MudButton>
                                         }
                                         else
                                         {
                                             <MudButton Variant="Variant.Filled" @onclick=ToggleEditMode>Endre</MudButton>
-                                            <MudButton Style="margin-left: 6px; margin-top: 16px;" @onclick="ShowResetPasswordComponents" Variant="Variant.Filled">Endre Passord</MudButton>
+                                            <MudButton Style="margin-left: 6px;" @onclick="ShowResetPasswordComponents" Variant="Variant.Filled">Endre Passord</MudButton>
                                         }
                                         <div style="height:10px"></div>
                                         @if (_editMode)
