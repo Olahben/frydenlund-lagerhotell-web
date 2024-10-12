@@ -1,0 +1,51 @@
+﻿@inject Auth0Service _auth0Service
+@inject AuthStateProviderService _customAuthStateProviderService
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Slett bruker</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText Typo="Typo.body1">Er du sikker på at du vil slette brukeren din?</MudText>
+        <MudText Typo="Typo.caption">Denne handlingen kan ikke angres</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Error" OnClick="@DeleteUser">Ja</MudButton>
+        <MudButton OnClick="@Cancel">Nei</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance Dialog { get; set; }
+
+    private void Cancel() => Dialog.Cancel();
+
+    private async void DeleteUser()
+    {
+        var user = await _customAuthStateProviderService.GetUser();
+        try
+        {
+            if (user.User.FirstName != null)
+            {
+                await _auth0Service.DeleteUser(user.User.Auth0Id);
+            }
+            else
+            {
+                await _auth0Service.DeleteUser(user.CompanyUser.Auth0Id);
+            }
+            Snackbar.Add("Bruker slettet", MudBlazor.Severity.Success);
+        }
+        catch (HttpRequestException e)
+        {
+            if (e.Message.Contains("404"))
+            {
+                Snackbar.Add("Brukeren finnes ikke", MudBlazor.Severity.Warning));
+            }
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Noe gikk galt under sletting av bruker", MudBlazor.Severity.Error);
+        }
+    }
+}
