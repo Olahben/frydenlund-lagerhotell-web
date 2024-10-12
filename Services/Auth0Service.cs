@@ -21,9 +21,10 @@ public class Auth0Service
     private readonly NavigationManager _navigationManager;
     private readonly UserService _userService;
     private readonly CompanyUserService _companyUserService;
+    private readonly AppState _appState;
     private readonly string _baseUrl = "https://localhost:7272/auth0-users";
 
-    public Auth0Service(IConfiguration configuration, SessionService sessionService, NavigationManager navigationManager, UserService userService, CompanyUserService companyUserService)
+    public Auth0Service(IConfiguration configuration, SessionService sessionService, NavigationManager navigationManager, UserService userService, CompanyUserService companyUserService, AppState appState)
     {
         _auth0Domain = configuration["Auth0:Domain"];
         _auth0FullDomain = $"https://{_auth0Domain}";
@@ -36,6 +37,7 @@ public class Auth0Service
         _navigationManager = navigationManager;
         _userService = userService;
         _companyUserService = companyUserService;
+        _appState = appState;
     }
 
     public static string GenerateState()
@@ -162,10 +164,18 @@ public class Auth0Service
 
     public async Task DeleteUser(string auth0Id)
     {
-        string endpoint = _baseUrl + $"/delete-user/{auth0Id}";
+        string endpoint = _baseUrl + $"/delete-user";
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _sessionService.GetJwtFromLocalStorage());
-        var response = await client.DeleteAsync(endpoint);
+        var request = new HttpRequestMessage(HttpMethod.Delete, endpoint)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(new Auth0IdRequest(auth0Id)), Encoding.UTF8, "application/json")
+        };
+
+        var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
 
+        await _sessionService.LogUserOut();
+        _appState.UserLoggedOut();
+        _navigationManager.NavigateTo("/registrer-deg");
     }
 }
