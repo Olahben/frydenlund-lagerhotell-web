@@ -31,6 +31,7 @@
                 <MudButtonGroup Color="Color.Primary">
                     <MudButton Style="" @onclick="() => SendNewVerificationEmail()" Variant="Variant.Outlined">Send ny e-post</MudButton>
                     <MudButton Style="" @onclick="() => CancelEmailVerification()" Variant="Variant.Outlined">Avbryt</MudButton>
+                    <MudButton @onclick="CheckEmailVerifiedStatus">Sjekk e-post status</MudButton>
                 </MudButtonGroup>
             </MudContainer>
         </MudPaper>
