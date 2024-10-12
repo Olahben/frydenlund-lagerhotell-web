@@ -11,6 +11,8 @@
 @inject SessionService _sessionService
 @inject AuthStateProviderService _customAuthStateProvider
 @inject IConfiguration _configuration
+@inject Auth0Service _auth0Service
+@inject IDialogService _dialogService
 
 @page "/user/{userId}"
 
@@ -203,7 +205,8 @@
                                         }
                                         @if (!_editPasswordMode)
                                         {
-                                            <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                            <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white; margin-right: 6px;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                            <MudButton OnClick="OpenDeleteUserDialog" Variant="Variant.Filled" Color="Color.Error" Style="color: white;" EndIcon="@Icons.Material.Filled.DeleteForever">Slett bruker</MudButton>
                                         }
                                         @if (_editMode)
                                         {
@@ -282,6 +285,7 @@
                                         @if (!_editPasswordMode)
                                         {
                                             <MudButton OnClick="Logout" Variant="Variant.Filled" Color="Color.Primary" Style="color: white; margin-top: 8px;" EndIcon="@Icons.Material.Filled.Logout">Logg ut</MudButton>
+                                            <MudButton OnClick="OpenDeleteUserDialog" Variant="Variant.Filled" Color="Color.Error" Style="color: white;" EndIcon="@Icons.Material.Filled.DeleteForever">Slett bruker</MudButton>
                                         }
                                     </MudPaper>
                                 </MudItem>
@@ -582,6 +586,11 @@
         await _authenticationStateProvider.GetAuthenticationStateAsync();
         StateHasChanged();
         _navigationManager.NavigateTo($"{_configuration["Auth0:Authority"]}/v2/logout?client_id={_configuration["Auth0:ClientId"]}&returnTo={_configuration["HostSettings:HostUrl"]}");
+    }
+
+    private void OpenDeleteUserDialog()
+    {
+        _dialogService.Show<Lagerhotell.Pages.UserSettings.ConfirmDeleteUser>("Slett bruker");
     }
 
     private void SetActiveTab(string tab)
