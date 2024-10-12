@@ -66,7 +66,7 @@
         isInitialized = true;
         Snackbar.Add("En e-post med en kode har blitt sendt til deg", MudBlazor.Severity.Success);
         await CountDown();
-        _timer = new Timer(OnTimerCallback, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        _timer = new Timer(OnTimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(20));
     }
 
 
