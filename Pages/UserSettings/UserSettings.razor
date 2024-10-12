@@ -260,7 +260,13 @@
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" For="@(() => _userValues.LastName)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" For="@(() => _userValues.PhoneNumber)" Disabled="true" Immediate="true" Variant="Variant.Outlined"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" For="@(() => _userValues.Email)" Immediate="true" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                                    <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" For="@(() => _userValues.BirthDate)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
+                                                    <MudTextField Style="margin-bottom: 10px;"
+                                                                  Label="Fødselsdato"
+                                                                  @bind-Value="_birthDateString"
+                                                                  Immediate="true"
+                                                                  Variant="Variant.Outlined"
+                                                                  For="@(() => _userValues.BirthDate)">
+                                                    </MudTextField>
                                                     <MudText Typo="Typo.h6" Style="font-size: 24px;">Adresse</MudText>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" For="@(() => _userValues.StreetAddress)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
                                                     <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" For="@(() => _userValues.PostalCode)" Immediate="true" Variant="Variant.Outlined"></MudTextField>
@@ -276,7 +282,7 @@
                                             <MudTextField Style="margin-bottom: 10px;" Label="Etternavn" @bind-Value="_userValues.LastName" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Mobilnummer" @bind-Value="_userValues.PhoneNumber" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="E-post" @bind-Value="_userValues.Email" Disabled="true" Variant="Variant.Outlined"></MudTextField>
-                                            <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_userValues.BirthDate" Disabled="true" Variant="Variant.Outlined"></MudTextField>
+                                            <MudTextField Style="margin-bottom: 10px;" Label="Fødselsdato" @bind-Value="_birthDateString" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudText Typo="Typo.h6" Style="font-size: 24px;">Adresse</MudText>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Adresse" @bind-Value="_userValues.StreetAddress" Disabled="true" Variant="Variant.Outlined"></MudTextField>
                                             <MudTextField Style="margin-bottom: 10px;" Label="Postnummer" @bind-Value="_userValues.PostalCode" Disabled="true" Variant="Variant.Outlined"></MudTextField>
@@ -359,6 +365,25 @@
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     private string activeTab = "profil";
+
+    private string _birthDateString
+    {
+        get => DateTime.TryParse(_userValues.BirthDate, out var date)
+            ? date.ToString("dd.MM.yyyy")
+            : string.Empty;
+        set
+        {
+            if (DateTime.TryParseExact(
+                value,
+                "dd.MM.yyyy",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out var parsedDate))
+            {
+                _userValues.BirthDate = parsedDate.ToString("yyyy-MM-dd");
+            }
+        }
+    }
 
     private bool _editMode = false;
     private bool _editPasswordMode = false;
@@ -459,6 +484,7 @@
                 _userValues.PasswordRepeat = user.Password;
                 _userValues.IsAdministrator = user.IsAdministrator;
                 _userValues.Email = user.Email;
+                _birthDateString = user.BirthDate;
                 isInitialized = true;
             }
             else
