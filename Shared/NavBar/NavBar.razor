@@ -14,27 +14,27 @@
 
 @if (isInitialized)
 {
-    <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px;">
+    <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px; background-color: white;">
         <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
-            <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonHvit.png"></MudImage>
-            <MudButton Color="Color.Inherit" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
+            <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonLilla.png"></MudImage>
+            <MudButton Color="Color.Primary" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
             @*Add link to settings/profile*@
             <MudSpacer />
             <AuthorizeView>
                 <NotAuthorized>
-                    <MudButton Style="margin-left: 8px;" @onclick="RedirectToAuth0Login" Color="Color.Inherit" Variant="Variant.Text">Logg inn</MudButton>
-                    <MudButton Style="color: white;" Href="/registrer-deg" Variant="Variant.Text">Registrer deg</MudButton>
+                    <MudButton Style="margin-left: 8px;" @onclick="RedirectToAuth0Login" Color="Color.Primary" Variant="Variant.Text">Logg inn</MudButton>
+                    <MudButton Href="/registrer-deg" Variant="Variant.Text" Color="Color.Primary">Registrer deg</MudButton>
                 </NotAuthorized>
                 <Authorized>
                     @if (user != null)
                     {
-                        <MudAvatar @onclick="(() => NavigateToUserSettings(user))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Inherit">
+                        <MudAvatar @onclick="(() => NavigateToUserSettings(user))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Primary">
                             @user.FirstName.Substring(0, 1)
                         </MudAvatar>
                     }
                     @if (companyUser != null)
                     {
-                        <MudAvatar @onclick="(() => NavigateToUserSettings(companyUser))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Inherit">
+                        <MudAvatar @onclick="(() => NavigateToUserSettings(companyUser))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Primary">
                             @companyUser.FirstName.Substring(0, 1)
                         </MudAvatar>
                     }
