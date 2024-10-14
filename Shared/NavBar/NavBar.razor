@@ -29,13 +29,13 @@
                 <Authorized>
                     @if (user != null)
                     {
-                        <MudAvatar @onclick="(() => NavigateToUserSettings(user))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Primary">
+                        <MudAvatar @onclick="(() => NavigateToUserSettings(user))" class="clickable" Color="Color.Primary">
                             @user.FirstName.Substring(0, 1)
                         </MudAvatar>
                     }
                     @if (companyUser != null)
                     {
-                        <MudAvatar @onclick="(() => NavigateToUserSettings(companyUser))" class="clickable" Style="color: white; border: solid 2px white;" Variant="Variant.Outlined" Color="Color.Primary">
+                        <MudAvatar @onclick="(() => NavigateToUserSettings(companyUser))" class="clickable" Color="Color.Primary">
                             @companyUser.FirstName.Substring(0, 1)
                         </MudAvatar>
                     }
