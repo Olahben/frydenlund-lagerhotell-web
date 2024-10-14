@@ -16,9 +16,10 @@
 {
     <MudContainer Style="max-width: 1280px !important; background-color: white; padding: 0; padding-left: 16px; padding-right: 16px;">
         <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
-            <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonLilla.png"></MudImage>
-            <MudButton Color="Color.Primary" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
-            @*Add link to settings/profile*@
+            <MudItem Style="display: flex; justify-content: center; margin: 0; padding: 0;">
+                <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonLilla.png"></MudImage>
+                <MudButton Color="Color.Primary" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
+            </MudItem>
             <MudSpacer />
             <AuthorizeView>
                 <NotAuthorized>
