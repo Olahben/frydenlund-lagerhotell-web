@@ -47,11 +47,11 @@
     </MudMainContent>
 </MudLayout>*@
 
-<MudLayout>
-    <MudAppBar Style="background-color: white;" Elevation="0">
+<MudLayout Style="justify-content: center;">
+    <MudAppBar Style="background-color: white;display: flex; justify-content: center; justify-self: center;" Elevation="0">
         <Lagerhotell.Shared.NavBar.NavBar />
     </MudAppBar>
-    <MudMainContent Style="display: flex; justify-content: center; max-height: fit-content; min-height: calc(100vh - 324px) !important; margin-bottom: 42px;">
+    <MudMainContent Style="display: flex; justify-content: center; max-height: fit-content; min-height: calc(100vh - 324px) !important; margin-bottom: 42px; padding-left: 16px; padding-right: 16px;">
         @Body
     </MudMainContent>
     <FooterI></FooterI>

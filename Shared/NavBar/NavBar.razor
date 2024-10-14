@@ -14,7 +14,7 @@
 
 @if (isInitialized)
 {
-    <MudContainer Style="padding-left: 16px; padding-right: 8px; max-width: 1100px; background-color: white;">
+    <MudContainer Style="max-width: 1280px !important; background-color: white; padding: 0; padding-left: 16px; padding-right: 16px;">
         <MudGrid Style="margin: 0 !important; width: 100% !important; color: white; align-items: center;">
             <MudImage Class="clickable" onclick="@RedirectToHome" Height="50" Width="40" Src="Data/Bilder/logoIkonLilla.png"></MudImage>
             <MudButton Color="Color.Primary" Style="margin-left: 6px;" Variant="Variant.Text" OnClick="@(() => OpenRightDrawer(Anchor.End))">Våre lagerhotell</MudButton>
@@ -86,13 +86,13 @@
                 var userOrCompanyUser = await _customAuthStateProviderService.GetUser();
                 Console.WriteLine(userOrCompanyUser.CompanyUser.FirstName);
                 if (userOrCompanyUser.User.FirstName != null)
-				{
-					user = userOrCompanyUser.User;
-				}
-				else
-				{
-					companyUser = userOrCompanyUser.CompanyUser;
-				}
+                {
+                    user = userOrCompanyUser.User;
+                }
+                else
+                {
+                    companyUser = userOrCompanyUser.CompanyUser;
+                }
             }
         }
         catch (Exception e)
