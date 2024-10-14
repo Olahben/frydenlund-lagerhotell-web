@@ -23,8 +23,10 @@
             <MudSpacer />
             <AuthorizeView>
                 <NotAuthorized>
+                    <MudItem Style="padding: 0; margin:0; display: flex; justify-content: center; height: 50px;">
                     <MudButton Style="margin-left: 8px;" @onclick="RedirectToAuth0Login" Color="Color.Primary" Variant="Variant.Text">Logg inn</MudButton>
                     <MudButton Href="/registrer-deg" Variant="Variant.Text" Color="Color.Primary">Registrer deg</MudButton>
+                    </MudItem>
                 </NotAuthorized>
                 <Authorized>
                     @if (user != null)
