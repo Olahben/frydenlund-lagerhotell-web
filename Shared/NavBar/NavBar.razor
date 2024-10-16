@@ -23,10 +23,22 @@
             <MudSpacer />
             <AuthorizeView>
                 <NotAuthorized>
-                    <MudItem Style="padding: 0; margin:0; display: flex; justify-content: center; height: 50px;">
-                    <MudButton Style="margin-left: 8px;" @onclick="RedirectToAuth0Login" Color="Color.Primary" Variant="Variant.Text">Logg inn</MudButton>
-                    <MudButton Href="/registrer-deg" Variant="Variant.Text" Color="Color.Primary">Registrer deg</MudButton>
-                    </MudItem>
+                    <MudHidden Breakpoint="Breakpoint.Xs">
+                        <MudItem Style="padding: 0; margin:0; display: flex; justify-content: center; height: 50px;">
+                            <MudButton Style="margin-left: 8px;" @onclick="RedirectToAuth0Login" Color="Color.Primary" Variant="Variant.Text">Logg inn</MudButton>
+                            <MudButton Href="/registrer-deg" Variant="Variant.Text" Color="Color.Primary">Registrer deg</MudButton>
+                        </MudItem>
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.SmAndUp">
+                        <MudItem Style="padding: 0; height: 50px;">
+                            <MudMenu Icon="@Icons.Material.Filled.Menu" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Style="margin-right: 26px;">
+                                <ChildContent>
+                                    <MudMenuItem><MudLink Href="/registrer-deg">Registrering</MudLink></MudMenuItem>
+                                    <MudMenuItem><MudLink @onclick="RedirectToAuth0Login">Innlogging</MudLink></MudMenuItem>
+                                </ChildContent>
+                            </MudMenu>
+                        </MudItem>
+                    </MudHidden>
                 </NotAuthorized>
                 <Authorized>
                     @if (user != null)
