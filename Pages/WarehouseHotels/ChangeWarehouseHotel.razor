@@ -3,7 +3,7 @@
 @inject IDialogService _dialogService
 @inject AssetService _assetService
 
-<MudDialog @bind-IsVisible="MainDialogOpen">
+<MudDialog @bind-Visible="MainDialogOpen">
     <DialogContent>
         <MudForm @ref="mainForm" Model="_newWarehouseHotel" Validation="@(_warehouseHotelValidator.ValidateValue)">
             <MudTextField RequiredError="Dette feltet kan ikke være tomt" Label="Breddegrad" Immediate="true" @bind-Value="_newWarehouseHotel.Coordinate.Latitude" For="(() => _newWarehouseHotel.Coordinate.Latitude)"></MudTextField>
@@ -40,7 +40,7 @@
             <MudSwitch Required="true" T="bool" Label="Har dette lagerhotellet tempererte utleie enheter?" @bind-Value="_newWarehouseHotel.ContainsTemperatedStorageUnits"></MudSwitch>
             <MudSwitch Required="true" T="bool" Label="Er dette lagerhotellet aktivt?" @bind-Value="_newWarehouseHotel.IsActive"></MudSwitch>
         </MudForm>
-        <MudDialog @bind-IsVisible="SecondDialogOpen">
+        <MudDialog @bind-Visible="SecondDialogOpen">
             <DialogContent>
                 <MudForm @ref="secondaryForm" Model="_oldWarehouseHotel" Validation="@(_warehouseHotelValidator.ValidateValue)">
                     <MudTextField Required="true" RequiredError="Dette feltet kan ikke være tomt" @bind-Value="_oldWarehouseHotel.Name" For="(() => _oldWarehouseHotel.Name)" Immediate="true" Label="Navnet på lagerhotellet du vil endre"></MudTextField>
