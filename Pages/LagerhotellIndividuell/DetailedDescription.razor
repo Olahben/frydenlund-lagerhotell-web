@@ -80,18 +80,18 @@
     else
     {
         <MudItem Style="padding-left: 12px; padding-bottom: 0;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
-            <MudGrid Style="height: 100%; margin: 0;">
-                <MudItem Style="height: 40%; padding-left: 0; padding-top: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-                    <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+            <MudGrid Style="height: 100%; margin: 0; max-width: 100%;">
+                <MudItem Style="height: 25%; padding-left: 0; padding-top: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                    <MudCarousel Class="mud-height-full" ShowArrows="true" ShowBullets="false" EnableSwipeGesture="true" AutoCycle="true" TData="object">
                         @foreach (string image in ImageCarouselImages)
                         {
                             <MudCarouselItem>
-                                <img style="height: 100%; width: 100%;" src="data:Image/jpg+png;base64, @image" />
+                                <img style="height: 280px; width: 100%; max-width: 100% !important;" src="data:Image/jpg+png;base64, @image" />
                             </MudCarouselItem>
                         }
                     </MudCarousel>
                 </MudItem>
-                <MudItem Style="height: 60%; padding-left: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                <MudItem Style="height: 75%; padding-left: 0; padding-bottom: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
                     <MudGrid Style="padding-right: 24px; padding-left: 0; padding-top: 0; padding-bottom: 0; margin: 0;" Class="mud-height-full" Justify="Justify.FlexEnd">
                         <MudPaper Class="mud-width-full mud-height-full" Style="background-color: rgba(89, 74, 226, 1); padding: 5px;">
                             <MudList T="string">
