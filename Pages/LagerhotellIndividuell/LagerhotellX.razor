@@ -33,10 +33,6 @@
         color: white;
     }
 
-    .mud-elevation-5 {
-        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
-    }
-
 </style>
 
 @if (isInitialized)
@@ -98,7 +94,7 @@
             </MudContainer>
             <MudCard Style="margin-left: 6px; margin-right: 6px;">
                 <MudCardMedia Image="../../Data/Bilder/lagerhotell-bilde.jpg"></MudCardMedia>
-                <MudCardContent Style="padding-left: 10px; padding-right: 42px;" Class="mud-elevation-5">
+                <MudCardContent Style="padding-left: 10px; padding-right: 42px;" Class="mud-elevation-3">
                     <MudText Style="font-weight: 300;" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
                     <MudText Style="font-weight: 500; margin-bottom: 6px;" Typo="Typo.h4">Lagring ved <div></div> @warehouseHotelName</MudText>
                     <MudText Style="font-weight: 400; font-size: 16.5px;" Typo="Typo.body1">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
