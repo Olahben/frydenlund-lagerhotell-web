@@ -33,6 +33,10 @@
         color: white;
     }
 
+    .mud-elevation-5 {
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+    }
+
 </style>
 
 @if (isInitialized)
@@ -44,15 +48,15 @@
                     <MudBreadcrumbs Style="padding-left: 0;" Items="BreadcrumbItems"></MudBreadcrumbs>
                 </MudContainer>
                 <MudGrid Justify="Justify.Center">
-                        <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="8" xl="8" xxl="8">
-                            <MudPaper Square="true" Style="display: flex; justify-content: center; flex-direction: column; padding-left: 31%;" Class="lagerhotell-card-header" Elevation="0" Height="400px" Color="Color.Primary">
-                                <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
-                                <MudText Style="font-weight: 500; margin-bottom: 12px;" Typo="Typo.h3" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
-                                <MudText Style="font-weight: 400; font-size: 18.5px;" Typo="Typo.body1" Class="lagerhotell-header-info">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
-                                <MudText Style="color: white; font-weight: 400; font-size: 18.5px;" Typo="Typo.body1">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
-                                <MudButton ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Variant="Variant.Outlined" Color="MudBlazor.Color.Inherit" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 12px; color:white; max-width: 150px;">Vis på kart</MudButton>
-                            </MudPaper>
-                        </MudItem>
+                    <MudItem Style="padding-right: 0;" xs="7" sm="7" md="7" lg="8" xl="8" xxl="8">
+                        <MudPaper Square="true" Style="display: flex; justify-content: center; flex-direction: column; padding-left: 31%;" Class="lagerhotell-card-header" Elevation="0" Height="400px" Color="Color.Primary">
+                            <MudText Style="font-weight: 300;" Class="lagerhotell-header-info" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
+                            <MudText Style="font-weight: 500; margin-bottom: 12px;" Typo="Typo.h3" Class="lagerhotell-header-info">Lagring ved <div></div> @warehouseHotelName</MudText>
+                            <MudText Style="font-weight: 400; font-size: 18.5px;" Typo="Typo.body1" Class="lagerhotell-header-info">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
+                            <MudText Style="color: white; font-weight: 400; font-size: 18.5px;" Typo="Typo.body1">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
+                            <MudButton ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Variant="Variant.Outlined" Color="MudBlazor.Color.Inherit" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 12px; color:white; max-width: 150px;">Vis på kart</MudButton>
+                        </MudPaper>
+                    </MudItem>
                     <MudItem Style="padding-left: 0;" xs="5" sm="5" md="5" lg="4" xl="4" xxl="4">
                         <MudPaper Elevation="0" Style="display: inline-block; width: 100%;" Height="400px">
                             <MudImage Style="width: 100%" ObjectFit="ObjectFit.Cover" Elevation="25" Height="400" Src="../../Data/Bilder/lagerhotell-bilde.jpg"></MudImage>
@@ -87,86 +91,103 @@
             </MudContainer>
         </MudContainer>
     </MudHidden>
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        <MudContainer Style="justify-content: center; width: 100%; padding-left: 0; padding-right: 0; max-width: 100%;">
+            <MudContainer Style="max-width: 1280px; padding-left: 16px; padding-right: 16px;">
+                <MudBreadcrumbs Style="padding-left: 0; padding-right: 0;" Items="BreadcrumbItems"></MudBreadcrumbs>
+            </MudContainer>
+            <MudCard Style="margin-left: 6px; margin-right: 6px;">
+                <MudCardMedia Image="../../Data/Bilder/lagerhotell-bilde.jpg"></MudCardMedia>
+                <MudCardContent Style="padding-left: 10px; padding-right: 42px;" Class="mud-elevation-5">
+                    <MudText Style="font-weight: 300;" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
+                    <MudText Style="font-weight: 500; margin-bottom: 6px;" Typo="Typo.h4">Lagring ved <div></div> @warehouseHotelName</MudText>
+                    <MudText Style="font-weight: 400; font-size: 16.5px;" Typo="Typo.body1">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
+                    <MudText Style="font-weight: 400; font-size: 16.5px;" Typo="Typo.body1">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
+                    <MudButton  ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Size="MudBlazor.Size.Medium" Variant="Variant.Outlined" Color="MudBlazor.Color.Primary" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 18px; max-width: 150px;">Vis på kart</MudButton>
+            </MudCardContent>
+        </MudCard>
+    </MudContainer>
+</MudHidden>
 }
 else
 {
-    <MudProgressCircular Indeterminate="true" />
-}
+<MudProgressCircular Indeterminate="true" />
+    }
 
-@code {
-    [Parameter]
-    public string? warehouseHotelName { get; set; }
+                    @code {
+            [Parameter]
+            public string? warehouseHotelName { get; set; }
     private WarehouseHotel? relevantWarehouseHotel { get; set; }
-    private List<BreadcrumbItem> BreadcrumbItems { get; set; } = new List<BreadcrumbItem>
+        private List<BreadcrumbItem> BreadcrumbItems { get; set; } = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Hjem", href: "/", icon: Icons.Material.Filled.Home),
         new BreadcrumbItem("Lagerhotell", href: null, disabled: true, icon: Icons.Material.Filled.LocationCity),
     };
-    private List<StorageUnit> RelevantStorageUnits { get; set; } = new List<StorageUnit>();
-    private List<StorageUnitSize> RelevantStorageUnitsFrontend { get; set; } = new List<StorageUnitSize>();
-    private bool isInitialized = false;
-    private string OpeningTime { get; set; }
-    private string ClosingTime { get; set; }
-    public StorageUnit StorageUnitToAdd { get; set; } = new StorageUnit();
-    private List<string> detailedDescriptionParagraphs = new List<string>();
-    private List<string> warehouseHotelBulletPoints = new List<string>();
-    private List<string> detailedDescriptionImages { get; set; } = new List<string>();
-    private string? googleMapsUrl { get; set; }
+        private List<StorageUnit> RelevantStorageUnits { get; set; } = new List<StorageUnit>();
+        private List<StorageUnitSize> RelevantStorageUnitsFrontend { get; set; } = new List<StorageUnitSize>();
+        private bool isInitialized = false;
+        private string OpeningTime { get; set; }
+        private string ClosingTime { get; set; }
+        public StorageUnit StorageUnitToAdd { get; set; } = new StorageUnit();
+        private List<string> detailedDescriptionParagraphs = new List<string>();
+        private List<string> warehouseHotelBulletPoints = new List<string>();
+        private List<string> detailedDescriptionImages { get; set; } = new List<string>();
+        private string? googleMapsUrl { get; set; }
 
-    private async Task LoadData()
-    {
-        try
+        private async Task LoadData()
         {
-            string token = await _sessionService.GetJwtFromLocalStorage();
+            try
+            {
+                string token = await _sessionService.GetJwtFromLocalStorage();
 
-            relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
-            detailedDescriptionParagraphs = _textHandler.ParseParagraphs(relevantWarehouseHotel.DetailedDescription);
-            warehouseHotelBulletPoints = _textHandler.ParseBulletPoints(relevantWarehouseHotel.BulletPoints);
-            detailedDescriptionImages = await _assetService.GetWarehouseHotelImagecarouselImages(relevantWarehouseHotel.WarehouseHotelId);
+                relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
+                detailedDescriptionParagraphs = _textHandler.ParseParagraphs(relevantWarehouseHotel.DetailedDescription);
+                warehouseHotelBulletPoints = _textHandler.ParseBulletPoints(relevantWarehouseHotel.BulletPoints);
+                detailedDescriptionImages = await _assetService.GetWarehouseHotelImagecarouselImages(relevantWarehouseHotel.WarehouseHotelId);
 
-            // Change href for location
-            BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
-            BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
+                // Change href for location
+                BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
+                BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
 
-            OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
-            ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
-            (OpeningTime, ClosingTime) = _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
+                OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
+                ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
+                (OpeningTime, ClosingTime) = _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
 
-            RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
-            RelevantStorageUnitsFrontend = await _lagerhotellXService.GetUniqueStorageUnitAreas(RelevantStorageUnits);
+                RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
+                RelevantStorageUnitsFrontend = await _lagerhotellXService.GetUniqueStorageUnitAreas(RelevantStorageUnits);
 
-            googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
+                googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
 
-            isInitialized = true;
+                isInitialized = true;
+            }
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine($"{e}");
+
+                googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
+                isInitialized = true;
+            }
+            catch (Exception e)
+            {
+                Snackbar.Add($"Lagerhotell ${warehouseHotelName} kunne ikke hentes inn", MudBlazor.Severity.Error);
+                Console.WriteLine($"{e}");
+            }
         }
-        catch (KeyNotFoundException e)
+
+        private void OpenAddStorageUnitDialog()
         {
-            Console.WriteLine($"{e}");
-
-            googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
-            isInitialized = true;
-        }
-        catch (Exception e)
-        {
-            Snackbar.Add($"Lagerhotell ${warehouseHotelName} kunne ikke hentes inn", MudBlazor.Severity.Error);
-            Console.WriteLine($"{e}");
-        }
-    }
-
-    private void OpenAddStorageUnitDialog()
-    {
-        var dialogParameterOptions = new DialogParameters<AddStorageUnit>
+            var dialogParameterOptions = new DialogParameters<AddStorageUnit>
         {
             { "LinkedWarehouseHotelName", warehouseHotelName }
         };
 
-        var dialogOptions = new DialogOptions { BackgroundClass = "custom-class" };
-        DialogService.Show<AddStorageUnit>("Legg til en lokasjon", dialogParameterOptions, dialogOptions);
-        StateHasChanged();
-    }
+            var dialogOptions = new DialogOptions { BackgroundClass = "custom-class" };
+            DialogService.Show<AddStorageUnit>("Legg til en lokasjon", dialogParameterOptions, dialogOptions);
+            StateHasChanged();
+        }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        await LoadData();
-    }
+        protected override async Task OnParametersSetAsync()
+        {
+            await LoadData();
+        }
 }
