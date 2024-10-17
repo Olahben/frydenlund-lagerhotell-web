@@ -37,7 +37,7 @@
 
 @if (isInitialized)
 {
-    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+    <MudHidden Breakpoint="Breakpoint.Xs">
         <MudContainer Style="justify-content: center; width: 100%; padding-left: 0; padding-right: 0; max-width: 100%;">
             <MudContainer Style="width: 100%; max-width: 100%; padding-left: 0; padding-right: 0;">
                 <MudContainer Style="max-width: 1280px; padding-left: 16px; padding-right: 42px;">
@@ -87,103 +87,126 @@
             </MudContainer>
         </MudContainer>
     </MudHidden>
-    <MudHidden Breakpoint="Breakpoint.MdAndUp">
-        <MudContainer Style="justify-content: center; width: 100%; padding-left: 0; padding-right: 0; max-width: 100%;">
-            <MudContainer Style="max-width: 1280px; padding-left: 16px; padding-right: 16px;">
-                <MudBreadcrumbs Style="padding-left: 0; padding-right: 0;" Items="BreadcrumbItems"></MudBreadcrumbs>
+    <MudHidden Breakpoint="Breakpoint.SmAndUp">
+        <MudContainer Style="display: flex; flex-direction: column; padding: 0;">
+            <MudContainer Style="justify-content: center; width: 100%; padding-left: 0; padding-right: 0; max-width: 100%;">
+                <MudContainer Style="max-width: 1280px; padding-left: 16px; padding-right: 16px;">
+                    <MudBreadcrumbs Style="padding-left: 0; padding-right: 0;" Items="BreadcrumbItems"></MudBreadcrumbs>
+                </MudContainer>
+                <MudCard Style="margin-left: 6px; margin-right: 6px;">
+                    <MudCardMedia Image="../../Data/Bilder/lagerhotell-bilde.jpg"></MudCardMedia>
+                    <MudCardContent Style="padding-left: 10px; padding-right: 42px;" Class="mud-elevation-2">
+                        <MudText Style="font-weight: 300;" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
+                        <MudText Style="font-weight: 500; margin-bottom: 6px;" Typo="Typo.h4">Lagring ved <div></div> @warehouseHotelName</MudText>
+                        <MudText Style="font-weight: 400; font-size: 16.5px;" Typo="Typo.body1">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
+                        <MudText Style="font-weight: 400; font-size: 16.5px;" Typo="Typo.body1">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
+                        <MudButton ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Size="MudBlazor.Size.Medium" Variant="Variant.Outlined" Color="MudBlazor.Color.Primary" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 18px; max-width: 150px;">Vis på kart</MudButton>
+                    </MudCardContent>
+                </MudCard>
             </MudContainer>
-            <MudCard Style="margin-left: 6px; margin-right: 6px;">
-                <MudCardMedia Image="../../Data/Bilder/lagerhotell-bilde.jpg"></MudCardMedia>
-                <MudCardContent Style="padding-left: 10px; padding-right: 42px;" Class="mud-elevation-3">
-                    <MudText Style="font-weight: 300;" Typo="Typo.h6">@relevantWarehouseHotel.Address.StreetAddress, @relevantWarehouseHotel.Address.PostalCode @relevantWarehouseHotel.Address.City</MudText>
-                    <MudText Style="font-weight: 500; margin-bottom: 6px;" Typo="Typo.h4">Lagring ved <div></div> @warehouseHotelName</MudText>
-                    <MudText Style="font-weight: 400; font-size: 16.5px;" Typo="Typo.body1">Vanlige åpningstider: @OpeningTime - @ClosingTime</MudText>
-                    <MudText Style="font-weight: 400; font-size: 16.5px;" Typo="Typo.body1">Mobilnummer: @relevantWarehouseHotel.PhoneNumber</MudText>
-                    <MudButton  ButtonType="ButtonType.Button" Target="_blank" Href=@googleMapsUrl Size="MudBlazor.Size.Medium" Variant="Variant.Outlined" Color="MudBlazor.Color.Primary" EndIcon="@Icons.Material.Outlined.Map" Style="margin-top: 18px; max-width: 150px;">Vis på kart</MudButton>
-            </MudCardContent>
-        </MudCard>
-    </MudContainer>
-</MudHidden>
+            <MudContainer Style="padding-left: 6px; padding-right: 6px; padding-top: 36px;">
+                <AuthorizeView Roles="Administrator">
+                    <Authorized>
+                        <MudButton Style="margin-bottom: 18px;" Color="MudBlazor.Color.Primary" @onclick="OpenAddStorageUnitDialog" Variant="Variant.Filled">Legg til lagerenhet</MudButton>
+                    </Authorized><NotAuthorized></NotAuthorized>
+                </AuthorizeView>
+                <MudText Style="" Typo="Typo.h5">Våre størrelser</MudText>
+                @if (RelevantStorageUnits.Count == 0)
+                {
+                    <MudText Typo="Typo.h6">Fant ingen lagerenheter tilknyttet dette lagerhotellet</MudText>
+                }
+                else
+                {
+                    <MudGrid Style="justify-content: start !important;">
+                        @foreach (var size in RelevantStorageUnitsFrontend)
+                        {
+                            <StorageUnitUi Size="size"></StorageUnitUi>
+                        }
+                    </MudGrid>
+                }
+            </MudContainer>
+        </MudContainer>
+    </MudHidden>
 }
 else
 {
-<MudProgressCircular Indeterminate="true" />
-    }
+    <MudProgressCircular Indeterminate="true" />
+}
 
-                    @code {
-            [Parameter]
-            public string? warehouseHotelName { get; set; }
+@code {
+    [Parameter]
+    public string? warehouseHotelName { get; set; }
     private WarehouseHotel? relevantWarehouseHotel { get; set; }
-        private List<BreadcrumbItem> BreadcrumbItems { get; set; } = new List<BreadcrumbItem>
+    private List<BreadcrumbItem> BreadcrumbItems { get; set; } = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Hjem", href: "/", icon: Icons.Material.Filled.Home),
         new BreadcrumbItem("Lagerhotell", href: null, disabled: true, icon: Icons.Material.Filled.LocationCity),
     };
-        private List<StorageUnit> RelevantStorageUnits { get; set; } = new List<StorageUnit>();
-        private List<StorageUnitSize> RelevantStorageUnitsFrontend { get; set; } = new List<StorageUnitSize>();
-        private bool isInitialized = false;
-        private string OpeningTime { get; set; }
-        private string ClosingTime { get; set; }
-        public StorageUnit StorageUnitToAdd { get; set; } = new StorageUnit();
-        private List<string> detailedDescriptionParagraphs = new List<string>();
-        private List<string> warehouseHotelBulletPoints = new List<string>();
-        private List<string> detailedDescriptionImages { get; set; } = new List<string>();
-        private string? googleMapsUrl { get; set; }
+    private List<StorageUnit> RelevantStorageUnits { get; set; } = new List<StorageUnit>();
+    private List<StorageUnitSize> RelevantStorageUnitsFrontend { get; set; } = new List<StorageUnitSize>();
+    private bool isInitialized = false;
+    private string OpeningTime { get; set; }
+    private string ClosingTime { get; set; }
+    public StorageUnit StorageUnitToAdd { get; set; } = new StorageUnit();
+    private List<string> detailedDescriptionParagraphs = new List<string>();
+    private List<string> warehouseHotelBulletPoints = new List<string>();
+    private List<string> detailedDescriptionImages { get; set; } = new List<string>();
+    private string? googleMapsUrl { get; set; }
 
-        private async Task LoadData()
+    private async Task LoadData()
+    {
+        try
         {
-            try
-            {
-                string token = await _sessionService.GetJwtFromLocalStorage();
+            string token = await _sessionService.GetJwtFromLocalStorage();
 
-                relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
-                detailedDescriptionParagraphs = _textHandler.ParseParagraphs(relevantWarehouseHotel.DetailedDescription);
-                warehouseHotelBulletPoints = _textHandler.ParseBulletPoints(relevantWarehouseHotel.BulletPoints);
-                detailedDescriptionImages = await _assetService.GetWarehouseHotelImagecarouselImages(relevantWarehouseHotel.WarehouseHotelId);
+            relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotelByName(warehouseHotelName, token);
+            detailedDescriptionParagraphs = _textHandler.ParseParagraphs(relevantWarehouseHotel.DetailedDescription);
+            warehouseHotelBulletPoints = _textHandler.ParseBulletPoints(relevantWarehouseHotel.BulletPoints);
+            detailedDescriptionImages = await _assetService.GetWarehouseHotelImagecarouselImages(relevantWarehouseHotel.WarehouseHotelId);
 
-                // Change href for location
-                BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
-                BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
+            // Change href for location
+            BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
+            BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
 
-                OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
-                ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
-                (OpeningTime, ClosingTime) = _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
+            OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
+            ClosingTime = relevantWarehouseHotel.OpeningHours.Closes.ToString();
+            (OpeningTime, ClosingTime) = _lagerhotellXService.CalculateTime(OpeningTime, ClosingTime, relevantWarehouseHotel);
 
-                RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
-                RelevantStorageUnitsFrontend = await _lagerhotellXService.GetUniqueStorageUnitAreas(RelevantStorageUnits);
+            RelevantStorageUnits = await _storageUnitService.GetRelevantStorageUnits(relevantWarehouseHotel.WarehouseHotelId);
+            RelevantStorageUnitsFrontend = await _lagerhotellXService.GetUniqueStorageUnitAreas(RelevantStorageUnits);
 
-                googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
+            googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
 
-                isInitialized = true;
-            }
-            catch (KeyNotFoundException e)
-            {
-                Console.WriteLine($"{e}");
-
-                googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
-                isInitialized = true;
-            }
-            catch (Exception e)
-            {
-                Snackbar.Add($"Lagerhotell ${warehouseHotelName} kunne ikke hentes inn", MudBlazor.Severity.Error);
-                Console.WriteLine($"{e}");
-            }
+            isInitialized = true;
         }
-
-        private void OpenAddStorageUnitDialog()
+        catch (KeyNotFoundException e)
         {
-            var dialogParameterOptions = new DialogParameters<AddStorageUnit>
+            Console.WriteLine($"{e}");
+
+            googleMapsUrl = $"https://maps.google.com/?q={relevantWarehouseHotel.Coordinate.Latitude},{relevantWarehouseHotel.Coordinate.Longitude}";
+            isInitialized = true;
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add($"Lagerhotell ${warehouseHotelName} kunne ikke hentes inn", MudBlazor.Severity.Error);
+            Console.WriteLine($"{e}");
+        }
+    }
+
+    private void OpenAddStorageUnitDialog()
+    {
+        var dialogParameterOptions = new DialogParameters<AddStorageUnit>
         {
             { "LinkedWarehouseHotelName", warehouseHotelName }
         };
 
-            var dialogOptions = new DialogOptions { BackgroundClass = "custom-class" };
-            DialogService.Show<AddStorageUnit>("Legg til en lokasjon", dialogParameterOptions, dialogOptions);
-            StateHasChanged();
-        }
+        var dialogOptions = new DialogOptions { BackgroundClass = "custom-class" };
+        DialogService.Show<AddStorageUnit>("Legg til en lokasjon", dialogParameterOptions, dialogOptions);
+        StateHasChanged();
+    }
 
-        protected override async Task OnParametersSetAsync()
-        {
-            await LoadData();
-        }
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadData();
+    }
 }
