@@ -20,12 +20,12 @@
                 <MudText Typo="Typo.body1" Style="color: white;">Telefon: @RelevantWarehouseHotel.PhoneNumber</MudText>
             </MudPaper>
         </MudItem>
-        @if (_currentBreakpoint.ToString() == "Xs" || _currentBreakpoint.ToString() == "Sm")
+        @if (_currentBreakpoint.ToString() == "Xs")
     {
         <MudItem Style="padding-left: 0px;padding-right: 24px; padding-top: 0; padding-bottom: 0; margin-bottom:206px;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
             <MudGrid Style="height: 100%; margin: 0;">
                 <MudItem Style="height: 100%; padding: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-                    <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+                    <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="false" EnableSwipeGesture="true" AutoCycle="true" TData="object">
                         @foreach (string image in ImageCarouselImages)
                         {
                             <MudCarouselItem>
@@ -42,6 +42,34 @@
                             {
                                     <MudListItem Style="color: white; margin-top: 0; align-items: center;"><p style=" display: flex;text-align: center; align-items: center;"><MudIcon Style="color: white;" Icon="@Icons.Material.Filled.ArrowRight"></MudIcon> @bulletPoint</p></MudListItem>
                             }
+                            </MudList>
+                        </MudPaper>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    } else if (_currentBreakpoint.ToString() == "Sm")
+    {
+        <MudItem Style="padding-left: 0px;padding-right: 24px; padding-top: 0; padding-bottom: 0; margin-bottom:306px;" xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
+            <MudGrid Style="height: 100%; margin: 0;">
+                <MudItem Style="height: 300px; padding: 0;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                    <MudCarousel Class="mud-width-full mud-height-full" ShowArrows="true" ShowBullets="false" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+                        @foreach (string image in ImageCarouselImages)
+                        {
+                            <MudCarouselItem>
+                                <img style="height: 100%; width: 100%;" src="data:Image/jpg+png;base64, @image" />
+                            </MudCarouselItem>
+                        }
+                    </MudCarousel>
+                </MudItem>
+                <MudItem Style="height: 80%; padding: 0; padding-right: 24px;" xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                    <MudGrid Style="padding-right: 24px; padding: 0; margin: 0;" Class="mud-height-full" Justify="Justify.FlexEnd">
+                        <MudPaper Square="true" Class="mud-width-full mud-height-full" Style="background-color: rgba(89, 74, 226, 1); padding: 5px;">
+                            <MudList T="string">
+                                @foreach (string bulletPoint in BulletPoints)
+                                {
+                                    <MudListItem Style="color: white; margin-top: 0; align-items: center;"><p style=" display: flex;text-align: center; align-items: center;"><MudIcon Style="color: white;" Icon="@Icons.Material.Filled.ArrowRight"></MudIcon> @bulletPoint</p></MudListItem>
+                                }
                             </MudList>
                         </MudPaper>
                     </MudGrid>
