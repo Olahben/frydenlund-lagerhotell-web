@@ -15,7 +15,7 @@
         state = queryParams["state"]?.Replace(" ", "+");
         if (code == null || state == null)
         {
-            Snackbar.Add("Noe gikk galt");
+            Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
             await _sessionService.RemoveItemAsync("loginState");
             NavigationManager.NavigateTo("/");
             return;
@@ -23,7 +23,7 @@
         string localStorageState = await _sessionService.GetItemAsync("loginState");
         if (localStorageState != state)
         {
-            Snackbar.Add("Noe gikk galt");
+            Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
             await _sessionService.RemoveItemAsync("loginState");
             NavigationManager.NavigateTo("/");
             return;
@@ -36,7 +36,7 @@
         }
         catch (Exception e)
         {
-            Snackbar.Add("Noe gikk galt");
+            Snackbar.Add("Noe gikk galt", MudBlazor.Severity.Error);
             await _sessionService.RemoveItemAsync("loginState");
             NavigationManager.NavigateTo("/");
             return;
