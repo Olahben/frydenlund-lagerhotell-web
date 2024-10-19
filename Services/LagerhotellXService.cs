@@ -67,6 +67,10 @@ public class LagerhotellXService
 
         foreach (var storageUnit in storageUnits)
         {
+            decimal area = (decimal)storageUnit.Dimensions.Area;
+            area = Math.Round(area * 2, MidpointRounding.AwayFromZero) / 2;
+            decimal volume = (decimal)storageUnit.Dimensions.Volume;
+            volume = Math.Round(volume * 2, MidpointRounding.AwayFromZero) / 2;
             StorageUnitSize newSize = new();
             if (!storageUnit.Occupied)
             {
@@ -74,6 +78,8 @@ public class LagerhotellXService
                 {
                     Area = storageUnit.Dimensions.Area,
                     Volume = storageUnit.Dimensions.Volume,
+                    RoundedArea = area,
+                    RoundedVolume = volume,
                     Price = storageUnit.PricePerMonth,
                     Temperated = storageUnit.Temperated,
                     storageUnitIds = new List<string> { storageUnit.StorageUnitId }
@@ -83,7 +89,8 @@ public class LagerhotellXService
             {
                 newSize = new StorageUnitSize
                 {
-                    Area = storageUnit.Dimensions.Area,
+                    RoundedArea = area,
+                    RoundedVolume = volume,
                     Volume = storageUnit.Dimensions.Volume,
                     Price = storageUnit.PricePerMonth,
                     Temperated = storageUnit.Temperated,
