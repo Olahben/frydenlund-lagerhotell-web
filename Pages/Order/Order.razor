@@ -5,6 +5,7 @@
 @inject SessionService _sessionService
 @inject WarehouseHotelService _warehouseHotelService
 @inject UserService _userService
+@inject AuthStateProviderService _customAuthenticationStateProvider
 
 @using System.Security.Claims
 
@@ -14,9 +15,7 @@
         <Overview RelevantStorageUnit=@relevantStorageUnit />
         @if (currentOrder != null)
         {
-            <MovingInDate RelevantOrder
-            =@currentOrder
-            />
+            <MovingInDate RelevantOrder=@currentOrder />
             <Insurance RelevantOrder=@currentOrder />
             <OrderConfirmation IsUserAuthenticated=@authorized RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
         }
@@ -45,13 +44,16 @@
     {
         try
         {
-            var authState = await authenticationStateTask;
-            var user = authState.User;
-            authorized = user.Identity.IsAuthenticated;
-            if (authState.User.Identity.IsAuthenticated)
+            var userOrCompanyUser = await _customAuthenticationStateProvider.GetUser();
+            if (userOrCompanyUser.User.FirstName != null)
             {
-                userAccessToken = await _sessionService.GetJwtFromLocalStorage();
-                var userId = user.FindFirst(c => c.Type == ClaimTypes.Sid).Value;
+                authorized = true;
+                string userId = userOrCompanyUser.User.Id;
+                currentOrder = new LagerhotellAPI.Models.DomainModels.Order("", userId, StorageUnitId, new OrderPeriod() { OrderDate = DateTime.Now }, OrderStatus.NotCreated, OrderInsurance.FiftyThousand, "");
+            } else if (userOrCompanyUser.CompanyUser.FirstName != null)
+            {
+                authorized = true;
+                string userId = userOrCompanyUser.CompanyUser.CompanyUserId;
                 currentOrder = new LagerhotellAPI.Models.DomainModels.Order("", userId, StorageUnitId, new OrderPeriod() { OrderDate = DateTime.Now }, OrderStatus.NotCreated, OrderInsurance.FiftyThousand, "");
             }
             else
