@@ -58,7 +58,7 @@
         </MudSimpleTable>
         @if (IsUserAuthenticated)
         {
-            <MudButton Style="margin-top: 16px;" @onclick="ConfirmOrder" Variant="Variant.Filled">Bestill nå</MudButton>
+            <MudButton Style="margin-top: 16px;" @onclick="ConfirmOrder" Color="Color.Primary" FullWidth="true" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.ArrowForward">Bestill nå</MudButton>
         }
         else
         {
