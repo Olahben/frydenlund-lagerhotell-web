@@ -12,7 +12,6 @@
 <MudContainer Style="max-width: 740px; padding: 16px;">
     <MudGrid Justify="Justify.Center" Style="">
         <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
-        <Overview RelevantStorageUnit=@relevantStorageUnit />
         @if (currentOrder != null)
         {
             <MovingInDate RelevantOrder=@currentOrder />
