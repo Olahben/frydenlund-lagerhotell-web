@@ -10,14 +10,26 @@
                 <tr>
                     <td><MudText Typo="Typo.body1">Avdeling</MudText></td>
                     <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantWarehouseHotel.Name</MudText></td>
-                    </tr>
-                    <tr>
-                        <td><MudText Typo="Typo.body1">Størrelse</MudText></td>
-                        <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.Dimensions.Area M2</MudText></td>
+                </tr>
+                <tr>
+                    <td><MudText Typo="Typo.body1">Lengde</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(RelevantStorageUnit.Dimensions.Length)M</MudText></td>
+                </tr>
+                <tr>
+                    <td><MudText Typo="Typo.body1">Bredde</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(RelevantStorageUnit.Dimensions.Width)M</MudText></td>
+                </tr>
+                <tr>
+                    <td><MudText Typo="Typo.body1">Høyde</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(RelevantStorageUnit.Dimensions.Height)M</MudText></td>
+                </tr>
+                <tr>
+                    <td><MudText Typo="Typo.body1">Størrelse</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(RelevantStorageUnit.Dimensions.Area)M2</MudText></td>
                 </tr>
                 <tr>
                     <td><MudText Typo="Typo.body1">Volum</MudText></td>
-                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.Dimensions.Volume M3</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(RelevantStorageUnit.Dimensions.Volume)M3</MudText></td>
                 </tr>
                 <tr>
                     <td><MudText Typo="Typo.body1">Temperert</MudText></td>
@@ -33,14 +45,14 @@
                 <tr>
                     <td><MudText Typo="Typo.body1">Innflyttingsdato</MudText></td>
                     <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantOrder.OrderPeriod.OrderDate.Value.Date.Date.ToShortDateString()</MudText></td>
-                    </tr>
-                    <tr>
-                        <td><MudText Typo="Typo.body1">Avtaletype</MudText></td>
-                        <td><MudText Style="font-weight: 450" Typo="Typo.body1">Månedlig</MudText></td>
-                    </tr>
-                    <tr>
-                        <td><MudText Typo="Typo.body1">Pris per måned</MudText></td>
-                        <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.PricePerMonth.Amount Kr</MudText></td>
+                </tr>
+                <tr>
+                    <td><MudText Typo="Typo.body1">Avtaletype</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">Månedlig</MudText></td>
+                </tr>
+                <tr>
+                    <td><MudText Typo="Typo.body1">Pris per måned</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@RelevantStorageUnit.PricePerMonth.Amount Kr</MudText></td>
                 </tr>
             </tbody>
         </MudSimpleTable>
@@ -74,17 +86,18 @@
             {
                 string orderId = await _orderService.CreateOrder(RelevantOrder);
                 _navigationManager.NavigateTo($"/order-sent/{orderId}");
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 Console.WriteLine(e);
                 Snackbar.Add("Noe gikk galt da vi prøvde å registrere bestillingen din,vennligst prøv på nytt om fem minutter, kontakt eventuelt kundeservice.", MudBlazor.Severity.Error);
                 return;
             }
-       Snackbar.Add("Bestillingen er registrert", MudBlazor.Severity.Success);
-       }
-       else
-       {
-           Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vennligst sjekk dem. Logg inn hvis du ikke har gjort det.", MudBlazor.Severity.Error);
-       }
+            Snackbar.Add("Bestillingen er registrert", MudBlazor.Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vennligst sjekk dem. Logg inn hvis du ikke har gjort det.", MudBlazor.Severity.Error);
+        }
     }
 }
