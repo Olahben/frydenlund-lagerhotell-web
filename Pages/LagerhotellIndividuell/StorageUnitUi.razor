@@ -20,7 +20,7 @@
                 <MudText Typo="Typo.body2"><span style="font-size: 28px; font-weight:500;">@($"{Size.Price.Amount}")kr</span> mnd</MudText>
                 @if (Size.storageUnitIds.Count > 0)
                 {
-                    <MudButton Color="Color.Primary" Variant="Variant.Filled">Bestill nå</MudButton>
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" href="@($"/bestill/{Size.storageUnitIds[0]}")">Bestill nå</MudButton>
                 }
                 else
                 {
