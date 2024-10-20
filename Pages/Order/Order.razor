@@ -8,10 +8,12 @@
 @inject AuthStateProviderService _customAuthenticationStateProvider
 
 @using System.Security.Claims
-
+<MudContainer Style="padding: 0; display: flex; flex-direction: column;">
+<MudContainer Style="padding-left: 16px; padding-right: 16px;" MaxWidth="MaxWidth.ExtraExtraLarge">
+    <MudBreadcrumbs Items=breadcrumbItems Style="padding-left: 0; padding-right: 0;" />
+</MudContainer>
 <MudContainer Style="max-width: 740px; padding: 16px;">
     <MudGrid Justify="Justify.Center" Style="">
-        <MudText Style="font-weight: 400;" Typo="Typo.h2">Din bestilling</MudText>
         @if (currentOrder != null)
         {
             <MovingInDate RelevantOrder=@currentOrder />
@@ -19,6 +21,7 @@
             <OrderConfirmation IsUserAuthenticated=@authorized RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
         }
     </MudGrid>
+</MudContainer>
 </MudContainer>
 
 @code {
@@ -38,6 +41,11 @@
             OpeningHours = new OpeningHours()
         };
     private bool authorized = false;
+    private List<BreadcrumbItem> breadcrumbItems { get; set; } = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Hjem", href: "/", icon: Icons.Material.Filled.Home),
+        new BreadcrumbItem("Lagerhotell", href: null, disabled: true, icon: Icons.Material.Filled.LocationCity),
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,6 +75,8 @@
             }
             relevantStorageUnit = await _storageUnitService.GetStorageUnit(StorageUnitId, userAccessToken);
             relevantWarehouseHotel = await _warehouseHotelService.GetWarehouseHotel(relevantStorageUnit.WarehouseHotelId);
+            breadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
+            breadcrumbItems.Add(new BreadcrumbItem("Din bestilling", href: null, disabled: true, icon: Icons.Material.Filled.ShoppingCart));
         }
         catch (KeyNotFoundException e)
         {
