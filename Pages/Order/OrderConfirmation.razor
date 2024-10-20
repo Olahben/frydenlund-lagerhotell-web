@@ -25,11 +25,11 @@
                 </tr>
                 <tr>
                     <td><MudText Typo="Typo.body1">Størrelse</MudText></td>
-                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(RelevantStorageUnit.Dimensions.Area)M2</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(_roundedArea)M2</MudText></td>
                 </tr>
                 <tr>
                     <td><MudText Typo="Typo.body1">Volum</MudText></td>
-                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(RelevantStorageUnit.Dimensions.Volume)M3</MudText></td>
+                    <td><MudText Style="font-weight: 450" Typo="Typo.body1">@(_roundedVolume)M3</MudText></td>
                 </tr>
                 <tr>
                     <td><MudText Typo="Typo.body1">Temperert</MudText></td>
@@ -76,6 +76,8 @@
     public WarehouseHotel RelevantWarehouseHotel { get; set; } = new();
     [Parameter]
     public bool IsUserAuthenticated { get; set; } = false;
+    private decimal _roundedArea;
+    private decimal _roundedVolume;
 
     public async Task ConfirmOrder()
     {
@@ -99,5 +101,13 @@
         {
             Snackbar.Add("Det er noe galt med verdiene du har fylt inn, vennligst sjekk dem. Logg inn hvis du ikke har gjort det.", MudBlazor.Severity.Error);
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        decimal decimalArea = (decimal) RelevantStorageUnit.Dimensions.Area;
+        decimal decimalVolume = (decimal) RelevantStorageUnit.Dimensions.Volume;
+        _roundedArea = Math.Round(decimalArea * 2, MidpointRounding.AwayFromZero) / 2;
+        _roundedVolume = Math.Round(decimalVolume * 2, MidpointRounding.AwayFromZero) / 2;
     }
 }
