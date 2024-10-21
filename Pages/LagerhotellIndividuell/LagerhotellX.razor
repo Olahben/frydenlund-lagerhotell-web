@@ -167,8 +167,6 @@ else
             warehouseHotelBulletPoints = _textHandler.ParseBulletPoints(relevantWarehouseHotel.BulletPoints);
             detailedDescriptionImages = await _assetService.GetWarehouseHotelImagecarouselImages(relevantWarehouseHotel.WarehouseHotelId);
 
-            // Change href for location
-            BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.LocationName, href: null, icon: Icons.Material.Filled.MyLocation));
             BreadcrumbItems.Add(new BreadcrumbItem(relevantWarehouseHotel.Name, href: $"/lagerhotell/{relevantWarehouseHotel.Name}", icon: Icons.Material.Filled.LocationCity));
 
             OpeningTime = relevantWarehouseHotel.OpeningHours.Opens.ToString();
