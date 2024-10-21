@@ -7,21 +7,24 @@
 @inject UserService _userService
 @inject AuthStateProviderService _customAuthenticationStateProvider
 
-@using System.Security.Claims
-<MudContainer Style="padding: 0; display: flex; flex-direction: column;">
-<MudContainer Style="padding-left: 16px; padding-right: 16px;" MaxWidth="MaxWidth.ExtraExtraLarge">
-    <MudBreadcrumbs Items=breadcrumbItems Style="padding-left: 0; padding-right: 0; font-size: 14px;" />
-</MudContainer>
-<MudContainer Style="max-width: 740px; padding: 16px;">
-    <MudGrid Justify="Justify.Center" Style="">
-        @if (currentOrder != null)
-        {
-            <MovingInDate RelevantOrder=@currentOrder />
-            <Insurance RelevantOrder=@currentOrder />
-            <OrderConfirmation IsUserAuthenticated=@authorized RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
-        }
-    </MudGrid>
-</MudContainer>
+<MudContainer Style="display: flex; flex-direction: column; max-width: 100%; padding: 0;">
+    <MudContainer Style="padding-left: 16px; padding-right: 16px;" MaxWidth="MaxWidth.Large">
+        <MudBreadcrumbs Items=breadcrumbItems Style="padding-left: 0; padding-right: 0; font-size: 14px;" />
+    </MudContainer>
+    <MudContainer Style="padding: 0; display: flex; flex-direction: column; margin-left: 0; margin-right: 0; width: 100%; max-width: 100%;  background-color: #f7f8f6;">
+        <MudContainer MaxWidth="MaxWidth.Large" Style="padding-left: 0; padding-right: 0;">
+            <MudContainer Style="max-width: 100%; padding: 16px;">
+                <MudGrid Justify="Justify.Center" Style="">
+                    @if (currentOrder != null)
+                    {
+                        <MovingInDate RelevantOrder=@currentOrder />
+                        <Insurance RelevantOrder=@currentOrder />
+                        <OrderConfirmation IsUserAuthenticated=@authorized RelevantWarehouseHotel=@relevantWarehouseHotel RelevantOrder=@currentOrder RelevantStorageUnit=@relevantStorageUnit />
+                    }
+                </MudGrid>
+            </MudContainer>
+        </MudContainer>
+    </MudContainer>
 </MudContainer>
 
 @code {
@@ -57,7 +60,8 @@
                 authorized = true;
                 string userId = userOrCompanyUser.User.Id;
                 currentOrder = new LagerhotellAPI.Models.DomainModels.Order("", userId, StorageUnitId, new OrderPeriod() { OrderDate = DateTime.Now }, OrderStatus.NotCreated, OrderInsurance.FiftyThousand, "");
-            } else if (userOrCompanyUser.CompanyUser.FirstName != null)
+            }
+            else if (userOrCompanyUser.CompanyUser.FirstName != null)
             {
                 authorized = true;
                 string userId = userOrCompanyUser.CompanyUser.CompanyUserId;
